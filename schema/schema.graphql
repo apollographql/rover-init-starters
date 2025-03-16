@@ -1,0 +1,61 @@
+# This schema is leveraging Apollo Connectors, a declarative programming model for
+# GraphQL that allows you to plug in your existing REST services directly into
+# a graph. [Visit Apollo's Connectors documentation](https://www.apollographql.com/docs/graphos/schema-design/connectors) to learn more.
+
+# These are the necessary directives you will be using.
+extend schema
+  @link(url: "https://specs.apollo.dev/federation/v2.10", import: ["@key"])
+  @link(
+    url: "https://specs.apollo.dev/connect/v0.1"
+    import: ["@source", "@connect"]
+  )
+  # The @source directive defines a shared data source for multiple connectors.
+
+  # Step one: Replace the `name` and `baseURL` of this @source with your own REST API.
+  @source(
+    name: "airlock_api"
+    http: {
+      baseURL: "https://rt-airlock-services-listing.herokuapp.com"
+      headers: [
+        # If your API requires headers, add them here and in your router.yaml file
+        { name: "name", value: "{$config.apiKey}" }
+      ]
+    }
+  )
+
+# This query field uses @connect to connect to the /listings endpoint, which returns a JSON object.
+# From that object, we’re selecting five properties: id, title, numOfBeds, costPerNight, and closed.
+# In this example, the “closedForBookings” JSON property is being aliased to “closed” in our GraphQL schema.
+# This enables the listing field to return a Listing.
+# To check out the JSON response for this endpoint, go to 🔗 https://rt-airlock-services-listing.herokuapp.com/listings/listing-1
+
+type Query {
+  # This query field uses a provided id argument (accessed through {$args.id}) to fetch a single Listing from the API.
+  # Step 2: Replace the `listing` field with the REST endpoint you'd like to call.
+  listing(id: ID!): Listing
+    @connect(
+      source: "airlock_api"
+      http: { GET: "/listings/{$args.id}" }
+      selection: """
+      id
+      title
+      numOfBeds
+      costPerNight
+      closed: closedForBookings
+      """
+    )
+}
+
+type Listing {
+  id: ID!
+  title: String!
+  numOfBeds: Int
+  costPerNight: Float
+  closed: Boolean
+}
+
+type Amenity {
+  id: ID!
+  category: String!
+  name: String!
+}

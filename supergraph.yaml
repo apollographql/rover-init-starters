@@ -1,0 +1,8 @@
+# To learn more, [visit Apollo's config documentation](https://www.apollographql.com/docs/graphos/reference/router/configuration#yaml-config-file)
+
+federation_version: =2.10.0-preview.4
+subgraphs: # Use this block to add all of the subgraphs (services) that make up your GraphQL API (including any @source used and listed under `preview_connectors` in `router-config.yaml`)
+  [subgraphName]:    # Populate this with your service's name and schema file
+    routing_url: http://placeholder     # This value is ignored
+    schema:
+      file: schema/schema.graphql
