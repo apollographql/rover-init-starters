@@ -2,12 +2,12 @@
 
 👋 Welcome to working with GraphOS\!
 
-This starter is designed to help you set up a new, federated GraphQL API (also known as a graph) using [Apollo Connectors for REST](https://www.apollographql.com/docs/graphos/schema-design/connectors) and your existing REST API(s).
+This starter project is designed to help you set up a new GraphQL API using [Apollo Connectors for REST](https://www.apollographql.com/docs/graphos/schema-design/connectors) and your existing REST APIs.
 
-When paired with [the Rover CLI](https://www.apollographql.com/docs/rover), this project allows you to:
+This project allows you to:
 
-* Design your API’s schema (with help from a starter template)   
-* Spin up a local environment to live-test your schema  
+* Design your API’s with help from a starter template  
+* Spin up a local environment to test your new GraphQL API
 * Push your schema changes to [the GraphOS platform](https://www.apollographql.com/docs/graphos/get-started/concepts/graphos)
 
 ## Next steps (Recommended Workflow)
