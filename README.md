@@ -11,4 +11,4 @@ This command:
 * Provides a starter schema to help you design your GraphQL API
 * Walks you through spinning up a local environment to test your API
 
-ℹ️New to \`rover init\` and this repo? Jump to the [Next Steps](?tab=t.0#heading=h.ajx7mu1cuq8h) section to install and configure Rover. Otherwise, head over to \`getting-started.md\` for next steps.
+ℹ️ New to \`rover init\` and this repo? Jump to the [Next Steps](?tab=t.0#heading=h.ajx7mu1cuq8h) section to install and configure Rover. Otherwise, head over to \`getting-started.md\` for next steps.
