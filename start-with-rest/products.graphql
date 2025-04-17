@@ -5,7 +5,7 @@
 # Guided tutorial: 🔗 https://www.apollographql.com/docs/graphos/get-started/guides/rest
 
 # Reference docs:
-🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors
+# 🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors
 
 extend schema
   @link( # Enable federation
