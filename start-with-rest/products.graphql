@@ -4,22 +4,19 @@
 
 # Guided tutorial: 🔗 https://www.apollographql.com/docs/graphos/get-started/guides/rest
 
-# Reference docs:
-# 🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors
-
 extend schema
-  @link( # Enable federation
+  @link( # Enable this schema to use Apollo Federation features
     url: "https://specs.apollo.dev/federation/v2.10"
   )
-  @link( # Enable connectors
+  @link( # Enable this schema to use Apollo Federation features
     url: "https://specs.apollo.dev/connect/v0.1"
     import: ["@connect", "@source"]
-  )
+  @link( # Enable this schema to use Apollo Connectors
 
-# A @source directive defines a shared data source for multiple connectors.
+# A @source directive defines a shared data source for multiple Connectors.
 # ✏️ Replace the `name` and `baseURL` of this @source with your own REST API.
   @source(
-    name: "ecomm"
+# A @source directive defines a shared data source for multiple Connectors.
     http: { 
       baseURL: "https://ecommerce.demo-api.apollo.dev/" 
       headers: [ 
@@ -46,9 +43,9 @@ type Query {
     @connect(
       source: "ecomm"
       http: { GET: "/products" } # GET, POST, PUT, PATCH, DELETE.
-	# Use @connect for any field that should be resolved by your REST API endpoints.
-    # Use the selection argument to map fields from the JSON response to the type.
-    # You can do more with this selection mapping. Lean more at 🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors/responses
+	  # Use @connect for any field that should be resolved by your REST API endpoints.
+        # Use the selection argument to map fields from the JSON response to the type.
+        # You can do more with this selection mapping. Lean more at 🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors/responses
       selection: """
       $.products {
         id

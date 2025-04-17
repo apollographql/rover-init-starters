@@ -1,6 +1,6 @@
-- [Introduction](#introduction)
+👋 Hi there! The following guide walks you through integrating REST APIs into your graph using [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors).
+
 - [Setup](#setup)
-  - [Part one: Make your first request](#part-one-make-your-first-request)
   - [Part two: Check out how Connectors work](#part-two-check-out-how-connectors-work)
 - [Time to build your API](#time-to-build-your-api)
 - [Debugging your schema](#debugging-your-schema)
@@ -11,17 +11,12 @@
 - [Security](#security)
 - [Additional resources](#additional-resources)
   - [Deploying your GraphQL API](#deploying-your-graphql-api)
-  - [More on GraphQL API development](#more-on-graphql-api-development)
+  - [More on graph development](#more-on-graph-development)
   - [More about Connectors](#more-about-connectors)
-
-# Introduction
-👋 Hi there! The following guide walks you through integrating REST APIs into your graph using [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors).
 
 # Setup
 
-## Part one: Make your first request
-
-1. Open `products.graphql` and take a look at your GraphQL API’s starter schema. Ignore the comments labeled with a ✏️ for now, we’ll get to them later.
+1. Open `products.graphql` to take a look at your graph's starter schema. Ignore the comments labeled with a ✏️ for now, we’ll get to them later.
 2. Run `rover dev --supergraph-config supergraph.yaml` to start a development session. This gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 3. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
@@ -35,7 +30,7 @@ query GetProducts {
 }
 ```
 
-4. Click `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties we asked for in our query! 🎉
+4. Click `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
 
 ## Part two: Check out how Connectors work
 
@@ -54,8 +49,8 @@ Then, follow the development cycle below:
 
 1. [Add your REST API details using @source](https://www.apollographql.com/docs/graphos/schema-design/connectors/directives#source). 
 2. Define the types and fields you want your GraphQL API to expose. Use the inline comments labeled with a ✏️ to follow along.
-3. [Configure the connector's request details](https://www.apollographql.com/docs/graphos/schema-design/connectors/requests).
-4. [Configure the connector's response mapping](https://www.apollographql.com/docs/graphos/schema-design/connectors/responses). You can use the [Connectors Mapping Playground](https://www.apollographql.com/connectors-mapping-playground) to help convert JSON responses to and from GraphQL types.
+3. [Configure the Connector's request details](https://www.apollographql.com/docs/graphos/schema-design/connectors/requests).
+4. [Configure the Connector's response mapping](https://www.apollographql.com/docs/graphos/schema-design/connectors/responses). You can use the [Connectors Mapping Playground](https://www.apollographql.com/connectors-mapping-playground) to help convert JSON responses to and from GraphQL types.
 5. Run operations and debug your API following the instructions in the section below.
 
 📓 **Note:** If you’re working with APIs that require headers, you’ll need to include them in `products.graphql` and add a router configuration file (`router.yaml`) to your project directory.
@@ -66,7 +61,7 @@ To learn more about headers and other advanced features like configuring environ
 
 # Debugging your schema
 
-The Apollo dev toolkit includes a few debugging tools to help you design and develop your GraphQL API. The journey looks a little something like this:
+The Apollo dev toolkit includes a few debugging tools to help you design and develop your graph. The journey looks a little something like this:
 
 - Design your schema with Apollo’s IDE extensions
 - Check for errors each time you save
@@ -74,16 +69,16 @@ The Apollo dev toolkit includes a few debugging tools to help you design and dev
 - Rinse and repeat until you're happy with your API!
 
 ## Design your schema with Apollo’s IDE extensions
-Apollo’s IDE extensions are designed to help you catch and correct any issues related to schema design as early as possible. Lean on their instant feedback and autocomplete capabilities to help you create types, fields, arguments, and connectors.
+Apollo’s IDE extensions are designed to help you catch and correct any issues related to schema design as early as possible. Lean on their instant feedback and autocomplete capabilities to help you create types, fields, arguments, and Connectors.
 
 ## Check for errors each time you save
-With rover dev, Rover starts watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
+When you run `rover dev`, Rover starts watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
 
 ## Debug Connectors in Sandbox
 
 ![A screenshot of the Connectors debugger in Apollo Sandbox](connectors-debugger.png)
 
-In Apollo Sandbox, you can access the Connectors Debugger by selecting it from the “Response” drop-down on the right side of your screen. The debugger will provide detailed insights into network calls, including response bodies, errors, and connector-related syntax. You can also visit Apollo's docs to [learn more about troubleshooting Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors/troubleshooting#return-debug-info-in-graphql-responses).
+In Apollo Sandbox, you can access the Connectors Debugger by selecting it from the **Response** drop-down on the right side of your screen. The debugger will provide detailed insights into network calls, including response bodies, errors, and connector-related syntax. You can also visit Apollo's docs to [learn more about troubleshooting Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors/troubleshooting#return-debug-info-in-graphql-responses).
 
 # Publishing changes to Apollo Studio
 When you publish a schema to GraphOS, it becomes part of your schema’s version history and is available for checks, composition, and collaboration. When you run `rover init`, GraphOS takes care of your first publish for you.
@@ -115,7 +110,7 @@ Making these updates helps safeguard your API against common vulnerabilities and
 - [Self-hosted Deployment](https://www.apollographql.com/docs/graphos/routing/self-hosted)
 - [Router configuration](https://www.apollographql.com/docs/graphos/routing/configuration)
 
-## More on GraphQL API development
+## More on graph development
 
 - [Introduction to Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/federation)
 - [Schema Design with Apollo GraphOS](https://www.apollographql.com/docs/graphos/schema-design)
