@@ -76,7 +76,7 @@ When you run `rover dev`, Rover starts watching your files for updates. Every ti
 
 ## Debug Connectors in Sandbox
 
-![A screenshot of the Connectors debugger in Apollo Sandbox](connectors-debugger.png)
+![A screenshot of the Connectors debugger in Apollo Sandbox](connectors_debugger.png)
 
 In Apollo Sandbox, you can access the Connectors Debugger by selecting it from the **Response** drop-down on the right side of your screen. The debugger will provide detailed insights into network calls, including response bodies, errors, and connector-related syntax. You can also visit Apollo's docs to [learn more about troubleshooting Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors/troubleshooting#return-debug-info-in-graphql-responses).
 
