@@ -11,11 +11,12 @@ extend schema
   @link( # Enable this schema to use Apollo Federation features
     url: "https://specs.apollo.dev/connect/v0.1"
     import: ["@connect", "@source"]
-  @link( # Enable this schema to use Apollo Connectors
+  ) # Enable this schema to use Apollo Connectors
 
 # A @source directive defines a shared data source for multiple Connectors.
 # ✏️ Replace the `name` and `baseURL` of this @source with your own REST API.
   @source(
+    name: "ecomm"
 # A @source directive defines a shared data source for multiple Connectors.
     http: { 
       baseURL: "https://ecommerce.demo-api.apollo.dev/" 
