@@ -47,6 +47,6 @@ rover init
 📓 **Note:** If you’re already logged into an existing Apollo organization by the time you run this command, the CLI will nudge you to go to Apollo Studio. From there, you can create a new personal API key to interact with Rover. If you don’t have an account yet, visiting the link will prompt you to create one.
 
 # Next steps
-For further guidance, check out `getting_started.md`. 🚀
+For further guidance, check out `getting-started.md`. 🚀
 
 To see more examples of Connectors, check out Apollo's [Connectors Community repo](https://github.com/apollographql/connectors-community).
