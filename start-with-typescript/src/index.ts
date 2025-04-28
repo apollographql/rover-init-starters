@@ -34,7 +34,7 @@ const context: ContextFunction<
 
 async function main() {
   let typeDefs = gql(
-    readFileSync("things.graphql", {
+    readFileSync("schema.graphql", {
       encoding: "utf-8",
     })
   );

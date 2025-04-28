@@ -7,7 +7,7 @@ import resolvers from "../resolvers";
 const server = new ApolloServer({
   schema: buildSubgraphSchema({
     typeDefs: gql(
-      readFileSync("things.graphql", {
+      readFileSync("schema.graphql", {
         encoding: "utf-8",
       })
     ),
