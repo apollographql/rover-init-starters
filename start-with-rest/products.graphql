@@ -22,7 +22,8 @@ extend schema
     baseURL: "https://ecommerce.demo-api.apollo.dev/"
     headers: [
       # If your API requires headers, add them here and in your router.yaml file.
-      { name: "name", value: "{$config.apiKey}" }
+      # Example:
+      # { name: "name", value: "{$config.apiKey}" }
     ]
   }
 )
@@ -46,7 +47,7 @@ type Query {
       http: { GET: "/products" } # GET, POST, PUT, PATCH, DELETE.
       # Use @connect for any field that should be resolved by your REST API endpoints.
       # Use the selection argument to map fields from the JSON response to the type.
-      # You can do more with this selection mapping. Lean more at 🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors/responses
+      # You can do more with this selection mapping. Learn more at 🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors/responses
       selection: """
       $.products {
         id
