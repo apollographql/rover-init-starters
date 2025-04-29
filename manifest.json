@@ -3,7 +3,7 @@
     {
       "id": "connectors",
       "display_name": "Start with REST",
-      "path": "start_with_rest",
+      "path": "start-with-rest",
       "language": "GraphQL",
       "federation_version": "=2.10.0",
       "max_schema_depth": 5,
@@ -12,7 +12,7 @@
     {
       "id": "typescript",
       "display_name": "Start with Typescript",
-      "path": "start_with_typescript",
+      "path": "start-with-typescript",
       "language": "Typescript",
       "federation_version": "=2.10.0",
       "max_schema_depth": 5,
