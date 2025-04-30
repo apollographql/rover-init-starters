@@ -7,7 +7,7 @@ export const Product: Resolvers = {
       const product = productsSource.find(
         (p) => String(p.id) === String(reference.id)
       );
-      return product ? { ...product, id: String(product.id) } : null;
+      return product ? { ...product } : null;
     },
     // Add any field resolvers here if needed in the future
   },

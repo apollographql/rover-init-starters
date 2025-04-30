@@ -5,10 +5,10 @@ export const Query: Resolvers = {
   Query: {
     product(_parent, { id }, _context) {
       const product = productsSource.find((p) => String(p.id) === String(id));
-      return product ? { ...product, id: String(product.id) } : null;
+      return product ? { ...product } : null;
     },
     products() {
-      return productsSource.map(p => ({ ...p, id: String(p.id) }));
+      return productsSource.map((p) => ({ ...p }));
     },
   },
 };
