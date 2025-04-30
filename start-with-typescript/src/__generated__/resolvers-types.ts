@@ -18,36 +18,37 @@ export type Scalars = {
   _FieldSet: { input: any; output: any; }
 };
 
-export type CreateThing = {
-  id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+export type CreateProductInput = {
+  description: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createThing?: Maybe<Thing>;
+  createProduct?: Maybe<Product>;
 };
 
 
-export type MutationCreateThingArgs = {
-  thing: CreateThing;
+export type MutationCreateProductArgs = {
+  input: CreateProductInput;
+};
+
+export type Product = {
+  __typename?: 'Product';
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  thing?: Maybe<Thing>;
-  things?: Maybe<Array<Maybe<Thing>>>;
+  product?: Maybe<Product>;
+  products: Array<Product>;
 };
 
 
-export type QueryThingArgs = {
+export type QueryProductArgs = {
   id: Scalars['ID']['input'];
-};
-
-export type Thing = {
-  __typename?: 'Thing';
-  id: Scalars['ID']['output'];
-  name?: Maybe<Scalars['String']['output']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -133,56 +134,46 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  CreateThing: CreateThing;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  CreateProductInput: CreateProductInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  Product: ResolverTypeWrapper<Product>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Query: ResolverTypeWrapper<{}>;
-  Thing: ResolverTypeWrapper<Thing>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  CreateThing: CreateThing;
-  ID: Scalars['ID']['output'];
+  CreateProductInput: CreateProductInput;
   String: Scalars['String']['output'];
   Mutation: {};
+  Product: Product;
+  ID: Scalars['ID']['output'];
   Query: {};
-  Thing: Thing;
   Boolean: Scalars['Boolean']['output'];
 }>;
 
-export type ContactDirectiveArgs = {
-  description?: Maybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-  url?: Maybe<Scalars['String']['input']>;
-};
-
-export type ContactDirectiveResolver<Result, Parent, ContextType = DataSourceContext, Args = ContactDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
 export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createThing?: Resolver<Maybe<ResolversTypes['Thing']>, ParentType, ContextType, RequireFields<MutationCreateThingArgs, 'thing'>>;
+  createProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>;
+}>;
+
+export type ProductResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
+  __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Product']>, { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"id":true}>, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  thing?: Resolver<Maybe<ResolversTypes['Thing']>, ParentType, ContextType, RequireFields<QueryThingArgs, 'id'>>;
-  things?: Resolver<Maybe<Array<Maybe<ResolversTypes['Thing']>>>, ParentType, ContextType>;
-}>;
-
-export type ThingResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Thing'] = ResolversParentTypes['Thing']> = ResolversObject<{
-  __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Thing']>, { __typename: 'Thing' } & GraphQLRecursivePick<ParentType, {"id":true}>, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryProductArgs, 'id'>>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = DataSourceContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
+  Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Thing?: ThingResolvers<ContextType>;
 }>;
 
-export type DirectiveResolvers<ContextType = DataSourceContext> = ResolversObject<{
-  contact?: ContactDirectiveResolver<any, any, ContextType>;
-}>;

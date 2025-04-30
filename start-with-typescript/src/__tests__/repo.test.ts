@@ -7,7 +7,7 @@ import resolvers from "../resolvers";
 const server = new ApolloServer({
   schema: buildSubgraphSchema({
     typeDefs: gql(
-      readFileSync("things.graphql", {
+      readFileSync("products.graphql", {
         encoding: "utf-8",
       })
     ),
@@ -16,20 +16,24 @@ const server = new ApolloServer({
 });
 
 describe("Repository Template Functionality", () => {
-  it("Executes Location Entity Resolver", async () => {
+  it("Executes Product Entity Resolver", async () => {
     //Arrange
     const query = `query ($representations: [_Any!]!) {
       _entities(representations: $representations) {
-        ...on Thing {
+        ...on Product {
           name
+          description
         }
       }
     }`;
     const variables = {
-      representations: [{ __typename: "Thing", id: "1" }],
+      representations: [{ __typename: "Product", id: "1" }],
     };
     const expected = {
-      _entities: [{ name: "Name" }],
+      _entities: [{
+        name: "Lunar Rover Wheels",
+        description: "Designed for traversing the rugged terrain of the moon, these wheels provide unrivaled traction and durability. Made from a lightweight composite, they ensure your rover is agile in challenging conditions."
+      }],
     };
     //Act
     const res = await server.executeOperation({

@@ -1,13 +1,14 @@
 import { Resolvers } from "../__generated__/resolvers-types";
-import { thingsSource } from "./thingsSource";
+import { productsSource } from "./productsSource";
 
 export const Query: Resolvers = {
   Query: {
-    thing(_parent, { id }, _context) {
-      return thingsSource.find((t) => t.id === id.toString()) || null;
+    product(_parent, { id }, _context) {
+      const product = productsSource.find((p) => String(p.id) === String(id));
+      return product ? { ...product, id: String(product.id) } : null;
     },
-    things() {
-      return thingsSource;
+    products() {
+      return productsSource.map(p => ({ ...p, id: String(p.id) }));
     },
   },
 };

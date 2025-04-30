@@ -1,11 +1,11 @@
 import { Query } from "./Query";
 import { Mutation } from "./Mutation";
-import { Thing } from "./Thing";
+import { Product } from "./Product";
 
 const resolvers = {
   ...Query,
   ...Mutation,
-  ...Thing,
+  ...Product,
 };
 
 export default resolvers;

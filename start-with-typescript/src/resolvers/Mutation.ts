@@ -1,15 +1,24 @@
 import { Resolvers } from "../__generated__/resolvers-types";
-import { thingsSource } from "./thingsSource";
+import { productsSource } from "./productsSource";
 
 export const Mutation: Resolvers = {
   Mutation: {
-    createThing(_parent, { thing }, _context) {
-      const exists = thingsSource.some((t) => t.id === thing.id);
-      const newThing = { id: thing.id, name: thing.name };
-      if (!exists) {
-        thingsSource.push(newThing);
-      }
-      return newThing;
+    createProduct(
+      _parent,
+      { input }: { input: { name: string; description: string } },
+      _context
+    ) {
+      const newId =
+        productsSource.length > 0
+          ? String(Math.max(...productsSource.map((p) => Number(p.id))) + 1)
+          : "1";
+      const newProduct = {
+        id: newId,
+        name: input.name,
+        description: input.description,
+      };
+      productsSource.push(newProduct);
+      return newProduct;
     },
   },
 };

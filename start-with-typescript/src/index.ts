@@ -11,11 +11,11 @@ import { DataSourceContext } from "./types/DataSourceContext";
 import { GraphQLError } from "graphql";
 
 const port = "4001";
-const subgraphName = "things";
+const subgraphName = "products";
 
 async function main() {
   let typeDefs = gql(
-    readFileSync("things.graphql", {
+    readFileSync("products.graphql", {
       encoding: "utf-8",
     })
   );
