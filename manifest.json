@@ -11,7 +11,7 @@
     },
     {
       "id": "typescript",
-      "display_name": "Start with Typescript",
+      "display_name": "Build  an API with Typescript",
       "path": "start-with-typescript",
       "language": "Typescript",
       "federation_version": "=2.10.0",
