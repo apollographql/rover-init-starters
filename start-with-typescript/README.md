@@ -1,7 +1,7 @@
 # Rover init Start with Typescript template
 
 
-This template can be used to quickly create an [Apollo Federation] subgraph with the [@apollo/subgraph] and [@apollo/server] packages. You can use this template from [Rover](https://www.apollographql.com/docs/rover/commands/template/) with `rover init` and selecting the "start with Typescript" journey.
+This template helps create an [Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/federation) subgraph with [Apollo Server](https://www.apollographql.com/docs/apollo-server) and the [@apollo/subgraph](https://www.apollographql.com/docs/apollo-server/using-federation/api/apollo-subgraph) package. You can use this template with the [`rover init`](https://www.apollographql.com/docs/rover/commands/init) command by selecting **Start with Typescript** in the command's wizard.
 
 ## What's Included
 
