@@ -1,0 +1,21 @@
+# Product GraphQL Schema
+
+type Product @key(fields: "id") {
+  id: ID!
+  name: String!
+  description: String!
+}
+
+type Query {
+  product(id: ID!): Product
+  products: [Product!]!
+}
+
+type Mutation {
+  createProduct(input: CreateProductInput!): Product
+}
+
+input CreateProductInput {
+  name: String!
+  description: String!
+}

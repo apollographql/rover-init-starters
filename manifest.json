@@ -1,0 +1,23 @@
+{
+  "templates": [
+    {
+      "id": "connectors",
+      "display_name": "Start with REST",
+      "path": "start-with-rest",
+      "language": "GraphQL",
+      "federation_version": "=2.10.0",
+      "max_schema_depth": 5,
+      "routing_url": "http://ignore"
+    },
+    {
+      "id": "typescript",
+      "display_name": "Build  an API with Typescript",
+      "path": "start-with-typescript",
+      "language": "Typescript",
+      "federation_version": "=2.10.0",
+      "max_schema_depth": 5,
+      "command": "npm ci && npm start",
+      "routing_url": "http://localhost:4001"
+    }
+  ]
+}
