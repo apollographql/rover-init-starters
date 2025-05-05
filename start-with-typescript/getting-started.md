@@ -23,7 +23,7 @@
 
 ## Make your first request
 1. Open `products.graphql` and take a look at your starter schema.
-2. Run the `rover dev` command shown in the CLI to start a development session. This gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
+2. In the terminal, run the `rover dev` command shown under `Next steps` to start a development session. This gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 3. In Sandbox, paste the following GraphQL query in the Operation section:
 
 ```
