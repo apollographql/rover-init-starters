@@ -17,7 +17,7 @@
 # Setup
 
 1. Open `products.graphql` to take a look at your graph's starter schema. Ignore the comments labeled with a ✏️ for now, we’ll get to them later.
-2. Run `rover dev --supergraph-config supergraph.yaml` to start a development session. This gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
+2. In the terminal, run the `rover dev` command shown under `Next steps` to start a development session. This gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 3. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
 ```
