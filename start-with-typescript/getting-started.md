@@ -1,4 +1,4 @@
-👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server and TypeScript. A subgraph is an individual GraphQL service in a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
+👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server and TypeScript. A subgraph is an individual GraphQL server in a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
 
 - [Setup](#setup)
   - [Components of a GraphQL server](#components-of-a-graphql-server)
@@ -22,7 +22,7 @@
 
 ## Components of a GraphQL server
 
-An overview of the files and elements that make up your server.
+Before diving in, it's helpful to understand the structure and purpose of the files included in this template. This overview will help you navigate the codebase more effectively.
 
 ### The schema (`products.graphql`)
 
@@ -45,7 +45,7 @@ The server is in charge of making sure requests are valid, finding the right dat
 
 1. Open `products.graphql` and take a look at your starter schema.
 2. In the terminal, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
-3. In Sandbox, paste the following GraphQL query in the Operation section:
+3. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
 ```
 query GetProducts {
@@ -66,33 +66,39 @@ You’re all set to start building. You'll be working primarily with the `produc
 First, make sure you’ve installed and configured your [IDE extension of choice](https://www.apollographql.com/docs/graphos/schema-design/ide-support) so you can rely on its autocompletion, schema information, and syntax highlighting features.
 
 Then, follow the development cycle below:
+
 1. Define the types and fields in the schema.
 2. Write the resolver function(s) that provide the data for those types and fields.
 3. Run operations and debug your API following the instructions in the section below.
 
-📓 **Note:** The [GraphQL Code Generator](https://the-guild.dev/graphql/codegen) has been automatically set up and configured for you. It reads your GraphQL schema and generates TypeScript types to use across your server. This helps you keep your TS types up to date as you make changes to your schema, allowing you to focus on development instead of manually updating type definitions.
+📓 **Note:** The [GraphQL Code Generator](https://the-guild.dev/graphql/codegen) has been automatically set up and configured for you. It reads your GraphQL schema and generates TypeScript types to use across your server. This helps you keep your TypeScript types up to date as you make changes to your schema, allowing you to focus on development instead of manually updating type definitions.
 
-If you modify your schema, run `npm run codegen` to ensure your generated types are up to date as well.
+Whenever you modify your schema, run `npm run codegen` to ensure your generated types are up to date as well.
 
 # Debugging your schema
 
-The Apollo dev toolkit includes a few debugging tools to help you design and develop your GraphQL API. The journey looks a little something like this:
+The Apollo dev toolkit includes a few debugging tools to help you design and develop your graph. The journey looks a little something like this:
 
 1. Design your schema with Apollo’s IDE extensions
 2. Check for errors each time you save
-3. Rinse and repeat until you're happy with your API!
+3. Run test requests in Sandbox
+4. Rinse and repeat until you're happy with your API!
 
 ## Design your schema with Apollo’s IDE extensions
 
-Apollo’s IDE extensions are designed to help you catch and correct any issues related to schema design as early as possible. Lean on their instant feedback and autocomplete capabilities to help you create types, fields, arguments, and connectors.
+Apollo’s IDE extensions are designed to help you catch and correct any issues related to schema design as early as possible. Lean on their instant feedback and autocomplete capabilities to help you create types, fields, and arguments.
 
 ## Check for errors each time you save
 
 With `rover dev`, Rover starts watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
 
+## Run test requests in Sandbox
+
+As you update your schema, Apollo Sandbox lets you validate your changes by testing requests and examining the actual server responses.
+
 # Publishing your changes to GraphOS Studio
 
-When you publish a schema to GraphOS, it becomes part of your schema’s version history and is available for checks, composition, and collaboration. When you run `rover init`, GraphOS takes care of your first publish for you. 
+When you publish a schema to GraphOS, it becomes part of your schema’s version history and is available for checks, composition, and collaboration. When you run `rover init`, GraphOS takes care of your first publish for you.
 
 Once you’ve made changes to your schema files and are happy with the state of your API, or if you’d like to test the experience of publishing schema changes to GraphOS Studio, paste and run the following command in your terminal:
 
@@ -106,6 +112,7 @@ rover subgraph publish your-graph-id@main \ # Replace this with your `APOLLO_GRA
 📓 **Note:** For production-ready APIs, [integrating Rover into your CI/CD](https://www.apollographql.com/docs/rover/ci-cd) ensures schema validation, reduces the risk of breaking changes, and improves collaboration.
 
 # Security
+
 For a more secure and reliable API, Apollo recommends updating your CORS policy and introspection settings for production or any published/publicly accessible environments. You can do so by:
 
 
@@ -116,22 +123,19 @@ Making these updates helps safeguard your API against common vulnerabilities and
 
 # Additional resources
 
-## More on GraphQL API development
+## More on GraphQL server development
 
 - [GraphQL basics](https://graphql.com/learn/what-is-graphql/)
 - [How does a GraphQL server work?](https://graphql.com/learn/how-does-graphql-work/)
 - [Introduction to Apollo Server](https://www.apollographql.com/docs/apollo-server)
-- [Introduction to Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/federation)
-- [Schema Design with Apollo GraphOS](https://www.apollographql.com/docs/graphos/schema-design)
-- [IDE support for schema development](https://www.apollographql.com/docs/graphos/schema-design/ide-support)
 
 ## More on federation
 
+- [Introduction to Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/federation)
 - [Tutorial: Federation with TypeScript & Apollo Server](https://www.apollographql.com/tutorials/intro-typescript)
 - [More educational materials covering TypeScript and Federation](https://www.apollographql.com/tutorials/browse/?categories=federation&languages=TypeScript)
-- [Entities in Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro)
 
-## Deploying your graph
+## Deploying your supergraph
 
 - [Supergraph routing with GraphOS Router](https://www.apollographql.com/docs/graphos/routing/about-router)
 - [Self-hosted Deployment](https://www.apollographql.com/docs/graphos/routing/self-hosted)

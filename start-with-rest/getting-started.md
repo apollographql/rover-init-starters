@@ -64,10 +64,10 @@ To learn more about headers and other advanced features like configuring environ
 
 The Apollo dev toolkit includes a few debugging tools to help you design and develop your graph. The journey looks a little something like this:
 
-- Design your schema with Apollo’s IDE extensions
-- Check for errors each time you save
-- Debug Connectors in Sandbox
-- Rinse and repeat until you're happy with your API!
+1. Design your schema with Apollo’s IDE extensions
+2. Check for errors each time you save
+3. Debug Connectors in Sandbox
+4. Rinse and repeat until you're happy with your API!
 
 ## Design your schema with Apollo’s IDE extensions
 
