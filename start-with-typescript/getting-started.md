@@ -17,7 +17,6 @@
   - [More on federation](#more-on-federation)
   - [Deploying your graph](#deploying-your-graph)
 
-
 # Setup
 
 ## Components of a GraphQL server
@@ -40,7 +39,6 @@ The server is in charge of making sure requests are valid, finding the right dat
 
 **📓 Note:** This graph is using [Apollo Server](https://github.com/apollographql/apollo-server)—an open source server library that is quick and easy to set up, giving you a way to build a production-ready, self-documenting GraphQL API.
 
-
 ## Make your first request
 
 1. Open `products.graphql` and take a look at your starter schema.
@@ -57,7 +55,7 @@ query GetProducts {
 }
 ```
 
-4. Click  `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
+4. Click `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
 
 # Time to build your API
 
@@ -114,7 +112,6 @@ rover subgraph publish your-graph-id@main \ # Replace this with your `APOLLO_GRA
 # Security
 
 For a more secure and reliable API, Apollo recommends updating your CORS policy and introspection settings for production or any published/publicly accessible environments. You can do so by:
-
 
 - Specifying which origins, HTTP methods, and headers are allowed to interact with your API
 - Turning off GraphQL introspection to limit the exposure of your API schema
