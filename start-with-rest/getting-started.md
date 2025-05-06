@@ -10,14 +10,14 @@
 - [Publishing changes to Apollo Studio](#publishing-changes-to-apollo-studio)
 - [Security](#security)
 - [Additional resources](#additional-resources)
-  - [Deploying your GraphQL API](#deploying-your-graphql-api)
+  - [Deploying your graph](#deploying-your-graph)
   - [More on graph development](#more-on-graph-development)
   - [More about Connectors](#more-about-connectors)
 
 # Setup
 
 1. Open `products.graphql` to take a look at your graph's starter schema. Ignore the comments labeled with a ✏️ for now, we’ll get to them later.
-2. In the terminal, run the `rover dev` command shown under `Next steps` to start a development session. This gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
+2. In the terminal, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 3. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
 ```
@@ -105,18 +105,16 @@ Making these updates helps safeguard your API against common vulnerabilities and
 
 # Additional resources
 
-## Deploying your GraphQL API
+## Deploying your graph
 - [Supergraph routing with GraphOS Router](https://www.apollographql.com/docs/graphos/routing/about-router)
 - [Self-hosted Deployment](https://www.apollographql.com/docs/graphos/routing/self-hosted)
 - [Router configuration](https://www.apollographql.com/docs/graphos/routing/configuration)
 
 ## More on graph development
-
 - [Introduction to Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/federation)
 - [Schema Design with Apollo GraphOS](https://www.apollographql.com/docs/graphos/schema-design)
 - [IDE support for schema development](https://www.apollographql.com/docs/graphos/schema-design/ide-support)
 
 ## More about Connectors
-
 - [Tutorial: GraphQL meets REST with Apollo Connectors](https://www.apollographql.com/tutorials/connectors-intro-rest)
 - [Connectors Community Repo](https://github.com/apollographql/connectors-community)

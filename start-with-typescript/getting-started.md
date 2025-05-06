@@ -1,12 +1,11 @@
-👋 Hi there! The following guide walks you through building a subgraph–a service in a federated architecture–with Apollo Server and TypeScript.
+👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server and TypeScript. A subgraph is an individual GraphQL service in a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
 
 - [Setup](#setup)
-  - [Make your first request](#make-your-first-request)
   - [Components of a GraphQL server](#components-of-a-graphql-server)
-    - [The schema](#the-schema)
-    - [Resolvers](#resolvers)
-    - [The server](#the-server)
-  - [Type safety](#type-safety)
+    - [The schema (`products.graphql`)](#the-schema-productsgraphql)
+    - [Resolvers (`src/resolvers`)](#resolvers-srcresolvers)
+    - [The server (`src/index.ts`)](#the-server-srcindexts)
+  - [Make your first request](#make-your-first-request)
 - [Time to build your API](#time-to-build-your-api)
 - [Debugging your schema](#debugging-your-schema)
   - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
@@ -16,14 +15,32 @@
 - [Additional resources](#additional-resources)
   - [More on GraphQL API development](#more-on-graphql-api-development)
   - [More on federation](#more-on-federation)
-  - [Deploying your GraphQL API](#deploying-your-graphql-api)
+  - [Deploying your graph](#deploying-your-graph)
 
 
 # Setup
 
+## Components of a GraphQL server
+An overview of the files and elements that make up your server.
+
+### The schema (`products.graphql`)
+The schema describes what data is available, how it’s structured, and how it can be requested or modified. It’s written using GraphQL’s Schema Definition Language (SDL), which lets you define the shape and capabilities of an API in a clear, type-safe way that is also backend-agnostic.
+
+### Resolvers (`src/resolvers`)
+A resolver function populates the data for a particular field in the schema. Resolvers are defined in a resolvers map that follows the hierarchy of the schema.
+
+You can find the resolvers for this project in `src/resolvers`. Each file corresponds to a type in your schema.
+
+### The server (`src/index.ts`)
+The server is in charge of making sure requests are valid, finding the right data, and sending it back to the requester.
+
+**📓 Note:** This graph is using [Apollo Server](https://github.com/apollographql/apollo-server)—an open source server library that is quick and easy to set up, giving you a way to build a production-ready, self-documenting GraphQL API.
+
+
 ## Make your first request
+
 1. Open `products.graphql` and take a look at your starter schema.
-2. In the terminal, run the `rover dev` command shown under `Next steps` to start a development session. This gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
+2. In the terminal, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 3. In Sandbox, paste the following GraphQL query in the Operation section:
 
 ```
@@ -36,27 +53,7 @@ query GetProducts {
 }
 ```
 
-4. Click  `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties we asked for in our query! 🎉
-
-## Components of a GraphQL server
-
-### The schema
-The schema describes what data is available, how it’s structured, and how it can be requested or modified. It’s written using GraphQL’s Schema Definition Language (SDL), which lets you define the shape and capabilities of an API in a clear, type-safe way that is also backend-agnostic.
-
-You can find the schema for this project in `products.graphql`.
-
-### Resolvers
-A resolver function populates the data for a particular field in the schema. Resolvers are defined in a resolvers map that follows the hierarchy of the schema.
-
-You can find the resolvers for this project in `src/resolvers`. Each file corresponds to a type in your schema.
-
-### The server
-Where the GraphQL server is configured and started. 
-
-You can find the server in `src/index.ts`.
-
-## Type safety
-The [GraphQL Code Generator](https://the-guild.dev/graphql/codegen) reads in a GraphQL schema and generates TypeScript types we can use throughout our server. It keeps our TypeScript types from getting outdated as we make changes to the schema, allowing us to focus on developing it rather than constantly updating type definitions.
+4. Click  `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
 
 # Time to build your API
 
@@ -69,7 +66,9 @@ Then, follow the development cycle below:
 2. Write the resolver function(s) that provide the data for those types and fields.
 3. Run operations and debug your API following the instructions in the section below.
 
-📓 **Note:** The GraphQL Code Generator has been automatically set up and configured for you. If you update your schema, run `npm run codegen` to ensure your generated types are up to date as well.
+📓 **Note:** The [GraphQL Code Generator](https://the-guild.dev/graphql/codegen) has been automatically set up and configured for you. It reads your GraphQL schema and generates TypeScript types to use across your server. This helps you keep your TS types up to date as you make changes to your schema, allowing you to focus on development instead of manually updating type definitions.
+
+If you modify your schema, run `npm run codegen` to ensure your generated types are up to date as well.
 
 # Debugging your schema
 The Apollo dev toolkit includes a few debugging tools to help you design and develop your GraphQL API. The journey looks a little something like this:
@@ -86,7 +85,7 @@ With `rover dev`, Rover starts watching your files for updates. Every time you m
 
 # Publishing your changes to GraphOS Studio
 
-When you publish a schema to GraphOS, it becomes part of your schema’s version history and is available for checks, composition, and collaboration. When you run `init`, Rover publishes your schema to GraphOS. 
+When you publish a schema to GraphOS, it becomes part of your schema’s version history and is available for checks, composition, and collaboration. When you run `rover init`, GraphOS takes care of your first publish for you. 
 
 Once you’ve made changes to your schema files and are happy with the state of your API, or if you’d like to test the experience of publishing schema changes to GraphOS Studio, paste and run the following command in your terminal:
 
@@ -123,7 +122,7 @@ Making these updates helps safeguard your API against common vulnerabilities and
 - [More educational materials covering TypeScript and Federation](https://www.apollographql.com/tutorials/browse/?categories=federation&languages=TypeScript)
 - [Entities in Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro)
 
-## Deploying your GraphQL API
+## Deploying your graph
 - [Supergraph routing with GraphOS Router](https://www.apollographql.com/docs/graphos/routing/about-router)
 - [Self-hosted Deployment](https://www.apollographql.com/docs/graphos/routing/self-hosted)
 - [Router configuration](https://www.apollographql.com/docs/graphos/routing/configuration)
