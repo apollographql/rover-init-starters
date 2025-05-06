@@ -42,7 +42,7 @@ The server is in charge of making sure requests are valid, finding the right dat
 ## Make your first request
 
 1. Open `products.graphql` and take a look at your starter schema.
-2. In the terminal, run `npm ci` then `npm run dev` to start the subgraph server.
+2. In the terminal, run `npm ci`, then `npm run dev` to start the subgraph server.
 3. In a new terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 4. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
