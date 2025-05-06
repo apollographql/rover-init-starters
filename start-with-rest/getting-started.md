@@ -1,4 +1,4 @@
-👋 Hi there! The following guide walks you through integrating REST APIs into your graph using [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors).
+👋 Hi there! This guide walks you through integrating REST APIs into your graph using [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors).
 
 - [Setup](#setup)
   - [Part two: Check out how Connectors work](#part-two-check-out-how-connectors-work)
@@ -7,7 +7,7 @@
   - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
   - [Check for errors each time you save](#check-for-errors-each-time-you-save)
   - [Debug Connectors in Sandbox](#debug-connectors-in-sandbox)
-- [Publishing changes to Apollo Studio](#publishing-changes-to-apollo-studio)
+- [Publishing changes to GraphOS Studio](#publishing-changes-to-graphos-studio)
 - [Security](#security)
 - [Additional resources](#additional-resources)
   - [Deploying your graph](#deploying-your-graph)
@@ -41,6 +41,7 @@ query GetProducts {
 Hooray! You ran a query, got some data back, and reviewed what Connectors are like under the hood! Feel free to experiment some more–try tweaking the query to see what data you can retrieve. 🚀
 
 # Time to build your API
+
 You’re all set to start building. You'll be working primarily with the `products.graphql` file.
 
 First, make sure you’ve installed and configured [your IDE extension of choice](https://www.apollographql.com/docs/graphos/schema-design/ide-support) so you can rely on its autocompletion, schema information, and syntax highlighting features.
@@ -69,9 +70,11 @@ The Apollo dev toolkit includes a few debugging tools to help you design and dev
 - Rinse and repeat until you're happy with your API!
 
 ## Design your schema with Apollo’s IDE extensions
+
 Apollo’s IDE extensions are designed to help you catch and correct any issues related to schema design as early as possible. Lean on their instant feedback and autocomplete capabilities to help you create types, fields, arguments, and Connectors.
 
 ## Check for errors each time you save
+
 When you run `rover dev`, Rover starts watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
 
 ## Debug Connectors in Sandbox
@@ -80,7 +83,8 @@ When you run `rover dev`, Rover starts watching your files for updates. Every ti
 
 In Apollo Sandbox, you can access the Connectors Debugger by selecting it from the **Response** drop-down on the right side of your screen. The debugger will provide detailed insights into network calls, including response bodies, errors, and connector-related syntax. You can also visit Apollo's docs to [learn more about troubleshooting Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors/troubleshooting#return-debug-info-in-graphql-responses).
 
-# Publishing changes to Apollo Studio
+# Publishing changes to GraphOS Studio
+
 When you publish a schema to GraphOS, it becomes part of your schema’s version history and is available for checks, composition, and collaboration. When you run `rover init`, GraphOS takes care of your first publish for you.
 
 Once you’ve made changes to your schema files and are happy with the state of your API, or if you’d like to test the experience of publishing schema changes to GraphOS Studio, paste and run the following command in your terminal:
@@ -106,15 +110,18 @@ Making these updates helps safeguard your API against common vulnerabilities and
 # Additional resources
 
 ## Deploying your graph
+
 - [Supergraph routing with GraphOS Router](https://www.apollographql.com/docs/graphos/routing/about-router)
 - [Self-hosted Deployment](https://www.apollographql.com/docs/graphos/routing/self-hosted)
 - [Router configuration](https://www.apollographql.com/docs/graphos/routing/configuration)
 
 ## More on graph development
+
 - [Introduction to Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/federation)
 - [Schema Design with Apollo GraphOS](https://www.apollographql.com/docs/graphos/schema-design)
 - [IDE support for schema development](https://www.apollographql.com/docs/graphos/schema-design/ide-support)
 
 ## More about Connectors
+
 - [Tutorial: GraphQL meets REST with Apollo Connectors](https://www.apollographql.com/tutorials/connectors-intro-rest)
 - [Connectors Community Repo](https://github.com/apollographql/connectors-community)

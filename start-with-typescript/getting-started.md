@@ -21,17 +21,21 @@
 # Setup
 
 ## Components of a GraphQL server
+
 An overview of the files and elements that make up your server.
 
 ### The schema (`products.graphql`)
+
 The schema describes what data is available, how it’s structured, and how it can be requested or modified. It’s written using GraphQL’s Schema Definition Language (SDL), which lets you define the shape and capabilities of an API in a clear, type-safe way that is also backend-agnostic.
 
 ### Resolvers (`src/resolvers`)
+
 A resolver function populates the data for a particular field in the schema. Resolvers are defined in a resolvers map that follows the hierarchy of the schema.
 
 You can find the resolvers for this project in `src/resolvers`. Each file corresponds to a type in your schema.
 
 ### The server (`src/index.ts`)
+
 The server is in charge of making sure requests are valid, finding the right data, and sending it back to the requester.
 
 **📓 Note:** This graph is using [Apollo Server](https://github.com/apollographql/apollo-server)—an open source server library that is quick and easy to set up, giving you a way to build a production-ready, self-documenting GraphQL API.
@@ -71,6 +75,7 @@ Then, follow the development cycle below:
 If you modify your schema, run `npm run codegen` to ensure your generated types are up to date as well.
 
 # Debugging your schema
+
 The Apollo dev toolkit includes a few debugging tools to help you design and develop your GraphQL API. The journey looks a little something like this:
 
 1. Design your schema with Apollo’s IDE extensions
@@ -78,9 +83,11 @@ The Apollo dev toolkit includes a few debugging tools to help you design and dev
 3. Rinse and repeat until you're happy with your API!
 
 ## Design your schema with Apollo’s IDE extensions
+
 Apollo’s IDE extensions are designed to help you catch and correct any issues related to schema design as early as possible. Lean on their instant feedback and autocomplete capabilities to help you create types, fields, arguments, and connectors.
 
 ## Check for errors each time you save
+
 With `rover dev`, Rover starts watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
 
 # Publishing your changes to GraphOS Studio
@@ -110,6 +117,7 @@ Making these updates helps safeguard your API against common vulnerabilities and
 # Additional resources
 
 ## More on GraphQL API development
+
 - [GraphQL basics](https://graphql.com/learn/what-is-graphql/)
 - [How does a GraphQL server work?](https://graphql.com/learn/how-does-graphql-work/)
 - [Introduction to Apollo Server](https://www.apollographql.com/docs/apollo-server)
@@ -118,11 +126,13 @@ Making these updates helps safeguard your API against common vulnerabilities and
 - [IDE support for schema development](https://www.apollographql.com/docs/graphos/schema-design/ide-support)
 
 ## More on federation
+
 - [Tutorial: Federation with TypeScript & Apollo Server](https://www.apollographql.com/tutorials/intro-typescript)
 - [More educational materials covering TypeScript and Federation](https://www.apollographql.com/tutorials/browse/?categories=federation&languages=TypeScript)
 - [Entities in Apollo Federation](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro)
 
 ## Deploying your graph
+
 - [Supergraph routing with GraphOS Router](https://www.apollographql.com/docs/graphos/routing/about-router)
 - [Self-hosted Deployment](https://www.apollographql.com/docs/graphos/routing/self-hosted)
 - [Router configuration](https://www.apollographql.com/docs/graphos/routing/configuration)
