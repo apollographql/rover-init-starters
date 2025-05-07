@@ -1,0 +1,33 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: List test files
+      run: |
+        echo "📋 Test files to be executed:"
+        ls -la tests/
+    
+    - name: Run manifest validation
+      run: |
+        echo "🔍 Running manifest.json validation..."
+        node tests/validate-manifest.js 
