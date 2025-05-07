@@ -1,4 +1,4 @@
-name: Tests
+name: Validation Tests
 
 on:
   pull_request:
@@ -21,12 +21,6 @@ jobs:
     
     - name: Install dependencies
       run: npm ci
-    
-    - name: List test files
-      run: |
-        echo "📋 Test files to be executed:"
-        ls -la tests/
-    
     - name: Run manifest validation
       run: |
         echo "🔍 Running manifest.json validation..."
