@@ -11,7 +11,7 @@ const schema = {
       type: 'array',
       items: {
         type: 'object',
-        required: ['id', 'display_name', 'path', 'language', 'federation_version', 'max_schema_depth', 'routing_url'],
+        required: ['id', 'display_name', 'path', 'language', 'federation_version', 'max_schema_depth', 'routing_url', 'test_commands'],
         properties: {
           id: { type: 'string' },
           display_name: { type: 'string' },
@@ -21,8 +21,15 @@ const schema = {
           max_schema_depth: { type: 'number' },
           routing_url: { type: 'string' },
           print_depth: { type: 'number' },
-          command: { type: 'string' },
-          start_point_file: { type: 'string' }
+          commands: {
+            type: 'array',
+            items: { type: 'string' }
+          },
+          start_point_file: { type: 'string' },
+          test_commands: {
+            type: 'array',
+            items: { type: 'string' }
+          }
         }
       }
     }
