@@ -94,7 +94,7 @@ query GetProducts {
 }
 ```
 
-4. Click `► GetProducts` to run the request. You'll get the same response back as before, but this time, the request was handled by the router. 
+4. Click `► GetProducts` to run the request. You'll get the same response back as before, but this time, the request was handled by the router.
 
 As you continue to add more subgraphs to the supergraph, you'll need to validate that one subgraph's changes work correctly with the rest of your supergraph.
 
@@ -136,6 +136,10 @@ With `rover dev`, Rover starts watching your files for updates. Every time you m
 ## Run test requests in Sandbox
 
 As you update your schema, Apollo Sandbox lets you validate your changes by testing requests and examining the actual server responses.
+
+When you want to test your subgraph server in isolation, use the Sandbox running at http://localhost:4001, started by the `npm run dev` command. We recommend this when you're just starting out, or when you want to focus on a specific subgraph server.
+
+When you want to test the supergraph as a whole, use the Sandbox running at http://localhost:4000, started by the `rover dev` command. We recommend this any time you have more than one subgraph in your supergraph.
 
 # Publishing your changes to GraphOS Studio
 
