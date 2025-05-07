@@ -74,6 +74,8 @@ Then, follow the development cycle below:
 
 Whenever you modify your schema, run `npm run codegen` to ensure your generated types are up to date as well.
 
+ℹ️ If you run into any issues or difficulties, please reach out via the [Apollo Community here](https://community.apollographql.com/c/graph-os/getting-started/35) and click “New Topic”–the Apollo team is here to help!
+
 # Debugging your schema
 
 The Apollo dev toolkit includes a few debugging tools to help you design and develop your graph. The journey looks a little something like this:
