@@ -1,23 +1,45 @@
-👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server and TypeScript. A subgraph is an individual GraphQL server in a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
+
+👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server, TypeScript, and Apollo Federation.
 
 - [Setup](#setup)
+  - [Apollo Federation components](#apollo-federation-components)
+    - [Subgraphs](#subgraphs)
+    - [The supergraph](#the-supergraph)
+    - [The router](#the-router)
   - [Components of a GraphQL server](#components-of-a-graphql-server)
     - [The schema (`products.graphql`)](#the-schema-productsgraphql)
     - [Resolvers (`src/resolvers`)](#resolvers-srcresolvers)
     - [The server (`src/index.ts`)](#the-server-srcindexts)
-  - [Make your first request](#make-your-first-request)
+- [Make your first request](#make-your-first-request)
+    - [To the subgraph server](#to-the-subgraph-server)
+    - [To the supergraph](#to-the-supergraph)
 - [Time to build your API](#time-to-build-your-api)
 - [Debugging your schema](#debugging-your-schema)
   - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
   - [Check for errors each time you save](#check-for-errors-each-time-you-save)
+  - [Run test requests in Sandbox](#run-test-requests-in-sandbox)
 - [Publishing your changes to GraphOS Studio](#publishing-your-changes-to-graphos-studio)
 - [Security](#security)
 - [Additional resources](#additional-resources)
-  - [More on GraphQL API development](#more-on-graphql-api-development)
+  - [More on GraphQL server development](#more-on-graphql-server-development)
   - [More on federation](#more-on-federation)
-  - [Deploying your graph](#deploying-your-graph)
+  - [Deploying your supergraph](#deploying-your-supergraph)
 
 # Setup
+
+## Apollo Federation components
+
+### Subgraphs
+
+A subgraph is an individual GraphQL server in a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
+
+### The supergraph
+
+Supergraphs _contain_ one or more subgraphs. Subgraphs are separate underlying services, each responsible for a different portion of the supergraph's available data. Clients make requests to the federated graph's single entry point called the router.
+
+### The router
+
+The router is the single access point for a federated GraphQL architecture. It receives incoming operations and intelligently routes them across component services before returning a unified response.
 
 ## Components of a GraphQL server
 
@@ -39,7 +61,7 @@ The server is in charge of making sure requests are valid, finding the right dat
 
 **📓 Note:** This graph is using [Apollo Server](https://github.com/apollographql/apollo-server)—an open source server library that is quick and easy to set up, giving you a way to build a production-ready, self-documenting GraphQL API.
 
-## Make your first request
+# Make your first request
 
 ### To the subgraph server
 
