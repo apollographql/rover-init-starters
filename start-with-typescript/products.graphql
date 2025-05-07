@@ -3,7 +3,7 @@
 # For a guided tutorial covering TypeScript and Apollo Server: 🔗 https://www.apollographql.com/tutorials/intro-typescript
 
 
-type Product @key(fields: "id") {
+type Product {
   id: ID!
   name: String!
   description: String!
