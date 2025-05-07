@@ -11,8 +11,8 @@
     - [Resolvers (`src/resolvers`)](#resolvers-srcresolvers)
     - [The server (`src/index.ts`)](#the-server-srcindexts)
 - [Make your first request](#make-your-first-request)
-    - [To the subgraph server](#to-the-subgraph-server)
-    - [To the supergraph](#to-the-supergraph)
+  - [To the subgraph server](#to-the-subgraph-server)
+  - [To the supergraph](#to-the-supergraph)
 - [Time to build your API](#time-to-build-your-api)
 - [Debugging your schema](#debugging-your-schema)
   - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
@@ -63,7 +63,7 @@ The server is in charge of making sure requests are valid, finding the right dat
 
 # Make your first request
 
-### To the subgraph server
+## To the subgraph server
 
 1. Open `products.graphql` and take a look at your starter schema.
 2. In the terminal, run `npm ci`, then `npm run dev` to start the subgraph server.
@@ -84,7 +84,7 @@ query GetProducts {
 
 When you want to test your subgraph in isolation, visit http://localhost:4001.
 
-### To the supergraph
+## To the supergraph
 
 A supergraph is composed of one or more subgraphs (right now, you're only starting with one), and can be accessed with a single endpoint.
 
