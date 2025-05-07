@@ -2,9 +2,6 @@
 
 - [Setup](#setup)
   - [Apollo Federation components](#apollo-federation-components)
-    - [Subgraphs](#subgraphs)
-    - [The supergraph](#the-supergraph)
-    - [The router](#the-router)
   - [Components of a GraphQL server](#components-of-a-graphql-server)
     - [The schema (`products.graphql`)](#the-schema-productsgraphql)
     - [Resolvers (`src/resolvers`)](#resolvers-srcresolvers)
