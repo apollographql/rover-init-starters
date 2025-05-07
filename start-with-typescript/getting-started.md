@@ -77,7 +77,7 @@ query GetProducts {
 ## To the supergraph (http://localhost:4000)
 
 1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with the router.
-2. In the browser, go to http://localhost:4000, where `rover dev` is running, and gives you access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
+2. In the browser, go to http://localhost:4000, where `rover dev` is running. You'll have access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
 3. In Sandbox, paste the same GraphQL query in the **Operation** section:
 
 ```
