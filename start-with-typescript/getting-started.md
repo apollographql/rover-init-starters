@@ -1,4 +1,3 @@
-
 👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server, TypeScript, and Apollo Federation.
 
 - [Setup](#setup)
@@ -29,19 +28,15 @@
 
 ## Apollo Federation components
 
-### Subgraphs
+This project gets you started with building a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
 
-A subgraph is an individual GraphQL server in a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
+A supergraph contains the _router_, and one or more _subgraphs_.
 
-### The supergraph
+The router is the single access point for the supergraph. It receives incoming operations from clients and intelligently routes them across subgraphs before returning a unified response.
 
-Supergraphs _contain_ one or more subgraphs. Subgraphs are separate underlying services, each responsible for a different portion of the supergraph's available data. Clients make requests to the federated graph's single entry point called the router.
+A subgraph is an individual GraphQL server that takes responsibility for a specific domain in the supergraph.
 
-### The router
-
-The router is the single access point for a federated GraphQL architecture. It receives incoming operations and intelligently routes them across component services before returning a unified response.
-
-## Components of a GraphQL server
+## Components of a GraphQL subgraph server
 
 Before diving in, it's helpful to understand the structure and purpose of the files included in this template. This overview will help you navigate the codebase more effectively.
 
@@ -88,8 +83,8 @@ When you want to test your subgraph in isolation, visit http://localhost:4001.
 
 A supergraph is composed of one or more subgraphs (right now, you're only starting with one), and can be accessed with a single endpoint.
 
-1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with a supergraph.
-2. In the browser, go to http://localhost:4000, where `rover dev` is running and gives you access to Sandbox. Make sure you still have the subgraph server running from the previous section.
+1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with the router.
+2. In the browser, go to http://localhost:4000, where `rover dev` is running, and gives you access to Sandbox. Make sure you still have the subgraph server running from the previous section.
 3. In Sandbox, paste the same GraphQL query in the **Operation** section:
 
 ```
