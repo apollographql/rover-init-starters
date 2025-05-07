@@ -60,12 +60,15 @@ query GetProducts {
 
 5. Click `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
 
+When you want to test your subgraph in isolation, visit http://localhost:4001.
+
 ### To the supergraph
 
 A supergraph is composed of one or more subgraphs (right now, you're only starting with one), and can be accessed with a single endpoint.
 
-1.  In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Sandbox. Make sure you still have the subgraph server running from the previous section.
-2.  In Sandbox, paste the same GraphQL query in the **Operation** section:
+1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with a supergraph.
+2. In the browser, go to http://localhost:4000, where `rover dev` is running and gives you access to Sandbox. Make sure you still have the subgraph server running from the previous section.
+3. In Sandbox, paste the same GraphQL query in the **Operation** section:
 
 ```
 query GetProducts {
@@ -77,9 +80,9 @@ query GetProducts {
 }
 ```
 
-5. Click `► GetProducts` to run the request. You'll get the same response back as before.
+4. Click `► GetProducts` to run the request. You'll get the same response back as before.
 
-As you continue to build your graph, you'll be adding more and more subgraphs, which means ... (EXPLAIN: what's the benefit of doing this?)
+When you want to test your supergraph, visit http://localhost:4000. `rover dev` is how you test and validate your supergraph. As more services/subgraphs get added to your graph, you'll need to validate that one subgraph server's changes work correctly with the rest of your supergraph.
 
 # Time to build your API
 
