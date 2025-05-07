@@ -27,7 +27,7 @@
 
 This project gets you started with building a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
 
-A supergraph contains the _router_, and one or more _subgraphs_.
+A supergraph contains a _router_, and one or more _subgraphs_.
 
 The router is the single access point for the supergraph. It receives incoming operations from clients and intelligently routes them across subgraphs before returning a unified response.
 
@@ -55,7 +55,7 @@ The server is in charge of making sure requests are valid, finding the right dat
 
 # Make your first request
 
-## To the subgraph server
+## To the subgraph server (http://localhost:4001)
 
 1. Open `products.graphql` and take a look at your starter schema.
 2. In the terminal, run `npm ci`, then `npm run dev` to start the subgraph server.
@@ -76,7 +76,7 @@ query GetProducts {
 
 When you want to test your subgraph in isolation, visit http://localhost:4001.
 
-## To the supergraph
+## To the supergraph (http://localhost:4000)
 
 A supergraph is composed of one or more subgraphs (right now, you're only starting with one), and can be accessed with a single endpoint.
 
@@ -94,9 +94,9 @@ query GetProducts {
 }
 ```
 
-4. Click `► GetProducts` to run the request. You'll get the same response back as before.
+4. Click `► GetProducts` to run the request. You'll get the same response back as before, but this time, the request was handled by the router. 
 
-When you want to test your supergraph, visit http://localhost:4000. `rover dev` is how you test and validate your supergraph. As more services/subgraphs get added to your graph, you'll need to validate that one subgraph server's changes work correctly with the rest of your supergraph.
+As you continue to add more subgraphs to the supergraph, you'll need to validate that one subgraph's changes work correctly with the rest of your supergraph.
 
 # Time to build your API
 
