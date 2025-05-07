@@ -2,13 +2,13 @@
 
 - [Setup](#setup)
   - [Apollo Federation components](#apollo-federation-components)
-  - [Components of a GraphQL server](#components-of-a-graphql-server)
+  - [Components of a GraphQL subgraph server](#components-of-a-graphql-subgraph-server)
     - [The schema (`products.graphql`)](#the-schema-productsgraphql)
     - [Resolvers (`src/resolvers`)](#resolvers-srcresolvers)
     - [The server (`src/index.ts`)](#the-server-srcindexts)
 - [Make your first request](#make-your-first-request)
-  - [To the subgraph server](#to-the-subgraph-server)
-  - [To the supergraph](#to-the-supergraph)
+  - [To the subgraph server (http://localhost:4001)](#to-the-subgraph-server-httplocalhost4001)
+  - [To the supergraph (http://localhost:4000)](#to-the-supergraph-httplocalhost4000)
 - [Time to build your API](#time-to-build-your-api)
 - [Debugging your schema](#debugging-your-schema)
   - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
@@ -74,14 +74,10 @@ query GetProducts {
 
 5. Click `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
 
-When you want to test your subgraph in isolation, visit http://localhost:4001.
-
 ## To the supergraph (http://localhost:4000)
 
-A supergraph is composed of one or more subgraphs (right now, you're only starting with one), and can be accessed with a single endpoint.
-
 1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with the router.
-2. In the browser, go to http://localhost:4000, where `rover dev` is running, and gives you access to Sandbox. Make sure you still have the subgraph server running from the previous section.
+2. In the browser, go to http://localhost:4000, where `rover dev` is running, and gives you access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
 3. In Sandbox, paste the same GraphQL query in the **Operation** section:
 
 ```
@@ -96,7 +92,7 @@ query GetProducts {
 
 4. Click `► GetProducts` to run the request. You'll get the same response back as before, but this time, the request was handled by the router.
 
-As you continue to add more subgraphs to the supergraph, you'll need to validate that one subgraph's changes work correctly with the rest of your supergraph.
+ℹ️ **Tip:** To learn more about which port to work with, check out the section titled [Run test requests in Sandbox](#run-test-requests-in-sandbox).
 
 # Time to build your API
 
@@ -114,7 +110,7 @@ Then, follow the development cycle below:
 
 Whenever you modify your schema, run `npm run codegen` to ensure your generated types are up to date as well.
 
-ℹ️ If you run into any issues or difficulties, please reach out via the [Apollo Community](https://community.apollographql.com/c/graph-os/getting-started/35). Click **New Topic** to start a discussion–the Apollo team is here to help!
+ℹ️ **Tip:** If you run into any issues or difficulties, please reach out via the [Apollo Community](https://community.apollographql.com/c/graph-os/getting-started/35). Click **New Topic** to start a discussion–the Apollo team is here to help!
 
 # Debugging your schema
 
