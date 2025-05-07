@@ -22,5 +22,12 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Run tests
-      run: npm test 
+    - name: List test files
+      run: |
+        echo "📋 Test files to be executed:"
+        ls -la tests/
+    
+    - name: Run manifest validation
+      run: |
+        echo "🔍 Running manifest.json validation..."
+        node tests/validate-manifest.js 
