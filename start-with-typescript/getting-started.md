@@ -41,9 +41,11 @@ The server is in charge of making sure requests are valid, finding the right dat
 
 ## Make your first request
 
+### To the subgraph server
+
 1. Open `products.graphql` and take a look at your starter schema.
 2. In the terminal, run `npm ci`, then `npm run dev` to start the subgraph server.
-3. In a new terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
+3. In the browser, go to http://localhost:4001, where the subgraph server is running. You'll have access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 4. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
 ```
@@ -58,9 +60,30 @@ query GetProducts {
 
 5. Click `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
 
+### To the supergraph
+
+A supergraph is composed of one or more subgraphs (right now, you're only starting with one), and can be accessed with a single endpoint.
+
+1.  In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Sandbox. Make sure you still have the subgraph server running from the previous section.
+2.  In Sandbox, paste the same GraphQL query in the **Operation** section:
+
+```
+query GetProducts {
+  products {
+    id
+    name
+    description
+  }
+}
+```
+
+5. Click `► GetProducts` to run the request. You'll get the same response back as before.
+
+As you continue to build your graph, you'll be adding more and more subgraphs, which means ... (EXPLAIN: what's the benefit of doing this?)
+
 # Time to build your API
 
-You’re all set to start building. You'll be working primarily with the `products.graphql` file.
+You’re all set to start building.
 
 First, make sure you’ve installed and configured your [IDE extension of choice](https://www.apollographql.com/docs/graphos/schema-design/ide-support) so you can rely on its autocompletion, schema information, and syntax highlighting features.
 
