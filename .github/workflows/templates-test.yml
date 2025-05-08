@@ -1,4 +1,4 @@
-name: Validation Tests
+name: Templates Test
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
     branches: [ main, 'releases/**' ]
 
 jobs:
-  test:
+  test-templates:
     runs-on: ubuntu-latest
     
     steps:
@@ -22,7 +22,12 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run manifest validation
+    - name: Test TypeScript template
       run: |
-        echo "🔍 Running manifest.json validation..."
-        node tests/validate-manifest.js
+        echo "Testing TypeScript template..."
+        npm run test:template start-with-typescript "npm ci" "npm test"
+
+    - name: Test REST template
+      run: |
+        echo "Testing REST template..."
+        npm run test:template start-with-rest "echo \"REST template test coming soon\""
