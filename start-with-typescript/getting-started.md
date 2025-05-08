@@ -9,11 +9,11 @@
 - [Make your first request](#make-your-first-request)
   - [To the subgraph server (http://localhost:4001)](#to-the-subgraph-server-httplocalhost4001)
   - [To the supergraph (http://localhost:4000)](#to-the-supergraph-httplocalhost4000)
+  - [Choosing a port to work with](#choosing-a-port-to-work-with)
 - [Time to build your API](#time-to-build-your-api)
 - [Debugging your schema](#debugging-your-schema)
   - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
   - [Check for errors each time you save](#check-for-errors-each-time-you-save)
-  - [Run test requests in Sandbox](#run-test-requests-in-sandbox)
 - [Publishing your changes to GraphOS Studio](#publishing-your-changes-to-graphos-studio)
 - [Security](#security)
 - [Additional resources](#additional-resources)
@@ -77,7 +77,7 @@ query GetProducts {
 ## To the supergraph (http://localhost:4000)
 
 1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with the router.
-2. In the browser, go to http://localhost:4000, where `rover dev` is running. You'll have access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
+2. In the browser, go to http://localhost:4000, where `rover dev` is running, and gives you access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
 3. In Sandbox, paste the same GraphQL query in the **Operation** section:
 
 ```
@@ -92,7 +92,15 @@ query GetProducts {
 
 4. Click `► GetProducts` to run the request. You'll get the same response back as before, but this time, the request was handled by the router.
 
-ℹ️ **Tip:** To learn more about which port to work with, check out the section titled [Run test requests in Sandbox](#run-test-requests-in-sandbox).
+## Choosing a port to work with
+
+As you start building and updating your schema, Apollo Sandbox lets you validate your changes by testing requests and examining the corresponding server responses.
+
+When you want to test your subgraph server in isolation, use the Sandbox running at http://localhost:4001, started by the `npm run dev` command. This is recommended when you're just starting out, or when you want to focus on a specific subgraph server.
+
+When you want to test the supergraph as a whole, use the Sandbox running at http://localhost:4000, started by the `rover dev` command. This is recommended when you have more than one subgraph in your supergraph.
+
+📓 **Note:** Please keep in mind that if you choose to work with `rover dev` and `localhost:4000`, you'll need to start the subgraph server _first_ by running `npm ci` and `npm run dev`—otherwise, you'll encounter errors when running requests in Sandbox.
 
 # Time to build your API
 
@@ -118,8 +126,7 @@ The Apollo dev toolkit includes a few debugging tools to help you design and dev
 
 1. Design your schema with Apollo’s IDE extensions
 2. Check for errors each time you save
-3. Run test requests in Sandbox
-4. Rinse and repeat until you're happy with your API!
+3. Rinse and repeat until you're happy with your API!
 
 ## Design your schema with Apollo’s IDE extensions
 
@@ -128,14 +135,6 @@ Apollo’s IDE extensions are designed to help you catch and correct any issues 
 ## Check for errors each time you save
 
 With `rover dev`, Rover starts watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
-
-## Run test requests in Sandbox
-
-As you update your schema, Apollo Sandbox lets you validate your changes by testing requests and examining the actual server responses.
-
-When you want to test your subgraph server in isolation, use the Sandbox running at http://localhost:4001, started by the `npm run dev` command. We recommend this when you're just starting out, or when you want to focus on a specific subgraph server.
-
-When you want to test the supergraph as a whole, use the Sandbox running at http://localhost:4000, started by the `rover dev` command. We recommend this any time you have more than one subgraph in your supergraph.
 
 # Publishing your changes to GraphOS Studio
 
