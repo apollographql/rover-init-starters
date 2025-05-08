@@ -77,7 +77,7 @@ query GetProducts {
 ## To the supergraph (http://localhost:4000)
 
 1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with the router.
-2. In the browser, go to http://localhost:4000, where `rover dev` is running, and gives you access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
+2. In the browser, go to http://localhost:4000, where `rover dev` is running. You'll have access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
 3. In Sandbox, paste the same GraphQL query in the **Operation** section:
 
 ```
@@ -94,13 +94,13 @@ query GetProducts {
 
 ## Choosing a port to work with
 
-As you start building and updating your schema, Apollo Sandbox lets you validate your changes by testing requests and examining the corresponding server responses.
+As you start building your schema, you can use Apollo Sandbox to send requests to your subgraph or supergraph.
 
 When you want to test your subgraph server in isolation, use the Sandbox running at http://localhost:4001, started by the `npm run dev` command. This is recommended when you're just starting out, or when you want to focus on a specific subgraph server.
 
 When you want to test the supergraph as a whole, use the Sandbox running at http://localhost:4000, started by the `rover dev` command. This is recommended when you have more than one subgraph in your supergraph.
 
-📓 **Note:** Please keep in mind that if you choose to work with `rover dev` and `localhost:4000`, you'll need to start the subgraph server _first_ by running `npm ci` and `npm run dev`—otherwise, you'll encounter errors when running requests in Sandbox.
+📓 **Note:** If you are using `rover dev` and `localhost:4000`, you'll need to start the subgraph server _first_ by running `npm ci` and `npm run dev`—otherwise, you'll encounter errors when running requests in Sandbox.
 
 # Time to build your API
 
