@@ -30,4 +30,4 @@ jobs:
     - name: Test REST template
       run: |
         echo "Testing REST template..."
-        npm run test:template start-with-rest "echo" "\"REST template test coming soon\""
+        npm run test:template start-with-rest "echo \"REST template test coming soon\""
