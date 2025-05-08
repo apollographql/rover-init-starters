@@ -1,3 +1,4 @@
+
 👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server, TypeScript, and Apollo Federation.
 
 - [Setup](#setup)
@@ -53,6 +54,7 @@ The server is in charge of making sure requests are valid, finding the right dat
 
 **📓 Note:** This graph is using [Apollo Server](https://github.com/apollographql/apollo-server)—an open source server library that is quick and easy to set up, giving you a way to build a production-ready, self-documenting GraphQL API.
 
+
 # Make your first request
 
 ## To the subgraph server (http://localhost:4001)
@@ -106,6 +108,7 @@ When you want to test the supergraph as a whole, use the Sandbox running at http
 
 You’re all set to start building.
 
+
 First, make sure you’ve installed and configured your [IDE extension of choice](https://www.apollographql.com/docs/graphos/schema-design/ide-support) so you can rely on its autocompletion, schema information, and syntax highlighting features.
 
 Then, follow the development cycle below:
@@ -135,6 +138,7 @@ Apollo’s IDE extensions are designed to help you catch and correct any issues 
 ## Check for errors each time you save
 
 With `rover dev`, Rover starts watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
+
 
 # Publishing your changes to GraphOS Studio
 
