@@ -58,7 +58,7 @@ Then, follow the development cycle below:
 
 To learn more about headers and other advanced features like configuring environment variables, telemetry, and authentication, visit [Apollo’s docs on working with Router](https://community.apollographql.com/c/graph-os/getting-started/35).
 
-ℹ️ If you run into any issues or difficulties, please reach out via the [Apollo Community here](https://community.apollographql.com/c/graph-os/getting-started/35) and click “New Topic”–the Apollo team is here to help!
+ℹ️ **Tip:** If you run into any issues or difficulties, please reach out via the [Apollo Community](https://community.apollographql.com/c/graph-os/getting-started/35). Click **New Topic** to start a discussion–the Apollo team is here to help!
 
 # Debugging your schema
 

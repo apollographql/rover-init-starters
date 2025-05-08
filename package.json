@@ -1,0 +1,11 @@
+{
+  "name": "rover-connectors-starter",
+  "version": "1.0.0",
+  "description": "Rover Connectors Starter Kit",
+  "scripts": {
+    "test": "node tests/validate-manifest.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.12.0"
+  }
+} 
