@@ -23,12 +23,14 @@ const schema = {
           print_depth: { type: 'number' },
           commands: {
             type: 'array',
-            items: { type: 'string' }
+            items: { type: 'string' },
+            minItems: 1
           },
           start_point_file: { type: 'string' },
           test_commands: {
             type: 'array',
-            items: { type: 'string' }
+            items: { type: 'string' },
+            minItems: 1
           }
         }
       }
