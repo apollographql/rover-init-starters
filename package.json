@@ -6,6 +6,6 @@
     "test": "node tests/validate-manifest.js"
   },
   "devDependencies": {
-    "ajv": "^8.12.0"
+    "ajv": "8.17.1"
   }
 } 
