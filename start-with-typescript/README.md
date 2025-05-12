@@ -4,7 +4,7 @@
 
 This graph was created using `rover init`. 
 
-`rover init` is designed to help you set up a new, federated GraphQL API using Apollo’s Rover CLI and [Apollo Server](https://www.apollographql.com/docs/apollo-server).
+`rover init` helps you set up a new, federated GraphQL API using [Apollo Server](https://www.apollographql.com/docs/apollo-server).
 
 This command:
 
