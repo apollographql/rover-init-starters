@@ -2,7 +2,7 @@
 
 👋 Welcome!
 
-This repository is used to initialize by `rover init` to curate an API orchestration project using [Apollo’s Rover CLI](https://www.apollographql.com/docs/rover) by providing a structured setup for managing and composing APIs efficiently.
+[Apollo’s Rover CLI](https://www.apollographql.com/docs/rover) uses this repository to initialize a [graph](https://www.apollographql.com/docs/concepts/graphs). Running Rover's [`init`](https://www.apollographql.com/docs/rover/commands/init) command provides a structured setup for managing and orchestrating APIs efficiently.
 
 # Prerequisites
 
