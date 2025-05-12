@@ -1,0 +1,33 @@
+name: Changelog Check
+
+on:
+  pull_request:
+    branches:
+      - 'release/**'
+    paths:
+      - 'CHANGELOG.md'
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  changelog-updated:
+    name: Ensure CHANGELOG.md is updated in PRs from main to release/*
+    runs-on: ubuntu-latest
+    if: github.base_ref != null && startsWith(github.base_ref, 'release/') && github.head_ref == 'main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if CHANGELOG.md was updated
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q '^CHANGELOG.md$'; then
+            echo "CHANGELOG.md was updated."
+          else
+            echo "CHANGELOG.md must be updated in PRs from main to release/* branches."
+            exit 1
+          fi
