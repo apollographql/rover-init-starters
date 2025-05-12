@@ -4,7 +4,7 @@
 
 This graph was created using `rover init`. 
 
-This template repository is used to initialize an API orchestration project using [Apollo’s Rover CLI](https://www.apollographql.com/docs/rover), [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors), and an example REST API, by providing a structured setup for managing and composing APIs efficiently.
+`rover init` helps you set up a new, federated GraphQL API using [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors) and an example REST API.
 
 This command:
 
