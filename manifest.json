@@ -17,7 +17,7 @@
       "language": "Typescript",
       "federation_version": "=2.10.0",
       "max_schema_depth": 5,
-      "commands": ["npm ci", "npm start"],
+      "commands": ["npm ci", "npm run dev"],
       "routing_url": "http://localhost:4001",
       "print_depth": 2
     }
