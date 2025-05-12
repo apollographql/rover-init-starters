@@ -14,7 +14,7 @@ This command:
 * Walks you through spinning up a local environment to test your API
 
 
-📓 **Note:** If you’re already logged into an existing Apollo organization by the time you run this command, the CLI will nudge you to go to Apollo Studio. From there, you can create a new personal API key to interact with Rover. If you don’t have an account yet, visiting the link will prompt you to create one.
+📓 **Note:** If you’re already logged into an existing Apollo organization by the time you run this command, the CLI will nudge you to go to GraphOS Studio. From there, you can create a new personal API key to interact with Rover. If you don’t have an account yet, visiting the link will prompt you to create one.
 
 # Next steps
 For further guidance, check out `getting-started.md`. 🚀
