@@ -2,7 +2,7 @@
 
 👋 Welcome!
 
-This template repository is used to initialize an API orchestration project using [Apollo’s Rover CLI](https://www.apollographql.com/docs/rover), [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors), and an example REST API, by providing a structured setup for managing and composing APIs efficiently.
+[Apollo’s Rover CLI](https://www.apollographql.com/docs/rover) uses this repository to initialize a [graph](https://www.apollographql.com/docs/concepts/graphs). Running Rover's [`init`](https://www.apollographql.com/docs/rover/commands/init) command provides a structured setup for managing and orchestrating APIs efficiently.
 
 # Prerequisites
 
@@ -45,8 +45,3 @@ rover init
 ```
 
 📓 **Note:** If you’re already logged into an existing Apollo organization by the time you run this command, the CLI will nudge you to go to Apollo Studio. From there, you can create a new personal API key to interact with Rover. If you don’t have an account yet, visiting the link will prompt you to create one.
-
-# Next steps
-For further guidance, check out `getting-started.md`. 🚀
-
-To see more examples of Connectors, check out Apollo's [Connectors Community repo](https://github.com/apollographql/connectors-community).
