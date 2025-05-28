@@ -62,20 +62,20 @@ This document outlines the process for contributing new templates to the rover-i
 
 Each template must include the following in `manifest.json`:
 
-\| Field \| Type \| Description \|
---
-\| --- \| --- \| --- \|
-\| `id` \| String \| Unique identifier among all starters \|
-\| `display_name` \| String \| Name displayed in selector for `rover init` \|
-\| `path` \| String \| Repository path to the template \|
-\| `commands` \| String[] \| Array of commands required to run the starter (must not be empty)\|
-\| `language` \| String \| Programming language the template represents \|
-\| `federation_version` \| String \| Minimum federation version supported \|
-\| `test_commands` \| String[] \| Commands to verify the starter builds and runs tests \|
-\| `routing_url` \| String \| URL where the subgraph is exposed \|
-\| `max_schema_depth` \| Int (optional) \| Maximum depth for GraphQL file discovery (defaults to 5) \|
-\| `print_depth` \| Int (optional) \| Controls file display depth during init execution \|
-\| `start_point_file` \| String (optional) \| Custom name for the "getting started" documentation file (defaults to `getting-started.md`) \|
+| Field             | Type         | Description                                                                 |
+|------------------|--------------|-----------------------------------------------------------------------------|
+| id               | String       | Unique identifier among all starters                                       |
+| display_name     | String       | Name displayed in selector for `rover init`                                |
+| path             | String       | Repository path to the template                                            |
+| commands         | String[]     | Array of commands required to run the starter (must not be empty)          |
+| language         | String       | Programming language the template represents                               |
+| federation_version | String     | Minimum federation version supported                                       |
+| test_commands    | String[]     | Commands to verify the starter builds and runs tests                       |
+| routing_url      | String       | URL where the subgraph is exposed                                          |
+| max_schema_depth | Int (optional) | Maximum depth for GraphQL file discovery (defaults to 5)                  |
+| print_depth      | Int (optional) | Controls file display depth during init execution                         |
+| start_point_file | String (optional) | Custom name for the "getting started" documentation file (defaults to `getting-started.md`) |
+
 
 Required files:
 - Getting started documentation (default: `getting-started.md`)
