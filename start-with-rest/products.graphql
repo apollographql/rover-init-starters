@@ -9,7 +9,7 @@ extend schema
     url: "https://specs.apollo.dev/federation/v2.10"
   )
   @link( # Enable this schema to use Apollo Connectors
-    url: "https://specs.apollo.dev/connect/v0.1"
+    url: "https://specs.apollo.dev/connect/v0.2"
     import: ["@connect", "@source"]
   )
 

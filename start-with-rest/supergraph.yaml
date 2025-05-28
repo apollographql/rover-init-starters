@@ -1,7 +1,7 @@
 # A "supergraph" is a unified GraphQL API composed of different services known as "subgraphs"
 
 # Set the maximum Apollo Federation version that subgraphs in this supergraph can use. Lean more at 🔗 https://www.apollographql.com/docs/graphos/schema-design/connectors/directives#prerequisites
-federation_version: =2.10.0
+federation_version: =2.11.0
 subgraphs: # Use this section to add all of the services that make up your supergraph
   products: # Your first subgraph has been named `products`
     routing_url: http://placeholder # This value is unused but cannot be empty
