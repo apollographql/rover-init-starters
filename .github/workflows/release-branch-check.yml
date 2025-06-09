@@ -7,29 +7,26 @@ on:
       - 'main'
     types: [opened, synchronize, reopened]
 
-env:
-  RELEASE_BRANCH_PREFIX: 'release/'
-  CURRENT_RELEASE: 'v2'
-
 jobs:
   validate-release-branch:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_BRANCH_PREFIX: 'release/'
+      CURRENT_RELEASE: 'v2'
+      TARGET_BRANCH: ${{ github.base_ref }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      PR_LABELS: ${{ github.event.pull_request.labels.*.name }}
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set environment variables
-        run: |
-          echo "TARGET_BRANCH=${{ github.base_ref }}" >> $GITHUB_ENV
-          echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
-          echo "PR_LABELS=${{ github.event.pull_request.labels.*.name }}" >> $GITHUB_ENV
-          echo "BASE_SHA=${{ github.event.pull_request.base.sha }}" >> $GITHUB_ENV
-          echo "HEAD_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
-
       - name: Validate release branch
         run: |
           # First check if it's a release branch
-          if [[ ! "$TARGET_BRANCH" =~ ^${{ env.RELEASE_BRANCH_PREFIX }} ]]; then
+          if [[ ! "$TARGET_BRANCH" =~ ^"$RELEASE_BRANCH_PREFIX" ]]; then
             # Not a release branch, no need for release validation
             exit 0
           fi
@@ -41,13 +38,13 @@ jobs:
           fi
           
           # Extract version from branch name (e.g., v2 from release/v2)
-          BRANCH_VERSION=$(echo "$TARGET_BRANCH" | sed "s|${{ env.RELEASE_BRANCH_PREFIX }}||")
+          BRANCH_VERSION=$(echo "$TARGET_BRANCH" | sed "s|$RELEASE_BRANCH_PREFIX||")
           
           # Check if trying to merge to an older release branch
-          if [[ "$BRANCH_VERSION" != "${{ env.CURRENT_RELEASE }}" ]]; then
+          if [[ "$BRANCH_VERSION" != "$CURRENT_RELEASE" ]]; then
             # Check for special label that allows merging to older releases
             if ! [[ "$PR_LABELS" =~ "allow-older-release" ]]; then
-              echo "::error::Merging to older release branches (release/$BRANCH_VERSION) is not allowed. Current release is ${{ env.CURRENT_RELEASE }}."
+              echo "::error::Merging to older release branches (release/$BRANCH_VERSION) is not allowed. Current release is $CURRENT_RELEASE."
               echo "::error::If this is intentional, add the 'allow-older-release' label to the PR."
               exit 1
             fi
