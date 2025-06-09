@@ -1,67 +1,48 @@
-name: Release Branch Check
-
-on:
-  pull_request:
-    branches:
-      - 'release/**'
-      - 'main'
-    types: [opened, synchronize, reopened]
-
 jobs:
   validate-release-branch:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_BRANCH_PREFIX: release/
+      CURRENT_RELEASE: v2
+      TARGET_BRANCH: ${{ github.base_ref }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      PR_LABELS_JSON: ${{ toJson(github.event.pull_request.labels) }}
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare environment
-        run: |
-          {
-            echo "RELEASE_BRANCH_PREFIX=release/"
-            echo "CURRENT_RELEASE=v2"
-            echo "TARGET_BRANCH=${{ github.base_ref }}"
-            echo "PR_TITLE=${{ github.event.pull_request.title }}"
-            echo "PR_LABELS=${{ github.event.pull_request.labels.*.name }}"
-            echo "BASE_SHA=${{ github.event.pull_request.base.sha }}"
-            echo "HEAD_SHA=${{ github.event.pull_request.head.sha }}"
-          } >> "$GITHUB_ENV"
-
       - name: Validate release branch
         run: |
-          # First check if it's a release branch
+          LABELS=$(echo "$PR_LABELS_JSON" | jq -r '.[].name' | tr '\n' ' ')
+
           if [[ ! "$TARGET_BRANCH" =~ ^"$RELEASE_BRANCH_PREFIX" ]]; then
-            # Not a release branch, no need for release validation
+            echo "Not a release branch — skipping release validation."
             exit 0
           fi
-          
-          # Check if PR has release label
-          if [[ ! "$PR_LABELS" =~ "release" ]]; then
+
+          if [[ ! "$LABELS" =~ "release" ]]; then
             echo "::error::PRs targeting release branches must have the 'release' label"
             exit 1
           fi
-          
-          # Extract version from branch name (e.g., v2 from release/v2)
+
           BRANCH_VERSION=$(echo "$TARGET_BRANCH" | sed "s|$RELEASE_BRANCH_PREFIX||")
-          
-          # Check if trying to merge to an older release branch
+
           if [[ "$BRANCH_VERSION" != "$CURRENT_RELEASE" ]]; then
-            # Check for special label that allows merging to older releases
-            if ! [[ "$PR_LABELS" =~ "allow-older-release" ]]; then
+            if [[ ! "$LABELS" =~ "allow-older-release" ]]; then
               echo "::error::Merging to older release branches (release/$BRANCH_VERSION) is not allowed. Current release is $CURRENT_RELEASE."
               echo "::error::If this is intentional, add the 'allow-older-release' label to the PR."
               exit 1
             fi
           fi
-          
-          # Additional validation for release PRs
-          # Check if PR title follows release format
+
           if ! [[ "$PR_TITLE" =~ ^Release\ \[[0-9]{4}-[0-9]{2}-[0-9]{2}\]$ ]]; then
             echo "::error::Release PR title must follow format: 'Release [YYYY-MM-DD]'"
             exit 1
           fi
-          
-          # Check if CHANGELOG.md has been updated
+
           if ! git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "CHANGELOG.md"; then
             echo "::error::CHANGELOG.md must be updated for releases"
             exit 1
-          fi 
+          fi
