@@ -10,36 +10,23 @@ on:
 jobs:
   validate-release-branch:
     runs-on: ubuntu-latest
-    env:
-      RELEASE_BRANCH_PREFIX: 'release/'
-      CURRENT_RELEASE: 'v2'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set PR variables
-        id: pr
-        env:
-          TARGET_BRANCH: ${{ github.base_ref }}
-          PR_TITLE: ${{ github.event.pull_request.title }}
-          PR_LABELS: ${{ github.event.pull_request.labels.*.name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      - name: Prepare environment
         run: |
-          echo "target_branch=$TARGET_BRANCH" >> $GITHUB_OUTPUT
-          echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
-          echo "pr_labels=$PR_LABELS" >> $GITHUB_OUTPUT
-          echo "base_sha=$BASE_SHA" >> $GITHUB_OUTPUT
-          echo "head_sha=$HEAD_SHA" >> $GITHUB_OUTPUT
+          {
+            echo "RELEASE_BRANCH_PREFIX=release/"
+            echo "CURRENT_RELEASE=v2"
+            echo "TARGET_BRANCH=${{ github.base_ref }}"
+            echo "PR_TITLE=${{ github.event.pull_request.title }}"
+            echo "PR_LABELS=${{ github.event.pull_request.labels.*.name }}"
+            echo "BASE_SHA=${{ github.event.pull_request.base.sha }}"
+            echo "HEAD_SHA=${{ github.event.pull_request.head.sha }}"
+          } >> "$GITHUB_ENV"
 
       - name: Validate release branch
-        env:
-          TARGET_BRANCH: ${{ steps.pr.outputs.target_branch }}
-          PR_TITLE: ${{ steps.pr.outputs.pr_title }}
-          PR_LABELS: ${{ steps.pr.outputs.pr_labels }}
-          BASE_SHA: ${{ steps.pr.outputs.base_sha }}
-          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
         run: |
           # First check if it's a release branch
           if [[ ! "$TARGET_BRANCH" =~ ^"$RELEASE_BRANCH_PREFIX" ]]; then
