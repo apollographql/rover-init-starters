@@ -22,7 +22,13 @@ jobs:
         run: |
           # First check if it's a release branch
           if [[ ! "${{ github.base_ref }}" =~ ^${{ env.RELEASE_BRANCH_PREFIX }} ]]; then
-            echo "::error::Releases are only allowed to branches starting with '${{ env.RELEASE_BRANCH_PREFIX }}'. Current target branch: ${{ github.base_ref }}"
+            # Not a release branch, no need for release validation
+            exit 0
+          fi
+          
+          # Check if PR has release label
+          if [[ ! "${{ github.event.pull_request.labels.*.name }}" =~ "release" ]]; then
+            echo "::error::PRs targeting release branches must have the 'release' label"
             exit 1
           fi
           
@@ -40,16 +46,14 @@ jobs:
           fi
           
           # Additional validation for release PRs
-          if [[ "${{ github.base_ref }}" =~ ^${{ env.RELEASE_BRANCH_PREFIX }} ]]; then
-            # Check if PR title follows release format
-            if ! [[ "${{ github.event.pull_request.title }}" =~ ^Release\ \[[0-9]{4}-[0-9]{2}-[0-9]{2}\]$ ]]; then
-              echo "::error::Release PR title must follow format: 'Release [YYYY-MM-DD]'"
-              exit 1
-            fi
-            
-            # Check if CHANGELOG.md has been updated
-            if ! git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q "CHANGELOG.md"; then
-              echo "::error::CHANGELOG.md must be updated for releases"
-              exit 1
-            fi
+          # Check if PR title follows release format
+          if ! [[ "${{ github.event.pull_request.title }}" =~ ^Release\ \[[0-9]{4}-[0-9]{2}-[0-9]{2}\]$ ]]; then
+            echo "::error::Release PR title must follow format: 'Release [YYYY-MM-DD]'"
+            exit 1
+          fi
+          
+          # Check if CHANGELOG.md has been updated
+          if ! git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q "CHANGELOG.md"; then
+            echo "::error::CHANGELOG.md must be updated for releases"
+            exit 1
           fi 
