@@ -5,7 +5,7 @@
       "display_name": "Start with REST",
       "path": "start-with-rest",
       "language": "GraphQL",
-      "federation_version": "=2.10.0",
+      "federation_version": "=2.11.0",
       "max_schema_depth": 5,
       "routing_url": "http://ignore",
       "test_commands": ["echo \"REST template test coming soon\""],
