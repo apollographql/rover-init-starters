@@ -1,5 +1,9 @@
 // Import everything needed to use the `useQuery` hook
-import { useQuery, gql } from '@apollo/client';
+import { gql } from '@apollo/client';
+
+// Import generated types and hooks
+// These will be available after running `npm run codegen`
+import { useGetLocationsQuery } from './generated/graphql';
 
 const GET_LOCATIONS = gql`
   query GetLocations {
@@ -13,12 +17,14 @@ const GET_LOCATIONS = gql`
 `;
 
 function DisplayLocations() {
-  const { loading, error, data } = useQuery(GET_LOCATIONS);
+  // Use the generated typed hook for better type safety
+  const { loading, error, data } = useGetLocationsQuery();
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
-  return data.locations.map(({ id, name, description, photo }: any) => (
+  // data.locations is now fully typed!
+  return data?.locations?.map(({ id, name, description, photo }) => (
     <div key={id}>
       <h3>{name}</h3>
       <img width="400" height="250" alt="location-reference" src={`${photo}`} />

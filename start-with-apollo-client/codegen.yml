@@ -1,0 +1,36 @@
+schema: 'https://flyby-router-demo.herokuapp.com/'
+documents: 'src/**/*.{ts,tsx,graphql,gql}'
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false
+      withMutationFn: true
+      withRefetchFn: true
+      apolloReactHooksImportFrom: '@apollo/client'
+      dedupeOperationSuffix: true
+      omitOperationSuffix: false
+      exportFragmentSpreadSubTypes: true
+      addDocBlocks: true
+      skipTypename: false
+      flattenGeneratedTypes: false
+      preResolveTypes: true
+      namingConvention:
+        typeNames: pascal-case#pascalCase
+        enumValues: keep
+        fieldNames: camelCase
+        variableNames: camelCase
+        fragmentNames: pascalCase
+        operationNames: pascalCase
+hooks:
+  afterAllFileWrite:
+    - echo "✅ GraphQL types generated successfully!"
+  afterOneFileWrite:
+    - echo "📝 Generated types in src/generated/graphql.ts"
+  onError:
+    - echo "❌ GraphQL code generation failed. Please check your schema connection and queries."
