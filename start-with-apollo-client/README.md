@@ -36,9 +36,25 @@ A React TypeScript application with Apollo Client for GraphQL.
 ## Apollo Client
 
 This template includes Apollo Client setup with:
-- Client configuration in `src/apollo/client.ts`
-- Example queries in `src/apollo/queries/`
+- Client configuration in `src/main.tsx`
+- Example queries and components in `src/App.tsx`
 - TypeScript support for GraphQL operations
+
+### How the Apollo Client Flow Works
+
+When you run `npm run dev`, here's what happens:
+
+1. **Development Server**: Vite starts the development server and serves your bundled React application
+2. **App Initialization**: When the browser loads your app, React renders the component tree
+3. **Apollo Provider**: The `ApolloProvider` in `src/main.tsx` makes the Apollo Client available to all components
+4. **Query Execution**: When `DisplayLocations` component mounts, the `useQuery(GET_LOCATIONS)` hook automatically:
+   - Sends a GraphQL query to the configured endpoint (`https://flyby-router-demo.herokuapp.com/`)
+   - Shows loading state while the request is in flight
+   - Caches the response in Apollo's `InMemoryCache`
+   - Re-renders the component with the fetched data
+5. **Data Rendering**: The locations data is displayed in the UI
+
+The key point: `npm run dev` only starts the development server - the actual GraphQL queries execute client-side when React components render and use Apollo hooks like `useQuery`.
 
 ## Learn More
 
