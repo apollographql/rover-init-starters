@@ -31,3 +31,8 @@ jobs:
       run: |
         echo "Testing REST template..."
         npm run test:template start-with-rest "echo \"REST template test coming soon\""
+
+    - name: Test Apollo Client template  
+      run: |
+        echo "Testing Apollo Client template..."
+        npm run test:template start-with-apollo-client "npm ci" "npm run build"

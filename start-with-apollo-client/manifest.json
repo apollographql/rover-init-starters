@@ -1,0 +1,13 @@
+{
+  "id": "react-typescript-apollo",
+  "display_name": "Build a React app with TypeScript for Apollo Client",
+  "path": "start-with-apollo-client",
+  "language": "TypeScript",
+  "federation_version": "=2.11.0",
+  "max_schema_depth": 5,
+  "routing_url": "http://localhost:5173",
+  "commands": ["npm install", "npm run dev"],
+  "test_commands": ["npm ci", "npm run build"],
+  "start_point_file": "README.md",
+  "print_depth": 2
+}

@@ -1,0 +1,30 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "{{REACT_VERSION}}",
+    "react-dom": "{{REACT_DOM_VERSION}}",
+    "@apollo/client": "{{APOLLO_CLIENT_VERSION}}",
+    "graphql": "{{GRAPHQL_VERSION}}"
+  },
+  "devDependencies": {
+    "@types/react": "{{TYPES_REACT_VERSION}}",
+    "@types/react-dom": "{{TYPES_REACT_DOM_VERSION}}",
+    "@typescript-eslint/eslint-plugin": "{{TYPESCRIPT_ESLINT_PLUGIN_VERSION}}",
+    "@typescript-eslint/parser": "{{TYPESCRIPT_ESLINT_PARSER_VERSION}}",
+    "@vitejs/plugin-react": "{{VITE_PLUGIN_REACT_VERSION}}",
+    "eslint": "{{ESLINT_VERSION}}",
+    "eslint-plugin-react-hooks": "{{ESLINT_PLUGIN_REACT_HOOKS_VERSION}}",
+    "eslint-plugin-react-refresh": "{{ESLINT_PLUGIN_REACT_REFRESH_VERSION}}",
+    "typescript": "{{TYPESCRIPT_VERSION}}",
+    "vite": "{{VITE_VERSION}}"
+  }
+}
