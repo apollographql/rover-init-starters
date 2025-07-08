@@ -1,4 +1,4 @@
-schema: 'https://flyby-router-demo.herokuapp.com/'
+schema: './schema.graphql'
 documents: ['src/**/*.{ts,tsx}']
 ignoreNoDocuments: true
 generates:
@@ -12,4 +12,4 @@ hooks:
   afterOneFileWrite:
     - echo "📝 Generated types in src/gql/ directory"
   onError:
-    - echo "❌ GraphQL code generation failed. Please check your schema connection and queries."
+    - echo "❌ GraphQL code generation failed. Please check your schema.graphql file and queries."

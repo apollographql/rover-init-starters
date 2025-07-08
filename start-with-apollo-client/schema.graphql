@@ -1,0 +1,45 @@
+"""
+Local GraphQL schema for development and type generation.
+This schema defines the types and operations used in the example queries.
+Update this schema to match your actual GraphQL API.
+"""
+
+type Query {
+  """Get all locations"""
+  locations: [Location!]!
+  
+  """Get a single location by ID"""
+  location(id: ID!): Location
+}
+
+type Mutation {
+  """Create a new location"""
+  createLocation(input: LocationInput!): Location!
+}
+
+"""A location with details about a place"""
+type Location {
+  """Unique identifier for the location"""
+  id: ID!
+  
+  """Name of the location"""
+  name: String!
+  
+  """Description of the location"""
+  description: String!
+  
+  """URL or path to a photo of the location"""
+  photo: String!
+}
+
+"""Input for creating a new location"""
+input LocationInput {
+  """Name of the location"""
+  name: String!
+  
+  """Description of the location"""
+  description: String!
+  
+  """URL or path to a photo of the location"""
+  photo: String!
+}

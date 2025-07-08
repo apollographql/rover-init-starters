@@ -19,12 +19,16 @@ A React TypeScript application with Apollo Client for GraphQL.
    VITE_GRAPHQL_ENDPOINT=http://localhost:4000/graphql
    ```
 
-3. Start the development server:
+3. Customize the GraphQL schema:
+   
+   Edit `schema.graphql` to match your actual GraphQL API. The template includes example types for locations, but you should update this to match your backend schema.
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
 
-4. Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+5. Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
 ## Available Scripts
 
@@ -132,10 +136,21 @@ This runs codegen before building, ensuring types are always up-to-date.
 
 The code generation is configured in `codegen.yml` for Client Preset:
 
-- **Schema**: Points to your GraphQL endpoint  
+- **Schema**: Uses local `schema.graphql` file for offline type generation
 - **Documents**: Scans `src/**/*.{ts,tsx}` for GraphQL operations
 - **Preset**: Uses `client` preset for modern type generation
 - **Output**: Creates optimized files in `src/gql/`
+
+### Schema Management
+
+This template includes a `schema.graphql` file that defines the GraphQL schema for type generation. This approach provides:
+
+- **Offline Development**: Generate types without needing a running GraphQL server
+- **Consistent Types**: Same types generated regardless of server availability
+- **Version Control**: Schema changes are tracked in your repository
+- **Fast Generation**: No network requests needed during development
+
+**Important**: Update `schema.graphql` to match your actual GraphQL API schema. The runtime Apollo Client connects to your real GraphQL endpoint (configured in `.env`), while the schema file is only used for generating TypeScript types.
 
 ### Key Benefits of Client Preset
 
@@ -152,11 +167,11 @@ The code generation is configured in `codegen.yml` for Client Preset:
 
 ### Troubleshooting
 
-**Network Issues:**
-If codegen fails due to network problems, it will show a helpful error message. You can always run `npm run codegen` manually when your connection is restored.
+**Schema Issues:**
+If codegen fails, check that your `schema.graphql` file is valid GraphQL syntax. The template works offline since it uses a local schema file.
 
-**Schema Changes:**
-When your GraphQL schema changes, run `npm run codegen` to regenerate types and catch any breaking changes.
+**Schema Updates:**
+When your GraphQL API schema changes, update the `schema.graphql` file to match, then run `npm run codegen` to regenerate types and catch any breaking changes.
 
 **Type Errors:**
 If you see TypeScript errors about missing generated types, ensure you've run `npm run codegen` after adding new GraphQL operations.

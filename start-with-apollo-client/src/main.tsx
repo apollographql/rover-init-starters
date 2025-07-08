@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 
 const client = new ApolloClient({
-  uri: 'https://flyby-router-demo.herokuapp.com/',
+  uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || 'https://flyby-router-demo.herokuapp.com/',
   cache: new InMemoryCache(),
 });
 
