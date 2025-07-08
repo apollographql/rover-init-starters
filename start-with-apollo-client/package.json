@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.yml",
     "codegen:watch": "graphql-codegen --config codegen.yml --watch",
-    "postinstall": "npm run codegen || echo 'Warning: GraphQL code generation failed. This may be due to network issues or invalid schema. You can run npm run codegen manually.'"
+    "postinstall": "npm run codegen || echo 'Warning: GraphQL code generation failed. You can run npm run codegen manually.'"
   },
   "dependencies": {
     "react": "{{REACT_VERSION}}",

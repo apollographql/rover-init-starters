@@ -6,10 +6,3 @@ generates:
     preset: client
     config:
       useTypeImports: true
-hooks:
-  afterAllFileWrite:
-    - echo "✅ GraphQL types generated successfully with client-preset!"
-  afterOneFileWrite:
-    - echo "📝 Generated types in src/gql/ directory"
-  onError:
-    - echo "❌ GraphQL code generation failed. Please check your schema.graphql file and queries."
