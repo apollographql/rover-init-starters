@@ -78,7 +78,7 @@ Once you’ve made changes to your schema files and are happy with the state of 
 ```
 rover subgraph publish your-graph-id@main \ # Replace this with your `APOLLO_GRAPH_REF` value
   --schema "./schema.graphql" \
-  --name {name_of_your_subgraph} \
+  --name your-subgraph-name-subgraph \ # Replace this with {your-subgraph-name}-subgraph 
   --routing-url "https://my-running-subgraph.com/api" # If you don't have a running API yet, you can replace this with http://localhost:4000
 ```
 
