@@ -30,8 +30,6 @@
     "typescript": "{{TYPESCRIPT_VERSION}}",
     "vite": "{{VITE_VERSION}}",
     "@graphql-codegen/cli": "{{GRAPHQL_CODEGEN_CLI_VERSION}}",
-    "@graphql-codegen/typescript": "{{GRAPHQL_CODEGEN_TYPESCRIPT_VERSION}}",
-    "@graphql-codegen/typescript-operations": "{{GRAPHQL_CODEGEN_TYPESCRIPT_OPERATIONS_VERSION}}",
-    "@graphql-codegen/typescript-react-apollo": "{{GRAPHQL_CODEGEN_TYPESCRIPT_REACT_APOLLO_VERSION}}"
+    "@graphql-codegen/client-preset": "{{GRAPHQL_CODEGEN_CLIENT_PRESET_VERSION}}"
   }
 }

@@ -15,7 +15,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/generated/*": ["src/generated/*"],
+      "@/gql/*": ["src/gql/*"],
       "@/*": ["src/*"]
     },
 

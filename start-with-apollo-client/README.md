@@ -60,44 +60,59 @@ The key point: `npm run dev` only starts the development server - the actual Gra
 
 ## GraphQL Code Generation
 
-This template includes **GraphQL Code Generator** for automatic TypeScript type generation from your GraphQL schema and operations. This provides:
+This template uses **GraphQL Code Generator with Client Preset** for automatic TypeScript type generation from your GraphQL schema and operations. This provides:
 
 - **Type Safety**: Fully typed GraphQL operations and data
-- **IntelliSense**: Auto-completion for GraphQL fields and operations
-- **Generated Hooks**: Ready-to-use React hooks for each query/mutation
-- **Error Prevention**: Catch GraphQL errors at compile time
+- **IntelliSense**: Auto-completion for GraphQL fields and operations  
+- **Zero Configuration**: Works automatically with existing queries
+- **Tree Shaking**: Only generates types for operations you actually use
+- **Fragment Masking**: Advanced type safety for GraphQL fragments
 
-### How It Works
+### How Client Preset Works
 
 1. **Schema Introspection**: Fetches your GraphQL schema from the endpoint
-2. **Document Analysis**: Scans your `.ts`/`.tsx` files for GraphQL operations
-3. **Type Generation**: Creates TypeScript types and React hooks
-4. **Auto-Import**: Use generated hooks instead of manual `useQuery` calls
+2. **Document Scanning**: Finds GraphQL operations in your TypeScript files
+3. **Smart Generation**: Only generates types for operations you use
+4. **Automatic Imports**: The `graphql()` function provides instant type safety
 
 ### Generated Files
 
 After running `npm run codegen`, you'll find:
 
 ```
-src/generated/
-└── graphql.ts          # All generated types and hooks
+src/gql/
+├── index.ts           # Main export file
+├── graphql.ts         # Generated types and operations
+└── gql.ts             # Typed graphql() function
 ```
 
 ### Usage Examples
 
-**Before (manual typing):**
+**Modern approach with Client Preset:**
 ```typescript
+import { useQuery } from '@apollo/client';
+import { graphql } from './gql';
+
+const GET_LOCATIONS = graphql(/* GraphQL */ `
+  query GetLocations {
+    locations {
+      id
+      name
+      description
+      photo
+    }
+  }
+`);
+
 const { data, loading, error } = useQuery(GET_LOCATIONS);
-// data is 'any' type - no type safety!
+// data is fully typed automatically!
 ```
 
-**After (generated types):**
-```typescript
-import { useGetLocationsQuery } from './generated/graphql';
-
-const { data, loading, error } = useGetLocationsQuery();
-// data is fully typed with IntelliSense support!
-```
+**Why Client Preset is Better:**
+- **No separate hooks**: Use standard Apollo hooks with full type safety
+- **Smaller bundle**: Only generates what you use
+- **Better DX**: IntelliSense works instantly as you type GraphQL
+- **Fragment safety**: Advanced type safety for complex queries
 
 ### Development Workflow
 
@@ -115,12 +130,25 @@ This runs codegen before building, ensuring types are always up-to-date.
 
 ### Configuration
 
-The code generation is configured in `codegen.yml`:
+The code generation is configured in `codegen.yml` for Client Preset:
 
-- **Schema**: Points to your GraphQL endpoint
-- **Documents**: Scans `src/**/*.{ts,tsx,graphql,gql}` for operations
-- **Plugins**: Generates TypeScript types, operations, and React hooks
-- **Output**: Creates `src/generated/graphql.ts`
+- **Schema**: Points to your GraphQL endpoint  
+- **Documents**: Scans `src/**/*.{ts,tsx}` for GraphQL operations
+- **Preset**: Uses `client` preset for modern type generation
+- **Output**: Creates optimized files in `src/gql/`
+
+### Key Benefits of Client Preset
+
+**Traditional Approach Issues:**
+- Generated separate hooks for every operation
+- Large bundle sizes with unused code
+- Complex configuration required
+
+**Client Preset Advantages:**
+- **Tree Shaking**: Only includes types you actually use
+- **Standard Hooks**: Use `useQuery`, `useMutation` directly
+- **Better Performance**: Smaller generated files
+- **Zero Config**: Works out of the box
 
 ### Troubleshooting
 
@@ -133,10 +161,13 @@ When your GraphQL schema changes, run `npm run codegen` to regenerate types and 
 **Type Errors:**
 If you see TypeScript errors about missing generated types, ensure you've run `npm run codegen` after adding new GraphQL operations.
 
+**Import Errors:**
+Make sure to import `graphql` from `./gql` (not `@apollo/client`) when using Client Preset.
+
 ## Learn More
 
 - [React Documentation](https://reactjs.org/)
 - [TypeScript Documentation](https://www.typescriptlang.org/)
 - [Apollo Client Documentation](https://www.apollographql.com/docs/react/)
-- [GraphQL Code Generator Documentation](https://the-guild.dev/graphql/codegen)
+- [GraphQL Code Generator Client Preset](https://the-guild.dev/graphql/codegen/plugins/presets/preset-client)
 - [Vite Documentation](https://vitejs.dev/)

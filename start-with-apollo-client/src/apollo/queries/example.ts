@@ -1,10 +1,10 @@
-import { gql } from '@apollo/client';
+import { graphql } from '../gql';
 
-// These GraphQL queries will be used by codegen to generate TypeScript types
-// After running `npm run codegen`, you can use the generated hooks:
-// import { useGetLocationsQuery, useGetLocationByIdQuery } from '@/generated/graphql';
+// These GraphQL operations use the client-preset pattern
+// Types are generated automatically when you run `npm run codegen`
+// The graphql() function provides full type safety and IntelliSense
 
-export const GET_LOCATIONS = gql`
+export const GET_LOCATIONS = graphql(/* GraphQL */ `
   query GetLocations {
     locations {
       id
@@ -13,10 +13,10 @@ export const GET_LOCATIONS = gql`
       photo
     }
   }
-`;
+`);
 
 // Example of a query with variables
-export const GET_LOCATION_BY_ID = gql`
+export const GET_LOCATION_BY_ID = graphql(/* GraphQL */ `
   query GetLocationById($id: ID!) {
     location(id: $id) {
       id
@@ -25,10 +25,10 @@ export const GET_LOCATION_BY_ID = gql`
       photo
     }
   }
-`;
+`);
 
 // Example of a mutation (if supported by your GraphQL endpoint)
-export const CREATE_LOCATION = gql`
+export const CREATE_LOCATION = graphql(/* GraphQL */ `
   mutation CreateLocation($input: LocationInput!) {
     createLocation(input: $input) {
       id
@@ -37,4 +37,4 @@ export const CREATE_LOCATION = gql`
       photo
     }
   }
-`;
+`);
