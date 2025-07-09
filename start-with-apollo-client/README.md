@@ -92,7 +92,7 @@ src/gql/
 
 ### Usage Examples
 
-**Modern approach with Client Preset:**
+**Queries with Client Preset:**
 ```typescript
 import { useQuery } from '@apollo/client';
 import { graphql } from './gql';
@@ -111,12 +111,6 @@ const GET_LOCATIONS = graphql(/* GraphQL */ `
 const { data, loading, error } = useQuery(GET_LOCATIONS);
 // data is fully typed automatically!
 ```
-
-**Why Client Preset is Better:**
-- **No separate hooks**: Use standard Apollo hooks with full type safety
-- **Smaller bundle**: Only generates what you use
-- **Better DX**: IntelliSense works instantly as you type GraphQL
-- **Fragment safety**: Advanced type safety for complex queries
 
 ### Development Workflow
 
@@ -152,19 +146,6 @@ This template includes a `schema.graphql` file that defines the GraphQL schema f
 
 **Important**: Update `schema.graphql` to match your actual GraphQL API schema. The runtime Apollo Client connects to your real GraphQL endpoint (configured in `.env`), while the schema file is only used for generating TypeScript types.
 
-### Key Benefits of Client Preset
-
-**Traditional Approach Issues:**
-- Generated separate hooks for every operation
-- Large bundle sizes with unused code
-- Complex configuration required
-
-**Client Preset Advantages:**
-- **Tree Shaking**: Only includes types you actually use
-- **Standard Hooks**: Use `useQuery`, `useMutation` directly
-- **Better Performance**: Smaller generated files
-- **Zero Config**: Works out of the box
-
 ### Troubleshooting
 
 **Schema Issues:**
@@ -178,6 +159,37 @@ If you see TypeScript errors about missing generated types, ensure you've run `n
 
 **Import Errors:**
 Make sure to import `graphql` from `./gql` (not `@apollo/client`) when using Client Preset.
+
+## When to Connect to Apollo GraphOS
+
+This template creates a **local React application** - no GraphOS graph is created automatically. You can develop and build your app using any GraphQL API.
+
+### Consider GraphOS when you need:
+
+- **Team Collaboration**: Share schemas and coordinate changes across multiple developers
+- **Schema Registry**: Centralized schema management with version history and validation
+- **Production Monitoring**: Query performance insights, error tracking, and usage analytics
+- **Federation**: Combine multiple GraphQL services into a unified API
+- **Schema Checks**: Validate schema changes before deployment to prevent breaking changes
+
+### Getting Started with GraphOS
+
+When you're ready to connect to Apollo Studio:
+
+1. **Create a graph** at [studio.apollographql.com](https://studio.apollographql.com)
+2. **Get your API key** from your graph's settings
+3. **Configure your Apollo Client** with your GraphOS endpoint:
+   ```typescript
+   const client = new ApolloClient({
+     uri: 'https://your-graph.apollographql.com/graphql',
+     headers: {
+       'Apollo-Require-Preflight': 'true'
+     },
+     cache: new InMemoryCache(),
+   });
+   ```
+
+**For local development**: Continue using your current setup with any GraphQL endpoint. GraphOS is most valuable when you're ready to deploy to production or collaborate with a team.
 
 ## Learn More
 
