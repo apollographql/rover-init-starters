@@ -1,44 +1,21 @@
 
-👋 Hi there! This guide walks you through building a _subgraph_ with Apollo Server, TypeScript, and Apollo Federation.
+👋 Hi there! 
 
-- [Setup](#setup)
-  - [Apollo Federation components](#apollo-federation-components)
-  - [Components of a GraphQL subgraph server](#components-of-a-graphql-subgraph-server)
-    - [The schema (`products.graphql`)](#the-schema-productsgraphql)
-    - [Resolvers (`src/resolvers`)](#resolvers-srcresolvers)
-    - [The server (`src/index.ts`)](#the-server-srcindexts)
-- [Make your first request](#make-your-first-request)
-  - [To the subgraph server (http://localhost:4001)](#to-the-subgraph-server-httplocalhost4001)
-  - [To the supergraph (http://localhost:4000)](#to-the-supergraph-httplocalhost4000)
-  - [Choosing a port to work with](#choosing-a-port-to-work-with)
-- [Time to build your API](#time-to-build-your-api)
-- [Debugging your schema](#debugging-your-schema)
-  - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
-  - [Check for errors each time you save](#check-for-errors-each-time-you-save)
-- [Publishing your changes to GraphOS Studio](#publishing-your-changes-to-graphos-studio)
-- [Security](#security)
-- [Additional resources](#additional-resources)
-  - [More on GraphQL server development](#more-on-graphql-server-development)
-  - [More on federation](#more-on-federation)
-  - [Deploying your supergraph](#deploying-your-supergraph)
+# Intro
 
-# Setup
+This project gets you started with building a federated architecture called a _supergraph_. A supergraph contains a _router_ and one or more _subgraphs_. 
 
-## Apollo Federation components
+A router is the single access point for the supergraph that receives incoming operations from clients and intelligently routes them across subgraphs before returning a unified response. A subgraph is an individual GraphQL server that takes responsibility for a specific domain in the supergraph.
 
-This project gets you started with building a federated architecture called a _supergraph_. This architecture lets different teams independently develop and deploy parts of the supergraph while maintaining a unified experience for clients.
 
-A supergraph contains a _router_, and one or more _subgraphs_.
+This guide walks you through building a _subgraph_ with Apollo Server, TypeScript, and Apollo Federation.
 
-The router is the single access point for the supergraph. It receives incoming operations from clients and intelligently routes them across subgraphs before returning a unified response.
-
-A subgraph is an individual GraphQL server that takes responsibility for a specific domain in the supergraph.
 
 ## Components of a GraphQL subgraph server
 
 Before diving in, it's helpful to understand the structure and purpose of the files included in this template. This overview will help you navigate the codebase more effectively.
 
-### The schema (`products.graphql`)
+### The schema (`schema.graphql`)
 
 The schema describes what data is available, how it’s structured, and how it can be requested or modified. It’s written using GraphQL’s Schema Definition Language (SDL), which lets you define the shape and capabilities of an API in a clear, type-safe way that is also backend-agnostic.
 
@@ -55,12 +32,12 @@ The server is in charge of making sure requests are valid, finding the right dat
 **📓 Note:** This graph is using [Apollo Server](https://github.com/apollographql/apollo-server)—an open source server library that is quick and easy to set up, giving you a way to build a production-ready, self-documenting GraphQL API.
 
 
-# Make your first request
+# Getting started
 
-## To the subgraph server (http://localhost:4001)
+## Running your subgraph locally
 
-1. Open `products.graphql` and take a look at your starter schema.
-2. In the terminal, run `npm ci`, then `npm run dev` to start the subgraph server.
+1. Open `schema.graphql` and take a look at your starter schema.
+2. In the terminal, run `npm i`, then `npm run dev` to start the subgraph server.
 3. In the browser, go to http://localhost:4001, where the subgraph server is running. You'll have access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 4. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
@@ -76,10 +53,10 @@ query GetProducts {
 
 5. Click `► GetProducts` to run the request. You'll get a response back with data for the product's id, name, and description; exactly the properties you asked for in the query! 🎉
 
-## To the supergraph (http://localhost:4000)
+## Running a router locally
 
-1. In a _new_ terminal window, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session with the router.
-2. In the browser, go to http://localhost:4000, where `rover dev` is running. You'll have access to another Sandbox. Make sure you still have the subgraph server running from the previous section.
+1. While running your subgraph(s) locally, in a _new_ terminal window run `rover dev`. The `dev` command will start a local development session with the router.
+2. In the browser, go to http://localhost:4000, where `rover dev` is running. You'll have access to another Sandbox.
 3. In Sandbox, paste the same GraphQL query in the **Operation** section:
 
 ```
@@ -102,7 +79,7 @@ When you want to test your subgraph server in isolation, use the Sandbox running
 
 When you want to test the supergraph as a whole, use the Sandbox running at http://localhost:4000, started by the `rover dev` command. This is recommended when you have more than one subgraph in your supergraph.
 
-📓 **Note:** If you are using `rover dev` and `localhost:4000`, you'll need to start the subgraph server _first_ by running `npm ci` and `npm run dev`—otherwise, you'll encounter errors when running requests in Sandbox.
+📓 **Note:** If you are using `rover dev` and `localhost:4000`, you'll need to start the subgraph server _first_ by running `npm i` and `npm run dev`—otherwise, you'll encounter errors when running requests in Sandbox.
 
 # Time to build your API
 
@@ -148,8 +125,8 @@ Once you’ve made changes to your schema files and are happy with the state of 
 
 ```
 rover subgraph publish your-graph-id@main \ # Replace this with your `APOLLO_GRAPH_REF` value
-  --schema "./products.graphql" \
-  --name products-subgraph \
+  --schema "./schema.graphql" \
+  --name {your_subgraph_name} \
   --routing-url "https://my-running-subgraph.com/api" # If you don't have a running API yet,replace this with http://localhost:4000
 ```
 

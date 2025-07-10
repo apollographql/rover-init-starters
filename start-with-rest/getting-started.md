@@ -1,22 +1,8 @@
 👋 Hi there! This guide walks you through integrating REST APIs into your graph using [Apollo Connectors](https://www.apollographql.com/docs/graphos/schema-design/connectors).
 
-- [Setup](#setup)
-  - [Part two: Check out how Connectors work](#part-two-check-out-how-connectors-work)
-- [Time to build your API](#time-to-build-your-api)
-- [Debugging your schema](#debugging-your-schema)
-  - [Design your schema with Apollo’s IDE extensions](#design-your-schema-with-apollos-ide-extensions)
-  - [Check for errors each time you save](#check-for-errors-each-time-you-save)
-  - [Debug Connectors in Sandbox](#debug-connectors-in-sandbox)
-- [Publishing changes to GraphOS Studio](#publishing-changes-to-graphos-studio)
-- [Security](#security)
-- [Additional resources](#additional-resources)
-  - [Deploying your graph](#deploying-your-graph)
-  - [More on graph development](#more-on-graph-development)
-  - [More about Connectors](#more-about-connectors)
+# Getting started
 
-# Setup
-
-1. Open `products.graphql` to take a look at your graph's starter schema. Ignore the comments labeled with a ✏️ for now, we’ll get to them later.
+1. Open `schema.graphql` to take a look at your graph's starter schema. Ignore the comments labeled with a ✏️ for now, we’ll get to them later.
 2. In the terminal, run the `rover dev` command provided in the output of `rover init` under **Next steps**. The `dev` command starts a local development session and gives you access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 3. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
@@ -36,13 +22,13 @@ query GetProducts {
 
 1. Let's find out where this data is coming from. Click the arrow next to **Response** and select the **Connectors Debugger** option.
 2. Now, click the most recent request to review its details. In the **Request overview** tab, press the **cURL** button to copy the underlying HTTP request made to the REST API. 
-3. Run this request in your terminal and compare it with what’s been configured using the `@connect` directive in `products.graphql`. You'll notice that some properties in the terminal response match to the `selection` mapping in the schema. This is the key to how Connectors work!
+3. Run this request in your terminal and compare it with what’s been configured using the `@connect` directive in `schema.graphql`. You'll notice that some properties in the terminal response match to the `selection` mapping in the schema. This is the key to how Connectors work!
 
 Hooray! You ran a query, got some data back, and reviewed what Connectors are like under the hood! Feel free to experiment some more–try tweaking the query to see what data you can retrieve. 🚀
 
 # Time to build your API
 
-You’re all set to start building. You'll be working primarily with the `products.graphql` file.
+You’re all set to start building. You'll be working primarily with the `schema.graphql` file.
 
 First, make sure you’ve installed and configured [your IDE extension of choice](https://www.apollographql.com/docs/graphos/schema-design/ide-support) so you can rely on its autocompletion, schema information, and syntax highlighting features.
 
@@ -54,7 +40,7 @@ Then, follow the development cycle below:
 4. [Configure the Connector's response mapping](https://www.apollographql.com/docs/graphos/schema-design/connectors/responses). You can use the [Connectors Mapping Playground](https://www.apollographql.com/connectors-mapping-playground) to help convert JSON responses to and from GraphQL types.
 5. Run operations and debug your API following the instructions in the section below.
 
-📓 **Note:** If you’re working with APIs that require headers, you’ll need to include them in `products.graphql` and add a router configuration file (`router.yaml`) to your project directory.
+📓 **Note:** If you’re working with APIs that require headers, you’ll need to include them in `schema.graphql` and add a router configuration file (`router.yaml`) to your project directory.
 
 To learn more about headers and other advanced features like configuring environment variables, telemetry, and authentication, visit [Apollo’s docs on working with Router](https://community.apollographql.com/c/graph-os/getting-started/35).
 
@@ -91,8 +77,8 @@ Once you’ve made changes to your schema files and are happy with the state of 
 
 ```
 rover subgraph publish your-graph-id@main \ # Replace this with your `APOLLO_GRAPH_REF` value
-  --schema "./products.graphql" \
-  --name products-subgraph \
+  --schema "./schema.graphql" \
+  --name {name_of_your_subgraph} \
   --routing-url "https://my-running-subgraph.com/api" # If you don't have a running API yet, you can replace this with http://localhost:4000
 ```
 

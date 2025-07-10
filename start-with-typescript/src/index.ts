@@ -8,11 +8,11 @@ import {
 import resolvers from "./resolvers";
 
 const port = "4001";
-const subgraphName = "products";
+const subgraphName = "products"; // TODO: Replace with your subgraph's name
 
 async function main() {
   let typeDefs = gql(
-    readFileSync("products.graphql", {
+    readFileSync("schema.graphql", {
       encoding: "utf-8",
     })
   );
