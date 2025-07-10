@@ -22,6 +22,9 @@ junit.xml
 # Node modules
 node_modules/
 
+# .env to store APOLLO_KEY
+.env
+
 # Mac OS
 .DS_Store
 
