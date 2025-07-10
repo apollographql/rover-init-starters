@@ -37,7 +37,7 @@ The server is in charge of making sure requests are valid, finding the right dat
 ## Running your subgraph locally
 
 1. Open `schema.graphql` and take a look at your starter schema.
-2. In the terminal, run `npm ci`, then `npm run dev` to start the subgraph server.
+2. In the terminal, run `npm i`, then `npm run dev` to start the subgraph server.
 3. In the browser, go to http://localhost:4001, where the subgraph server is running. You'll have access to Apollo Sandbox—a local, in-browser GraphQL playground, where you can run GraphQL operations and test your API as you design it.
 4. In Sandbox, paste the following GraphQL query in the **Operation** section:
 
@@ -79,7 +79,7 @@ When you want to test your subgraph server in isolation, use the Sandbox running
 
 When you want to test the supergraph as a whole, use the Sandbox running at http://localhost:4000, started by the `rover dev` command. This is recommended when you have more than one subgraph in your supergraph.
 
-📓 **Note:** If you are using `rover dev` and `localhost:4000`, you'll need to start the subgraph server _first_ by running `npm ci` and `npm run dev`—otherwise, you'll encounter errors when running requests in Sandbox.
+📓 **Note:** If you are using `rover dev` and `localhost:4000`, you'll need to start the subgraph server _first_ by running `npm i` and `npm run dev`—otherwise, you'll encounter errors when running requests in Sandbox.
 
 # Time to build your API
 
