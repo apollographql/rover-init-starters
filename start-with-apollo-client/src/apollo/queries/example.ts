@@ -1,10 +1,24 @@
-import { graphql } from '../gql';
+import { gql } from '@apollo/client';
 
-// These GraphQL operations use the client-preset pattern
-// Types are generated automatically when you run `npm run codegen`
-// The graphql() function provides full type safety and IntelliSense
+// Simple GraphQL queries for the AI MockProvider
+// The AI MockProvider will generate mock data dynamically based on these queries
 
-export const GET_LOCATIONS = graphql(/* GraphQL */ `
+export interface Location {
+  id: string;
+  name: string;
+  description: string;
+  photo?: string;
+}
+
+export interface LocationsData {
+  locations: Location[];
+}
+
+export interface LocationData {
+  location: Location;
+}
+
+export const GET_LOCATIONS = gql`
   query GetLocations {
     locations {
       id
@@ -13,10 +27,9 @@ export const GET_LOCATIONS = graphql(/* GraphQL */ `
       photo
     }
   }
-`);
+`;
 
-// Example of a query with variables
-export const GET_LOCATION_BY_ID = graphql(/* GraphQL */ `
+export const GET_LOCATION_BY_ID = gql`
   query GetLocationById($id: ID!) {
     location(id: $id) {
       id
@@ -25,16 +38,4 @@ export const GET_LOCATION_BY_ID = graphql(/* GraphQL */ `
       photo
     }
   }
-`);
-
-// Example of a mutation (if supported by your GraphQL endpoint)
-export const CREATE_LOCATION = graphql(/* GraphQL */ `
-  mutation CreateLocation($input: LocationInput!) {
-    createLocation(input: $input) {
-      id
-      name
-      description
-      photo
-    }
-  }
-`);
+`;

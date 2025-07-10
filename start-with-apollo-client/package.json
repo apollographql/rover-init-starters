@@ -5,15 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run codegen && tsc && vite build",
+    "build": "npm run codegen; tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "codegen": "grep -q 'schema.*http' codegen.yml && graphql-codegen --config codegen.yml || echo 'No URL schema found or introspection unavailable. Skipping codegen.'",
     "codegen:watch": "graphql-codegen --config codegen.yml --watch",
-    "postinstall": "npm run codegen"
+    "postinstall": "npm run codegen || true"
   },
   "dependencies": {
-    "ai-sdk/google": "^1.2.22",
+    "@ai-sdk/google": "^1.2.22",
     "ai": "^4.3.17",
     "react": "{{REACT_VERSION}}",
     "react-dom": "{{REACT_DOM_VERSION}}",

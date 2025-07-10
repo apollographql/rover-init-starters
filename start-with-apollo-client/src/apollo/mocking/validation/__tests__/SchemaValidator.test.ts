@@ -1,6 +1,7 @@
 import { SchemaValidator } from '../SchemaValidator';
 import { gql } from '../../../__tests__/helpers/gqlForTesting';
 import { buildASTSchema, parse, printSchema } from 'graphql';
+import { ZodError, ZodIssueCode } from 'zod';
 
 function makeSubgraphSchema(schema: string): string {
   return printSchema(buildASTSchema(parse(schema)));
@@ -19,15 +20,20 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        bookTitle: 'The Martian',
+        data: {
+          bookTitle: 'The Martian',
+        },
       }),
     ).toEqual({
       data: {
-        bookTitle: 'The Martian',
+        data: {
+          bookTitle: 'The Martian',
+        },
       },
       success: true,
     });
@@ -52,20 +58,25 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        book: {
-          __typename: 'Book',
-          title: 'The Martian',
+        data: {
+          book: {
+            __typename: 'Book',
+            title: 'The Martian',
+          },
         },
       }),
     ).toEqual({
       data: {
-        book: {
-          __typename: 'Book',
-          title: 'The Martian',
+        data: {
+          book: {
+            __typename: 'Book',
+            title: 'The Martian',
+          },
         },
       },
       success: true,
@@ -114,36 +125,41 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        book: {
-          __typename: 'Book',
-          title: 'The Martian',
-          publicationDate: '2024-12-01T00:00:00Z',
-          author: {
-            __typename: 'Author',
-            name: '',
-            address: {
-              __typename: 'Address',
-              postalCode: 33215,
+        data: {
+          book: {
+            __typename: 'Book',
+            title: 'The Martian',
+            publicationDate: '2024-12-01T00:00:00Z',
+            author: {
+              __typename: 'Author',
+              name: '',
+              address: {
+                __typename: 'Address',
+                postalCode: 33215,
+              },
             },
           },
         },
       }),
     ).toEqual({
       data: {
-        book: {
-          __typename: 'Book',
-          title: 'The Martian',
-          publicationDate: '2024-12-01T00:00:00Z',
-          author: {
-            __typename: 'Author',
-            name: '',
-            address: {
-              __typename: 'Address',
-              postalCode: 33215,
+        data: {
+          book: {
+            __typename: 'Book',
+            title: 'The Martian',
+            publicationDate: '2024-12-01T00:00:00Z',
+            author: {
+              __typename: 'Author',
+              name: '',
+              address: {
+                __typename: 'Address',
+                postalCode: 33215,
+              },
             },
           },
         },
@@ -170,18 +186,23 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        book: {
-          __typename: 'Hat',
+        data: {
+          book: {
+            __typename: 'Hat',
+          },
         },
       }),
     ).toEqual({
       data: {
-        book: {
-          __typename: 'Book',
+        data: {
+          book: {
+            __typename: 'Book',
+          },
         },
       },
       success: true,
@@ -200,15 +221,20 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        bookTitle: null,
+        data: {
+          bookTitle: null,
+        },
       }),
     ).toEqual({
       data: {
-        bookTitle: null,
+        data: {
+          bookTitle: null,
+        },
       },
       success: true,
     });
@@ -226,18 +252,26 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
-    expect(
-      operationValidator.safeParse({
-        bookTitle: null,
-      }),
-    ).toEqual({
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
+    const result = operationValidator.safeParse({
       data: {
-        bookTitle: 'null',
+        bookTitle: null,
       },
-      success: true,
     });
+    expect(result.success).toBe(false);
+    expect(result.error).toEqual(
+      new ZodError([
+        {
+          code: ZodIssueCode.invalid_type,
+          expected: 'string',
+          received: 'null',
+          path: ['data', 'bookTitle'],
+          message: 'Expected string, received null',
+        },
+      ]),
+    );
   });
 
   it('handles nullable lists', () => {
@@ -252,15 +286,20 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        bookTitles: null,
+        data: {
+          bookTitles: null,
+        },
       }),
     ).toEqual({
       data: {
-        bookTitles: null,
+        data: {
+          bookTitles: null,
+        },
       },
       success: true,
     });
@@ -278,15 +317,20 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        bookTitles: ['The Martian', null],
+        data: {
+          bookTitles: ['The Martian', null],
+        },
       }),
     ).toEqual({
       data: {
-        bookTitles: ['The Martian', null],
+        data: {
+          bookTitles: ['The Martian', null],
+        },
       },
       success: true,
     });
@@ -304,18 +348,26 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
-    expect(
-      operationValidator.safeParse({
-        bookTitles: ['The Martian', null],
-      }),
-    ).toEqual({
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
+    const result = operationValidator.safeParse({
       data: {
-        bookTitles: ['The Martian', 'null'],
+        bookTitles: ['The Martian', null],
       },
-      success: true,
     });
+    expect(result.success).toBe(false);
+    expect(result.error).toEqual(
+      new ZodError([
+        {
+          code: ZodIssueCode.invalid_type,
+          expected: 'string',
+          received: 'null',
+          path: ['data', 'bookTitles', 1],
+          message: 'Expected string, received null',
+        },
+      ]),
+    );
   });
 
   it('handles non-nullable lists', () => {
@@ -330,11 +382,14 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        bookTitles: null,
+        data: {
+          bookTitles: null,
+        },
       }),
     ).toEqual({
       error: expect.any(Object),
@@ -342,11 +397,15 @@ describe('SchemaValidator', () => {
     });
     expect(
       operationValidator.safeParse({
-        bookTitles: ['The Martian'],
+        data: {
+          bookTitles: ['The Martian'],
+        },
       }),
     ).toEqual({
       data: {
-        bookTitles: ['The Martian'],
+        data: {
+          bookTitles: ['The Martian'],
+        },
       },
       success: true,
     });
@@ -369,15 +428,20 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        bookGenre: 'FICTION',
+        data: {
+          bookGenre: 'FICTION',
+        },
       }),
     ).toEqual({
       data: {
-        bookGenre: 'FICTION',
+        data: {
+          bookGenre: 'FICTION',
+        },
       },
       success: true,
     });
@@ -407,18 +471,23 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        publication: {
-          __typename: 'Magazine',
+        data: {
+          publication: {
+            __typename: 'Magazine',
+          },
         },
       }),
     ).toEqual({
       data: {
-        publication: {
-          __typename: 'Magazine',
+        data: {
+          publication: {
+            __typename: 'Magazine',
+          },
         },
       },
       success: true,
@@ -455,21 +524,26 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
 
     expect(
       operationValidator.safeParse({
-        publication: {
-          __typename: 'Magazine',
-          title: 'Game Informer',
+        data: {
+          publication: {
+            __typename: 'Magazine',
+            title: 'Game Informer',
+          },
         },
       }),
     ).toEqual({
       data: {
-        publication: {
-          __typename: 'Magazine',
-          title: 'Game Informer',
+        data: {
+          publication: {
+            __typename: 'Magazine',
+            title: 'Game Informer',
+          },
         },
       },
       success: true,
@@ -503,21 +577,26 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
 
     expect(
       operationValidator.safeParse({
-        publication: {
-          __typename: 'Publication',
-          title: 'Game Informer',
+        data: {
+          publication: {
+            __typename: 'Publication',
+            title: 'Game Informer',
+          },
         },
       }),
     ).toEqual({
       data: {
-        publication: {
-          __typename: 'Publication',
-          title: 'Game Informer',
+        data: {
+          publication: {
+            __typename: 'Publication',
+            title: 'Game Informer',
+          },
         },
       },
       success: true,
@@ -559,23 +638,28 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
 
     expect(
       operationValidator.safeParse({
-        publication: {
-          __typename: 'Book',
-          title: 'The Martian',
-          edition: 'First Edition',
+        data: {
+          publication: {
+            __typename: 'Book',
+            title: 'The Martian',
+            edition: 'First Edition',
+          },
         },
       }),
     ).toEqual({
       data: {
-        publication: {
-          __typename: 'Book',
-          title: 'The Martian',
-          edition: 'First Edition',
+        data: {
+          publication: {
+            __typename: 'Book',
+            title: 'The Martian',
+            edition: 'First Edition',
+          },
         },
       },
       success: true,
@@ -617,23 +701,28 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
 
     expect(
       operationValidator.safeParse({
-        publication: {
-          __typename: 'Magazine',
-          title: 'Game Informer',
-          publicationMonth: 'June',
+        data: {
+          publication: {
+            __typename: 'Magazine',
+            title: 'Game Informer',
+            publicationMonth: 'June',
+          },
         },
       }),
     ).toEqual({
       data: {
-        publication: {
-          __typename: 'Magazine',
-          title: 'Game Informer',
-          publicationMonth: 'June',
+        data: {
+          publication: {
+            __typename: 'Magazine',
+            title: 'Game Informer',
+            publicationMonth: 'June',
+          },
         },
       },
       success: true,
@@ -674,21 +763,122 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
 
     expect(
       operationValidator.safeParse({
-        printedMedia: {
-          __typename: 'Publication',
-          title: 'Game Informer',
+        data: {
+          printedMedia: {
+            __typename: 'Publication',
+            title: 'Game Informer',
+          },
         },
       }),
     ).toEqual({
       data: {
-        printedMedia: {
-          __typename: 'Publication',
-          title: 'Game Informer',
+        data: {
+          printedMedia: {
+            __typename: 'Publication',
+            title: 'Game Informer',
+          },
+        },
+      },
+      success: true,
+    });
+  });
+
+  it('handles named fragments for an interface', () => {
+    const schema = makeSubgraphSchema(gql`
+      type Query {
+        book: Book
+        bookExists: Boolean!
+      }
+
+      interface Book {
+        title: String!
+      }
+    `);
+
+    const operation = gql`
+      query Get_Book {
+        book {
+          ...BookDetailsFragment
+        }
+      }
+
+      fragment BookDetailsFragment on Book {
+        title
+      }
+    `;
+    const subgraphValidator = new SchemaValidator(schema);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
+
+    const result = operationValidator.safeParse({
+      data: {
+        book: {
+          title: 'The Martian',
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      data: {
+        data: {
+          book: {
+            title: 'The Martian',
+          },
+        },
+      },
+      success: true,
+    });
+  });
+
+  it('handles named fragments for an object type', () => {
+    const schema = makeSubgraphSchema(gql`
+      type Query {
+        book: Book
+        bookExists: Boolean!
+      }
+
+      type Book {
+        title: String!
+      }
+    `);
+
+    const operation = gql`
+      query Get_Book {
+        book {
+          ...BookDetailsFragment
+        }
+      }
+
+      fragment BookDetailsFragment on Book {
+        title
+      }
+    `;
+    const subgraphValidator = new SchemaValidator(schema);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
+
+    const result = operationValidator.safeParse({
+      data: {
+        book: {
+          title: 'The Martian',
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      data: {
+        data: {
+          book: {
+            title: 'The Martian',
+          },
         },
       },
       success: true,
@@ -707,15 +897,20 @@ describe('SchemaValidator', () => {
       }
     `;
     const subgraphValidator = new SchemaValidator(schema);
-    const operationValidator =
-      subgraphValidator.getOperationValidator(operation);
+    const operationValidator = subgraphValidator.getOperationValidator(
+      parse(operation),
+    );
     expect(
       operationValidator.safeParse({
-        updateBookTitle: 'The Martian',
+        data: {
+          updateBookTitle: 'The Martian',
+        },
       }),
     ).toEqual({
       data: {
-        updateBookTitle: 'The Martian',
+        data: {
+          updateBookTitle: 'The Martian',
+        },
       },
       success: true,
     });

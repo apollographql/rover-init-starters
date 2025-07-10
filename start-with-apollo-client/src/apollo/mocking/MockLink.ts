@@ -64,6 +64,15 @@ function requestToKey(request: GraphQLRequest, addTypename: boolean): string {
   return JSON.stringify(requestKey);
 }
 
+function operationToCacheKey(operation: Operation): string {
+  const queryString = print(operation.query);
+  const cacheKey = { 
+    query: queryString, 
+    variables: operation.variables || {} 
+  };
+  return JSON.stringify(cacheKey);
+}
+
 export class MockLink extends ApolloLink {
   public operation!: Operation;
   public addTypename: boolean = true;
@@ -87,6 +96,7 @@ export class MockLink extends ApolloLink {
       });
     }
   }
+
 
   public addMockedResponse(mockedResponse: MockedResponse) {
     const normalizedMockedResponse =
