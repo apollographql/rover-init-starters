@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
-import { GET_LOCATIONS, type LocationsData } from './apollo/queries';
+import { GET_LOCATIONS, type LocationsData } from './apollo/queries/example';
 
 export function Locations() {
   const { loading, error, data } = useQuery<LocationsData>(GET_LOCATIONS);

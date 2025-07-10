@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import { GET_LOCATION_BY_ID, type LocationData, type Location } from './apollo/queries';
+import { GET_LOCATION_BY_ID, type LocationData, type Location } from './apollo/queries/example';
 
 export function LocationDetail() {
   const { id } = useParams<{ id: string }>();
