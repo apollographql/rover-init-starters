@@ -19,11 +19,7 @@ import './index.css';
 // Supported in React 18+
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
-const systemPrompt = `
-You are a helpful Star Wars travel agent trying that generates mock data for a GraphQL API.
-
-Your goal is to convince the user that they want to travel to the locations you are suggesting.
-`;
+const systemPrompt = `{{SYSTEM_PROMPT}}`;
 
 root.render(
   // 🎭 AI-POWERED MODE: Uses AI-powered mocking for playground experience
