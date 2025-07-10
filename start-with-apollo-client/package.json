@@ -17,6 +17,7 @@
     "ai": "^4.3.17",
     "react": "{{REACT_VERSION}}",
     "react-dom": "{{REACT_DOM_VERSION}}",
+    "react-router-dom": "{{REACT_ROUTER_DOM_VERSION}}",
     "@apollo/client": "{{APOLLO_CLIENT_VERSION}}",
     "graphql": "{{GRAPHQL_VERSION}}",
     "zod": "^3.25.76"
