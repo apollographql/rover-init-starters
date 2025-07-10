@@ -1,6 +1,14 @@
 # {{PROJECT_NAME}}
 
-A React TypeScript application with Apollo Client for GraphQL.
+A React TypeScript application with Apollo Client for GraphQL that starts as an **AI-powered demo playground** and can be easily configured to connect to your real GraphQL API.
+
+## 🎭 Demo Mode (Default)
+
+This template starts in **demo mode** using AI-powered mocking, perfect for:
+- Exploring GraphQL concepts without needing a backend
+- Prototyping and experimentation
+- Learning Apollo Client patterns
+- Demonstrating GraphQL capabilities
 
 ## Getting Started
 
@@ -9,26 +17,66 @@ A React TypeScript application with Apollo Client for GraphQL.
    npm install
    ```
 
-2. Copy the environment file and configure your GraphQL endpoint:
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and set your GraphQL endpoint:
-   ```
-   VITE_GRAPHQL_ENDPOINT=http://localhost:4000/graphql
-   ```
-
-3. Customize the GraphQL schema:
-   
-   Edit `schema.graphql` to match your actual GraphQL API. The template includes example types for locations, but you should update this to match your backend schema.
-
-4. Start the development server:
+2. Start the development server:
    ```bash
    npm run dev
    ```
 
-5. Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+3. Open [http://localhost:5173](http://localhost:5173) to view the demo in your browser.
+
+The app will work immediately with AI-generated mock data!
+
+## 🚀 Connect to Your Real GraphQL API
+
+When you're ready to connect to your actual GraphQL endpoint:
+
+### Step 1: Update the code in `src/main.tsx`
+
+```typescript
+// Comment out the MockedProvider:
+// <MockedProvider systemPrompt={systemPrompt}>
+//   <App />
+// </MockedProvider>
+
+// Uncomment the ApolloProvider:
+<ApolloProvider client={client}>
+  <App />
+</ApolloProvider>
+```
+
+### Step 2: Configure your GraphQL endpoint
+
+Create a `.env` file and set your GraphQL endpoint:
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
+```
+GRAPHQL_ENDPOINT=https://your-graphql-api.com/graphql
+```
+
+### Step 3: Update schema configuration
+
+Edit `codegen.yml` to point to your GraphQL endpoint:
+```yaml
+schema: 'https://your-graphql-api.com/graphql'  # Replace the local schema.graphql
+documents: ['src/**/*.{ts,tsx}']
+ignoreNoDocuments: true
+generates:
+  src/gql/:
+    preset: client
+    config:
+      useTypeImports: true
+```
+
+### Step 4: Generate types from your real schema
+
+```bash
+npm run codegen
+```
+
+This will fetch your schema via introspection and generate TypeScript types for your actual GraphQL API.
 
 ## Available Scripts
 
@@ -39,28 +87,50 @@ A React TypeScript application with Apollo Client for GraphQL.
 - `npm run codegen` - Generate TypeScript types from GraphQL schema
 - `npm run codegen:watch` - Generate types in watch mode for development
 
-## Apollo Client
+## Apollo Client (Production Mode)
 
-This template includes Apollo Client setup with:
+When you switch from demo mode to production mode, this template includes Apollo Client setup with:
 - Client configuration in `src/main.tsx`
 - Example queries and components in `src/App.tsx`
 - TypeScript support for GraphQL operations
 
 ### How the Apollo Client Flow Works
 
-When you run `npm run dev`, here's what happens:
+When you configure a real GraphQL endpoint and run `npm run dev`:
 
 1. **Development Server**: Vite starts the development server and serves your bundled React application
 2. **App Initialization**: When the browser loads your app, React renders the component tree
 3. **Apollo Provider**: The `ApolloProvider` in `src/main.tsx` makes the Apollo Client available to all components
-4. **Query Execution**: When `DisplayLocations` component mounts, the `useQuery(GET_LOCATIONS)` hook automatically:
-   - Sends a GraphQL query to the configured endpoint (`https://flyby-router-demo.herokuapp.com/`)
-   - Shows loading state while the request is in flight
-   - Caches the response in Apollo's `InMemoryCache`
-   - Re-renders the component with the fetched data
-5. **Data Rendering**: The locations data is displayed in the UI
+4. **Query Execution**: When components mount, the `useQuery` hooks automatically:
+   - Send GraphQL queries to your configured endpoint
+   - Show loading state while requests are in flight
+   - Cache responses in Apollo's `InMemoryCache`
+   - Re-render components with the fetched data
+5. **Data Rendering**: The real data from your GraphQL API is displayed in the UI
 
 The key point: `npm run dev` only starts the development server - the actual GraphQL queries execute client-side when React components render and use Apollo hooks like `useQuery`.
+
+## AI-Powered Demo Mode
+
+The default demo mode uses a sophisticated mocking system that:
+
+- **AI-Generated Responses**: Uses AI to generate realistic GraphQL responses based on your schema
+- **Smart Mocking**: Understands GraphQL schema structure and generates appropriate mock data
+- **Interactive Experience**: Provides a fully functional GraphQL experience without needing a backend
+- **Customizable System Prompt**: The AI behavior can be customized via the `systemPrompt` in `src/main.tsx`
+
+### How Demo Mode Works
+
+1. **Schema Validation**: The `MockedProvider` validates your GraphQL operations against the local schema
+2. **AI Response Generation**: When queries execute, AI generates realistic responses based on the schema and system prompt
+3. **GraphQL Compliance**: All responses follow proper GraphQL structure and typing
+4. **Development Experience**: You get the full Apollo Client experience with loading states, caching, and error handling
+
+This mode is perfect for:
+- Learning GraphQL concepts
+- Prototyping without backend dependencies
+- Demonstrating GraphQL capabilities
+- Developing frontend features before backend APIs are ready
 
 ## GraphQL Code Generation
 
@@ -130,21 +200,25 @@ This runs codegen before building, ensuring types are always up-to-date.
 
 The code generation is configured in `codegen.yml` for Client Preset:
 
-- **Schema**: Uses local `schema.graphql` file for offline type generation
+- **Schema**: Uses local `schema.graphql` file by default (demo mode) or your GraphQL endpoint URL (production mode)
 - **Documents**: Scans `src/**/*.{ts,tsx}` for GraphQL operations
 - **Preset**: Uses `client` preset for modern type generation
 - **Output**: Creates optimized files in `src/gql/`
 
 ### Schema Management
 
-This template includes a `schema.graphql` file that defines the GraphQL schema for type generation. This approach provides:
-
+**Demo Mode**: Uses the included `schema.graphql` file for offline type generation. This provides:
 - **Offline Development**: Generate types without needing a running GraphQL server
 - **Consistent Types**: Same types generated regardless of server availability
 - **Version Control**: Schema changes are tracked in your repository
 - **Fast Generation**: No network requests needed during development
 
-**Important**: Update `schema.graphql` to match your actual GraphQL API schema. The runtime Apollo Client connects to your real GraphQL endpoint (configured in `.env`), while the schema file is only used for generating TypeScript types.
+**Production Mode**: When you update `codegen.yml` to use your GraphQL endpoint URL, the system automatically:
+- **Fetches Live Schema**: Uses introspection to get your real GraphQL schema
+- **Stays in Sync**: Always generates types from your actual API
+- **Validates Changes**: Catches breaking changes when your API schema evolves
+
+The conditional codegen system automatically detects whether you're using a URL or local file and adjusts accordingly.
 
 ### Troubleshooting
 
