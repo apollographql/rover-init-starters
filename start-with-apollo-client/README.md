@@ -1,14 +1,13 @@
 # {{PROJECT_NAME}}
 
-A React TypeScript application with Apollo Client for GraphQL that starts as an **AI-powered demo playground** and can be easily configured to connect to your real GraphQL API.
+A React TypeScript application with Apollo Client for GraphQL that starts as an **AI-powered playground** and can be easily configured to connect to your real GraphQL API.
 
 ## 🎭 Demo Mode (Default)
 
 This template starts in **demo mode** using AI-powered mocking, perfect for:
 - Exploring GraphQL concepts without needing a backend
 - Prototyping and experimentation
-- Learning Apollo Client patterns
-- Demonstrating GraphQL capabilities
+- Seeing the power of GraphQL capabilities
 
 ## Getting Started
 
@@ -26,9 +25,9 @@ This template starts in **demo mode** using AI-powered mocking, perfect for:
 
 The app will work immediately with AI-generated mock data!
 
-## 🚀 Connect to Your Real GraphQL API
+## 🚀 Connect to Your Own API Endpoint
 
-When you're ready to connect to your actual GraphQL endpoint:
+When you're ready to connect to your actual endpoint:
 
 ### Step 1: Update the code in `src/main.tsx`
 
@@ -44,9 +43,9 @@ When you're ready to connect to your actual GraphQL endpoint:
 </ApolloProvider>
 ```
 
-### Step 2: Configure your GraphQL endpoint
+### Step 2: Configure your endpoint
 
-Create a `.env` file and set your GraphQL endpoint:
+Create a `.env` file and set your endpoint:
 ```bash
 cp .env.example .env
 ```
@@ -81,11 +80,9 @@ This will fetch your schema via introspection and generate TypeScript types for 
 ## Available Scripts
 
 - `npm run dev` - Runs the app in development mode
-- `npm run build` - Builds the app for production (includes type generation)
+- `npm run build` - Builds the app for production
 - `npm run lint` - Runs ESLint
 - `npm run preview` - Preview the production build
-- `npm run codegen` - Generate TypeScript types from GraphQL schema
-- `npm run codegen:watch` - Generate types in watch mode for development
 
 ## Apollo Client (Production Mode)
 
@@ -101,7 +98,7 @@ When you configure a real GraphQL endpoint and run `npm run dev`:
 1. **Development Server**: Vite starts the development server and serves your bundled React application
 2. **App Initialization**: When the browser loads your app, React renders the component tree
 3. **Apollo Provider**: The `ApolloProvider` in `src/main.tsx` makes the Apollo Client available to all components
-4. **Query Execution**: When components mount, the `useQuery` hooks automatically:
+4. **Query Execution**: When components mount, the [`useQuery` hooks](https://www.apollographql.com/docs/react/data/queries/) (which check the local cache first, then fetch from the network) automatically:
    - Send GraphQL queries to your configured endpoint
    - Show loading state while requests are in flight
    - Cache responses in Apollo's `InMemoryCache`
@@ -132,127 +129,13 @@ This mode is perfect for:
 - Demonstrating GraphQL capabilities
 - Developing frontend features before backend APIs are ready
 
-## GraphQL Code Generation
+## Next Steps
+This template creates a **local React application** - no GraphOS graph is created automatically. 
+When you feel ready to connect your app to an API, you can connect to any existing GraphQL API, or create a new one.
 
-This template uses **GraphQL Code Generator with Client Preset** for automatic TypeScript type generation from your GraphQL schema and operations. This provides:
-
-- **Type Safety**: Fully typed GraphQL operations and data
-- **IntelliSense**: Auto-completion for GraphQL fields and operations  
-- **Zero Configuration**: Works automatically with existing queries
-- **Tree Shaking**: Only generates types for operations you actually use
-- **Fragment Masking**: Advanced type safety for GraphQL fragments
-
-### How Client Preset Works
-
-1. **Schema Introspection**: Fetches your GraphQL schema from the endpoint
-2. **Document Scanning**: Finds GraphQL operations in your TypeScript files
-3. **Smart Generation**: Only generates types for operations you use
-4. **Automatic Imports**: The `graphql()` function provides instant type safety
-
-### Generated Files
-
-After running `npm run codegen`, you'll find:
-
-```
-src/gql/
-├── index.ts           # Main export file
-├── graphql.ts         # Generated types and operations
-└── gql.ts             # Typed graphql() function
-```
-
-### Usage Examples
-
-**Queries with Client Preset:**
-```typescript
-import { useQuery } from '@apollo/client';
-import { graphql } from './gql';
-
-const GET_LOCATIONS = graphql(/* GraphQL */ `
-  query GetLocations {
-    locations {
-      id
-      name
-      description
-      photo
-    }
-  }
-`);
-
-const { data, loading, error } = useQuery(GET_LOCATIONS);
-// data is fully typed automatically!
-```
-
-### Development Workflow
-
-**For active development:**
-```bash
-npm run codegen:watch
-```
-This watches your GraphQL files and regenerates types automatically.
-
-**For production builds:**
-```bash
-npm run build
-```
-This runs codegen before building, ensuring types are always up-to-date.
-
-### Configuration
-
-The code generation is configured in `codegen.yml` for Client Preset:
-
-- **Schema**: Uses local `schema.graphql` file by default (demo mode) or your GraphQL endpoint URL (production mode)
-- **Documents**: Scans `src/**/*.{ts,tsx}` for GraphQL operations
-- **Preset**: Uses `client` preset for modern type generation
-- **Output**: Creates optimized files in `src/gql/`
-
-### Schema Management
-
-**Demo Mode**: Uses the included `schema.graphql` file for offline type generation. This provides:
-- **Offline Development**: Generate types without needing a running GraphQL server
-- **Consistent Types**: Same types generated regardless of server availability
-- **Version Control**: Schema changes are tracked in your repository
-- **Fast Generation**: No network requests needed during development
-
-**Production Mode**: When you update `codegen.yml` to use your GraphQL endpoint URL, the system automatically:
-- **Fetches Live Schema**: Uses introspection to get your real GraphQL schema
-- **Stays in Sync**: Always generates types from your actual API
-- **Validates Changes**: Catches breaking changes when your API schema evolves
-
-The conditional codegen system automatically detects whether you're using a URL or local file and adjusts accordingly.
-
-### Troubleshooting
-
-**Schema Issues:**
-If codegen fails, check that your `schema.graphql` file is valid GraphQL syntax. The template works offline since it uses a local schema file.
-
-**Schema Updates:**
-When your GraphQL API schema changes, update the `schema.graphql` file to match, then run `npm run codegen` to regenerate types and catch any breaking changes.
-
-**Type Errors:**
-If you see TypeScript errors about missing generated types, ensure you've run `npm run codegen` after adding new GraphQL operations.
-
-**Import Errors:**
-Make sure to import `graphql` from `./gql` (not `@apollo/client`) when using Client Preset.
-
-## When to Connect to Apollo GraphOS
-
-This template creates a **local React application** - no GraphOS graph is created automatically. You can develop and build your app using any GraphQL API.
-
-### Consider GraphOS when you need:
-
-- **Team Collaboration**: Share schemas and coordinate changes across multiple developers
-- **Schema Registry**: Centralized schema management with version history and validation
-- **Production Monitoring**: Query performance insights, error tracking, and usage analytics
-- **Federation**: Combine multiple GraphQL services into a unified API
-- **Schema Checks**: Validate schema changes before deployment to prevent breaking changes
-
-### Getting Started with GraphOS
-
-When you're ready to connect to Apollo Studio:
-
-1. **Create a graph** at [studio.apollographql.com](https://studio.apollographql.com)
-2. **Get your API key** from your graph's settings
-3. **Configure your Apollo Client** with your GraphOS endpoint:
+### 1. Connect a Graph
+#### Connect to an existing GraphQL endpoint
+1.  **Configure your Apollo Client** with your GraphOS endpoint:
    ```typescript
    const client = new ApolloClient({
      uri: 'https://your-graph.apollographql.com/graphql',
@@ -262,8 +145,96 @@ When you're ready to connect to Apollo Studio:
      cache: new InMemoryCache(),
    });
    ```
+2. **Update the VITE_GRAPHQL_ENDPOINT in your .env file**
 
-**For local development**: Continue using your current setup with any GraphQL endpoint. GraphOS is most valuable when you're ready to deploy to production or collaborate with a team.
+#### Create a new Graph 
+1. [Does Not Exist Yet] **Infer your schema** Using the rover supergraph infer command   
+2. **Convert your schema to a graph** Connect to Apollo Studio:
+    a. **Create a graph** at [studio.apollographql.com](https://studio.apollographql.com)
+    b. **Get your API key** from your graph's settings
+    c. **Configure your Apollo Client** with your GraphOS endpoint:
+        ```typescript
+        const client = new ApolloClient({
+            uri: 'https://your-graph.apollographql.com/graphql',
+            headers: {
+            'Apollo-Require-Preflight': 'true'
+            },
+            cache: new InMemoryCache(),
+        });
+        ```
+     d. [Does Not Exist Yet] **Publish your schema** using the rover subgraph publish batch publish command  
+
+##### Consider GraphOS when you need:
+- **Team Collaboration**: Share schemas and coordinate changes across multiple developers
+- **Schema Registry**: Centralized schema management with version history and validation
+- **Production Monitoring**: Query performance insights, error tracking, and usage analytics
+- **Federation**: Combine multiple GraphQL services into a unified API
+- **Schema Checks**: Validate schema changes before deployment to prevent breaking changes**For local development**: Continue using your current setup with any GraphQL endpoint. GraphOS is most valuable when you're ready to deploy to production or collaborate with a team.
+
+### 2. Introspect your schema
+
+Before connecting to a GraphQL API, explore its schema structure:
+
+1. **Open GraphQL Playground** in your browser:
+   ```bash
+   # Replace with your actual endpoint
+   open https://your-graphql-api.com/graphql
+   ```
+
+2. **Run introspection query** to see available types and operations:
+   ```graphql
+   query IntrospectionQuery {
+     __schema {
+       types {
+         name
+         kind
+         fields {
+           name
+           type {
+             name
+           }
+         }
+       }
+     }
+   }
+   ```
+
+3. **Browse the schema** to understand what queries and mutations are available for your frontend.
+
+### 3. Setup your CodeGen
+
+Generate TypeScript types from your GraphQL schema automatically:
+
+1. **Configure codegen.yml** to point to your endpoint:
+   ```yaml
+   schema: 'https://your-graphql-api.com/graphql'
+   documents: ['src/**/*.{ts,tsx}']
+   ignoreNoDocuments: true
+   generates:
+     src/gql/:
+       preset: client
+       config:
+         useTypeImports: true
+   ```
+
+2. **Generate types** from your schema:
+   ```bash
+   npm run codegen
+   ```
+
+3. **Import generated types** in your components:
+   ```typescript
+   import { useQuery } from '@apollo/client';
+   import { GetLocationsQuery } from '../gql/graphql';
+   
+   const { data, loading, error } = useQuery<GetLocationsQuery>(GET_LOCATIONS);
+   ```
+
+Your GraphQL operations now have full TypeScript support with autocomplete and type safety!
+
+### 4. Iterate, Share, and Promote!
+Congratulations!!! You now have a local react app linked to a graph. You can start building and collaborating with teammates on creating or iterating on a Graph-powered web app. 
+
 
 ## Learn More
 

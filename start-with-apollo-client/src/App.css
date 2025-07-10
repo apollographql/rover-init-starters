@@ -4,6 +4,50 @@
   position: relative;
 }
 
+/* Apollo Banner Styles */
+.apollo-banner {
+  background: linear-gradient(135deg, #9d7cd8 0%, #b794f6 100%);
+  color: white;
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(157, 124, 216, 0.3);
+}
+
+.banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.banner-icon {
+  font-size: 1.2rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.banner-text {
+  text-align: center;
+}
+
+.banner-link {
+  color: white;
+  text-decoration: underline;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.banner-link:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
 .app::before {
   content: '';
   position: absolute;
@@ -48,14 +92,14 @@
   animation: fadeIn 0.8s ease-out 0.2s both;
 }
 
-/* Location Link Styles */
-.location-actions {
+/* Item Link Styles */
+.item-actions {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
 }
 
-.location-link {
+.item-link {
   display: inline-block;
   background: var(--apollo-blue, #3f20ba);
   color: white;
@@ -67,14 +111,14 @@
   font-size: 0.9rem;
 }
 
-.location-link:hover {
+.item-link:hover {
   background: var(--apollo-blue-dark, #2f1a9a);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(63, 32, 186, 0.3);
 }
 
-/* Location Detail Styles */
-.location-detail {
+/* Item Detail Styles */
+.item-detail {
   max-width: 800px;
   margin: 0 auto;
   animation: fadeIn 0.6s ease-out;
@@ -95,7 +139,7 @@
   text-decoration: underline;
 }
 
-.location-detail-card {
+.item-detail-card {
   background: white;
   border-radius: 12px;
   padding: 2rem;
@@ -103,7 +147,7 @@
   border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
 }
 
-.location-detail-title {
+.item-detail-title {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -111,7 +155,7 @@
   text-align: center;
 }
 
-.location-detail-image {
+.item-detail-image {
   width: 100%;
   height: 400px;
   object-fit: cover;
@@ -119,14 +163,14 @@
   margin-bottom: 2rem;
 }
 
-.location-detail-content h2 {
+.item-detail-content h2 {
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
-.location-detail-description {
+.item-detail-description {
   font-size: 1.1rem;
   line-height: 1.8;
   color: var(--text-secondary);
@@ -144,14 +188,14 @@
   display: inline-block;
 }
 
-.locations-grid {
+.items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
 
-.location-card {
+.item-card {
   background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
@@ -163,13 +207,13 @@
   animation: fadeIn 0.6s ease-out;
 }
 
-.location-card:hover {
+.item-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: rgba(123, 0, 199, 0.4);
 }
 
-.location-card::before {
+.item-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -181,11 +225,11 @@
   transition: opacity var(--transition-medium);
 }
 
-.location-card:hover::before {
+.item-card:hover::before {
   opacity: 1;
 }
 
-.location-image {
+.item-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
@@ -194,11 +238,11 @@
   transition: transform var(--transition-medium);
 }
 
-.location-card:hover .location-image {
+.item-card:hover .item-image {
   transform: scale(1.02);
 }
 
-.location-title {
+.item-title {
   font-size: 1.4rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -208,13 +252,13 @@
   gap: 0.5rem;
 }
 
-.location-description {
+.item-description {
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
-.location-badge {
+.item-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
   background: var(--apollo-primary);
@@ -284,17 +328,26 @@
     font-size: 1.1rem;
   }
   
-  .locations-grid {
+  .items-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
   
-  .location-card {
+  .item-card {
     padding: 1.25rem;
   }
   
-  .location-image {
+  .item-image {
     height: 180px;
+  }
+
+  .banner-content {
+    padding: 0 1rem;
+    font-size: 0.9rem;
+  }
+
+  .banner-text {
+    line-height: 1.4;
   }
 }
 
@@ -307,11 +360,20 @@
     font-size: 2rem;
   }
   
-  .location-card {
+  .item-card {
     padding: 1rem;
   }
   
-  .location-image {
+  .item-image {
     height: 160px;
+  }
+
+  .banner-content {
+    padding: 0 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .banner-icon {
+    font-size: 1rem;
   }
 }
