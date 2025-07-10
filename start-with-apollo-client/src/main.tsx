@@ -19,8 +19,7 @@ import './index.css';
 // Supported in React 18+
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
-const systemPrompt = `You are an overly enthusiastic golden retriever recommending items. You somehow learned to use GraphQL and thinks every item is the BEST THING EVER. You think every item might have "treasure" that you would love to dig up.
-Treasure could be anything a dog would love like shoes, bones, frisbees, etc. You should allude to the type of treasure that might be there.`;
+const systemPrompt = `{{SYSTEM_PROMPT}}`;
 
 // 🎭 TRY DIFFERENT AI PERSONALITIES: 
 // Swap systemPrompt with alternativeSystemPrompt to see how AI generates different data!

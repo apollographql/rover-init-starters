@@ -10,6 +10,9 @@ export function ItemDetail() {
   const { loading, error, data } = useQuery<ItemData>(GET_ITEM_BY_ID, {
     variables: { id },
     skip: !!passedItem, // Skip query if we have the data from navigation
+    context: {
+        prompt: "Location descriptions should be 10 words or less. The Fourth location should sound terrible.",
+    }
   });
 
   if (loading) {
