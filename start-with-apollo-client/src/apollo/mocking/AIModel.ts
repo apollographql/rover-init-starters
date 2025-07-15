@@ -5,7 +5,7 @@ import {
 import type { Operation } from '@apollo/client';
 import { type LanguageModelV1, type Schema, generateObject } from 'ai';
 import { print } from 'graphql';
-import { objectToString, type GenericObject } from '../utils';
+import { objectToString, type GenericObject } from './utils';
 import { SchemaValidator } from './validation/SchemaValidator';
 import type z from 'zod';
 
