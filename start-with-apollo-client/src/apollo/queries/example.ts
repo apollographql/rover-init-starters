@@ -26,7 +26,8 @@ export const GET_ITEMS = gql`
       id
       name
       headline
-      subheading
+      # 🎭 Uncomment this field to see AI MockProvider adapt the schema and generate subheading data!
+      # subheading
       description
       photo
     }

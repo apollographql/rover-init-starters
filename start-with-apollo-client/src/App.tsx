@@ -11,7 +11,8 @@ export default function App() {
   // Use the first item's headline and subheading for the header
   const headerData = data?.items?.[0];
   const headline = headerData?.headline || "Apollo GraphQL Explorer";
-  const subheading = headerData?.subheading || "Explore the power of GraphQL with AI-generated data";
+  // 🎭 Uncomment this line to see AI MockProvider dynamically generate subheading data!
+  // const subheading = headerData?.subheading || "Explore the power of GraphQL with AI-generated data";
   
   return (
     <BrowserRouter>
@@ -39,9 +40,10 @@ export default function App() {
               {headline}
               <span className="rocket-icon">🚀</span>
             </h1>
+            {/* 🎭 Uncomment this block to display AI-generated subheading text!
             <p className="subtitle">
               {subheading}
-            </p>
+            </p> */}
             <p className="subtitle">
               Powered by <a 
                 href="https://www.apollographql.com/docs/" 

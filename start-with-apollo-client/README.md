@@ -25,6 +25,20 @@ This template starts in **demo mode** using AI-powered mocking, perfect for:
 
 The app will work immediately with AI-generated mock data!
 
+## 🎯 Quick Demo Guide - Top Features
+
+### 1. No Schema Required
+Notice in `src/Items.tsx` - we have only a query, no graph, no schema. The AI mock provider handles everything based on context.
+
+### 2. Change AI Personalities
+Edit the `systemPrompt` in `src/main.tsx:22-23`. Try switching from the default dog enthusiast to a travel agent and see how all responses change instantly.
+
+### 3. Query-Level Control
+Add `# @aiPrompt:` comments to specific queries in your GraphQL operations for fine-tuned control over individual queries.
+
+### 4. Dynamic Query Shapes
+Since this isn't schema-driven, you can modify query fields on the fly. Add new fields like `subheading` and the AI will generate appropriate data.
+
 ## 🚀 Get Started
 
 ### Step 1: Configure your endpoint
