@@ -5,7 +5,7 @@ import {
 import type { Operation } from '@apollo/client';
 import { type LanguageModelV1, type Schema, generateObject } from 'ai';
 import { print } from 'graphql';
-import { objectToString, type GenericObject } from './utils';
+import { objectToString, type GenericObject } from '../utils';
 import { SchemaValidator } from './validation/SchemaValidator';
 import type z from 'zod';
 
@@ -78,6 +78,7 @@ export class AIModel {
 
   async generateResponseForOperation(
     operation: Operation,
+    queryPrompt?: string,
   ): Promise<GenericObject> {
     console.log('\n###########');
     console.log('Generating response for operation');
@@ -100,7 +101,7 @@ export class AIModel {
 
     const promptOptions: RequiredGenerateObjectOptions = {
       model: this.model,
-      prompt: AIModel.createPrompt(operation),
+      prompt: AIModel.createPrompt(operation, queryPrompt),
       mode: 'json',
     };
 
@@ -134,7 +135,10 @@ export class AIModel {
     );
   }
 
-  static createPrompt({ query, variables }: Operation): string {
+  static createPrompt(
+    { query, variables }: Operation,
+    queryPrompt?: string,
+  ): string {
     const queryString = print(query);
 
     let promptVariables = '';
@@ -147,14 +151,13 @@ export class AIModel {
     \`\`\``;
     }
 
-    const consistencyNote = variables ? `
-    
-    IMPORTANT: Be consistent with the provided variables. If an ID is provided, use it to generate consistent, deterministic data. For example, if id="1", always generate the same location data for that ID. Use the ID as a seed for consistent generation.` : '';
-
     const prompt = `Give me mock data that fulfills this query:
     \`\`\`graphql
     ${queryString}
-    \`\`\`${promptVariables}${consistencyNote}`;
+    \`\`\`
+    ${promptVariables}
+    ${queryPrompt ? `\nAdditional instructions:\n${queryPrompt}` : ''}
+    `;
 
     return prompt;
   }

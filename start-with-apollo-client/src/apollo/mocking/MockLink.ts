@@ -64,15 +64,6 @@ function requestToKey(request: GraphQLRequest, addTypename: boolean): string {
   return JSON.stringify(requestKey);
 }
 
-function operationToCacheKey(operation: Operation): string {
-  const queryString = print(operation.query);
-  const cacheKey = { 
-    query: queryString, 
-    variables: operation.variables || {} 
-  };
-  return JSON.stringify(cacheKey);
-}
-
 export class MockLink extends ApolloLink {
   public operation!: Operation;
   public addTypename: boolean = true;
@@ -97,7 +88,6 @@ export class MockLink extends ApolloLink {
     }
   }
 
-
   public addMockedResponse(mockedResponse: MockedResponse) {
     const normalizedMockedResponse =
       this.normalizeMockedResponse(mockedResponse);
@@ -115,12 +105,13 @@ export class MockLink extends ApolloLink {
 
   public request(operation: Operation): Observable<FetchResult> | null {
     this.operation = operation;
+    const queryPrompt = operation.getContext().prompt;
 
     // Return an Observable for Apollo Client to subscribe to
     return new Observable((observer) => {
       try {
         // Generate a response for the operation using the AI model
-        this.aiModel.generateResponseForOperation(operation).then((result) => {
+        this.aiModel.generateResponseForOperation(operation, queryPrompt).then((result) => {
           // Notify the observer with the generated response
           observer.next(result);
         });
