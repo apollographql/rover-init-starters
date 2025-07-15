@@ -11,12 +11,18 @@ This template starts in **demo mode** using AI-powered mocking, perfect for:
 
 ## Getting Started
 
-1. Install dependencies:
+1. Copy the environment variable file and add your Google Gemini API Key
+(visit https://aistudio.google.com/apikey to generate one):
+  ```bash
+  cp .env.example .env
+  ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the development server:
+3. Start the development server:
    ```bash
    npm run dev
    ```

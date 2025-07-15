@@ -56,7 +56,7 @@ export class AIModel {
   constructor({ modelId, systemPrompt, schemaFile }: AIModelOptions) {
     this.systemPrompt = systemPrompt || '';
     this.provider = createGoogleGenerativeAI({
-      apiKey: import.meta.env.AI_API_KEY,
+      apiKey: import.meta.env.VITE_AI_API_KEY,
     });
     this.model = this.provider(modelId || DEFAULT_MODEL_ID);
     this.systemPrompt = (systemPrompt || '') + BASE_SYSTEM_PROMPT;
