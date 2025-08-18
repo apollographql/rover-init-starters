@@ -13,13 +13,12 @@ extend schema
     import: ["@connect", "@source"]
   )
 
-# A @source directive defines a shared data source for multiple Connectors.
-# ✏️ Replace the `name` and `baseURL` of this @source with your own REST API.
+# ✏️ This schema is using a demo REST API as its @source. Replace the `name` and `baseURL` of it with your own REST API.
 @source(
   name: "ecomm"
   # A @source directive defines a shared data source for multiple Connectors.
   http: {
-    baseURL: "https://ecommerce.demo-api.apollo.dev/"
+    baseURL: "https://ecommerce.demo-api.apollo.dev/" 
     headers: [
       # If your API requires headers, add them here and in your router.yaml file.
       # Example:
