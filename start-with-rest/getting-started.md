@@ -40,7 +40,7 @@ Once you run the command, the CLI will start watching your files for updates. Ev
 
 ## The design process
 
-The best way to get started with schema design is to check out the different [schema types](https://www.apollographql.com/docs/graphos/schema-design) that make up your graph. You can also skip and go straight to Apollo’s Schema Design Guides and Principles, starting with [Demand-Oriented Schema Design](https://www.apollographql.com/docs/graphos/schema-design/guides/demand-oriented-schema-design).
+The best way to get started with schema design is to check out the different [schema types](https://www.apollographql.com/docs/graphos/schema-design) that make up your graph. You can also go straight to Apollo’s schema design guides, starting with [Demand-Oriented Schema Design](https://www.apollographql.com/docs/graphos/schema-design/guides/demand-oriented-schema-design).
 
 ## Debugging Apollo Connectors
 
