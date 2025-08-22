@@ -1,3 +1,22 @@
+
+- [Overview](#overview)
+  - [Components of your GraphQL service](#components-of-your-graphql-service)
+    - [The schema (`products.graphql`)](#the-schema-productsgraphql)
+    - [Resolvers (`src/resolvers`)](#resolvers-srcresolvers)
+    - [The server (`src/index.ts`)](#the-server-srcindexts)
+- [Designing your graph](#designing-your-graph)
+  - [IDE extensions for graph development](#ide-extensions-for-graph-development)
+  - [Working on your graph locally](#working-on-your-graph-locally)
+  - [The design process](#the-design-process)
+- [Publishing changes to GraphOS Studio](#publishing-changes-to-graphos-studio)
+- [Deployment](#deployment)
+- [Security](#security)
+- [Additional resources](#additional-resources)
+  - [Graph development](#graph-development)
+  - [Apollo Server](#apollo-server)
+  - [Apollo Router](#apollo-router)
+
+
 # Overview
 
 👋 Hi there!
@@ -7,6 +26,25 @@ Your new graph is set up with [Apollo Federation](https://www.apollographql.com/
 Your service uses [Apollo Server](https://www.apollographql.com/docs/apollo-server) as its backend, a production-ready GraphQL server that connects your schema to any data source and handles all GraphQL execution, caching, and performance optimizations.
 
 This project is also set up to use [Apollo Router](https://www.apollographql.com/docs/graphos/routing) as the entry point for all requests to your graph. It’s a great way to get features like tracing, metrics, and caching out of the box. It gives you a single place to configure settings for your graph, like traffic shaping, authorization, and more. For now, the router simply forwards requests to your service, but as your graph grows, it can pull data from multiple places and return one clear, consistent result.
+
+## Components of your GraphQL service
+
+Before diving in, it's helpful to understand the structure and purpose of some of the files included in this template. This will help you navigate the codebase more effectively.
+
+### The schema (`products.graphql`)
+
+The schema describes what data is available, how it’s structured, and how it can be requested or modified. It’s written using GraphQL’s Schema Definition Language (SDL), which lets you define the shape and capabilities of an API in a clear, type-safe way that is also backend-agnostic.
+
+### Resolvers (`src/resolvers`)
+
+A resolver function populates the data for a particular field in the schema. Resolvers are defined in a resolvers map that follows the hierarchy of the schema.
+
+You can find the resolvers for this project in `src/resolvers`. Each file corresponds to a type in your schema.
+
+### The server (`src/index.ts`)
+
+The server is in charge of making sure requests are valid, finding the right data, and sending it back to the requester.
+
 
 # Designing your graph
 
