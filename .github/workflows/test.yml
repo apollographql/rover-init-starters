@@ -2,9 +2,9 @@ name: Validation Tests
 
 on:
   pull_request:
-    branches: [ main, 'releases/**' ]
+    branches: [ main, 'releases/**', 'release/**' ]
   push:
-    branches: [ main, 'releases/**' ]
+    branches: [ main, 'releases/**', 'release/**' ]
 
 jobs:
   test:
