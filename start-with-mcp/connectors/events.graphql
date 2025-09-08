@@ -1,0 +1,285 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.11"
+    import: ["@key", "@shareable", "@external", "@requires", "@inaccessible"]
+  ) # Enable this schema to use Apollo Federation features
+  @link( # Enable this schema to use Apollo Connectors
+    url: "https://specs.apollo.dev/connect/v0.2"
+    import: ["@connect", "@source"]
+  )
+  @source(
+    name: "luma"
+    http: {
+      baseURL: "https://public-api.luma.com/v1"
+      headers: [{ name: "x-luma-api-key", value: "{$config.lumaKey}" }]
+    }
+  )
+
+enum SORT {
+  ASC
+  DESC
+}
+
+type Query {
+  lumaEvents(
+    before: String
+    after: String
+    cursor: String
+    limit: Int = 3
+    sort: SORT = DESC
+  ): LumaEventConnection
+    @connect(
+      source: "luma"
+      http: {
+        GET: "/calendar/list-events"
+        queryParams: """
+        before: $args.before
+        after: $args.after
+        pagination_cursor: $args.cursor
+        pagination_limit: $args.limit
+        sort_direction: $args.sort->match(
+          ["ASC","asc"],
+          ["DESC","desc"]
+        )
+        """
+      }
+      selection: """
+      hasMore: has_more
+      nextCursor: next_cursor
+      events: entries {
+        id: api_id
+        $.event {
+          calendar: { id: calendar_api_id }
+          createdAt: created_at
+          coverUrl: cover_url
+          name
+          description
+          descriptionMd: description_md
+          startAt: start_at
+          durationInterval: duration_interval
+          endAt: end_at
+          address: geo_address_json {
+            address
+            city
+            region
+            country
+            cityState: city_state
+            fullAddress: full_address
+            googleMapsPlaceId: google_maps_place_id
+            appleMapsPlaceId: apple_maps_place_id
+            description
+          }
+          geoLatitude: geo_latitude
+          geoLongitude: geo_longitude
+          url
+          timezone
+          user: { id: user_api_id }
+          visibility
+          meetingUrl: meeting_url
+          zoomMeetingUrl: zoom_meeting_url
+        }
+        tags {
+          id: api_id
+          name
+        }
+      }
+      """
+    )
+}
+
+type LumaEventConnection {
+  hasMore: Boolean
+  nextCursor: String
+  events: [LumaEvent]
+}
+type LumaEvent
+  @key(fields: "id")
+  @connect(
+    source: "luma"
+    http: { GET: "/event/get/?api_id={$this.id}" }
+    selection: """
+    $.event {
+      id: api_id
+      $.event {
+        calendar: { id: calendar_api_id }
+        createdAt: created_at
+        coverUrl: cover_url
+        name
+        description
+        descriptionMd: description_md
+        startAt: start_at
+        durationInterval: duration_interval
+        endAt: end_at
+        address: geo_address_json {
+          address
+          city
+          region
+          country
+          cityState: city_state
+          fullAddress: full_address
+          googleMapsPlaceId: google_maps_place_id
+          appleMapsPlaceId: apple_maps_place_id
+          description
+        }
+        geoLatitude: geo_latitude
+        geoLongitude: geo_longitude
+        url
+        timezone
+        user: { id: user_api_id }
+        visibility
+        meetingUrl: meeting_url
+        zoomMeetingUrl: zoom_meeting_url
+      }
+      tags {
+        id: api_id
+        name
+      }
+    }
+    """
+  ) {
+  id: ID
+  calendar: Calendar
+  createdAt: DateTime
+  coverUrl: String
+  name: String
+  description: String
+  descriptionMd: String
+  startAt: DateTime
+  durationInterval: Int
+  endAt: DateTime
+  address: Address
+  geoLatitude: Float
+  geoLongitude: Float
+  url: String
+  timezone: String
+  user: User
+  visibility: String
+  meetingUrl: String
+  zoomMeetingUrl: String
+  tags: [Tag]
+  registration: GuestConnection
+    @connect(
+      source: "luma"
+      http: { GET: "event/get-guests?event_api_id={$this.id}" }
+      selection: """
+      hasMore: has_more
+      nextCursor: next_cursor
+      guests: $.entries.guest {
+        id: api_id
+        companyName: registration_answers->first.answer
+        approvalStatus: approval_statusc
+        createdAt: created_at
+        customSource: custom_source
+        ethAddress: eth_address
+        invitedAt: invited_at
+        joinedAt: joined_at
+        phoneNumber: phone_number
+        registeredAt: registered_at
+        registrationAnswers: registration_answers {
+          label
+          answer
+          questionId: question_id
+          questionType: question_type
+        }
+        solanaAddress: solana_address
+        userApiId: user_api_id
+        userName: user_name
+        userEmail: user_email
+        userFirstName: user_first_name
+        userLastName: user_last_name
+        name
+        email
+        checkedInAt: checked_in_at
+        checkInQrCode: check_in_qr_code
+        eventTicket: event_ticket {
+          amount
+          amountDiscount: amount_discount
+          amountTax: amount_tax
+          id: api_id
+          checkedInAt: checked_in_at
+          currency
+          eventTicketTypeApiId: event_ticket_type_api_id
+          isCaptured: is_captured
+          name
+        }
+      }
+      """
+    )
+}
+
+
+type GuestConnection {
+  hasMore: Boolean
+  nextCursor: String
+  guests: [LumaGuest]
+}
+
+type LumaGuest {
+  id: ID
+  companyName: String
+  approvalStatus: String
+  createdAt: DateTime
+  customSource: String
+  ethAddress: String
+  invitedAt: DateTime
+  joinedAt: DateTime
+  phoneNumber: String
+  registeredAt: DateTime
+  registrationAnswers: [RegistrationAnswer]
+  solanaAddress: String
+  userApiId: ID
+  userName: String
+  userEmail: String
+  userFirstName: String
+  userLastName: String
+  name: String
+  email: String
+  checkedInAt: DateTime
+  checkInQrCode: String
+  eventTicket: EventTicket
+}
+type RegistrationAnswer {
+  label: String
+  answer: String
+  questionId: ID
+  questionType: String
+}
+
+type EventTicket {
+  amount: Float
+  amountDiscount: Float
+  amountTax: Float
+  id: ID
+  checkedInAt: DateTime
+  currency: String
+  eventTicketTypeApiId: ID
+  isCaptured: Boolean
+  name: String
+}
+
+type Tag {
+  id: ID
+  name: String
+}
+
+scalar DateTime
+
+type Calendar {
+  id: ID
+}
+
+type User {
+  id: ID
+}
+
+type Address {
+  address: String
+  city: String
+  region: String
+  country: String
+  cityState: String
+  fullAddress: String
+  googleMapsPlaceId: String
+  appleMapsPlaceId: String
+  description: String
+}
