@@ -1,0 +1,5 @@
+{
+  "rover":{
+    "supergraphConfig": "./connectors/supergraph.yaml"
+  }
+}

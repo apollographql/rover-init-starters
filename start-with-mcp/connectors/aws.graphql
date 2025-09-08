@@ -1,0 +1,304 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.10"
+    import: ["@key", "@shareable", "@external", "@requires", "@inaccessible"]
+  ) 
+  @link(
+    url: "https://specs.apollo.dev/connect/v0.1"
+    import: ["@connect", "@source"]
+  )
+  @source(
+    name: "lambda"
+    http: { baseURL: "https://lambda.us-east-1.amazonaws.com" }
+  )
+  @source(
+    name: "dynamodb"
+    http: {
+      baseURL: "https://dynamodb.us-east-1.amazonaws.com"
+    }
+  )
+
+type EventConnection {
+  items: [Event]
+  pageInfo: PageInfo
+}
+type PageInfo {
+  count: Int
+  next: String
+}
+
+#build this out to whatever cities, consider an any/other value
+enum Location {
+  NY
+  SF
+  VIRTUAL
+}
+
+input SpeakerSubmissionInput {
+  name: String!
+  email: String!
+  title: String!
+  abstract: String!
+  location: Location!
+}
+
+input UpdateSubmissionInput {
+  name: String
+  email: String
+  title: String
+  abstract: String
+  location: Location
+}
+
+type Submission {
+  id: ID
+  title: String
+  abstract: String
+  name: String
+  email: String
+  location: Location
+  message: String
+}
+
+# type Talk {
+#   title: String
+#   abstract: String
+# }
+
+type SubmissionDetails {
+  id: ID!
+  name: String!
+  email: String!
+  title: String!
+  abstract: String!
+  location: Location!
+}
+
+type Query {
+  # #TODO
+  # allTalks: [Talk]
+  #   @connect(
+  #     source: "supabase"
+  #     http: { GET: "proposals?select=title,abstract" }
+  #     selection: """
+  #     title
+  #     abstract
+  #     """
+  #   )
+
+  userSubmissions: [SubmissionDetails]
+    @connect(
+      source: "lambda"
+      http: {
+        POST: "/2015-03-31/functions/mcp-community-UserProposals-VyWLQYkAgQC1/invocations"
+        body: "email: $context.email"
+      }
+      selection: """
+      id
+      name
+      title
+      abstract
+      location
+      email
+      """
+    )
+
+  eventConnection(cursor: String = "", limit: Int = 5): EventConnection
+    @connect(
+      source: "dynamodb"
+      http: {
+        POST: "/"
+        body: """
+        $args.cursor->match(
+          [null, $({
+            TableName: $('mcp-community-events'),
+            Limit: $args.limit,
+            KeyConditionExpression: '#type = :type',
+            ExpressionAttributeNames: {
+              '#type': 'type'
+            },
+            ExpressionAttributeValues: {
+              ':type': { S: 'event' }
+            },
+            ScanIndexForward: false
+          })],
+          ["", $({
+            TableName: $('mcp-community-events'),
+            Limit: $args.limit,
+            KeyConditionExpression: '#type = :type',
+            ExpressionAttributeNames: {
+              '#type': 'type'
+            },
+            ExpressionAttributeValues: {
+              ':type': { S: 'event' }
+            },
+            ScanIndexForward: false
+          })],
+          [@, $({
+            TableName: $('mcp-community-events'),
+            Limit: $args.limit,
+            KeyConditionExpression: '#type = :type',
+            ExpressionAttributeValues: {
+              ':type': { S: 'event' }
+            },
+            ScanIndexForward: false
+          })],
+        )
+        """
+    headers: [{ name: "X-Amz-Target", value: "DynamoDB_20120810.Query" }]
+      }
+      selection: """
+      pageInfo: {
+        count: Count
+        next: LastEvaluatedKey.id.S
+      }
+      items: $.Items {
+        id: eventId.S
+        name: name.S
+        location: location.S
+        date: startAt.S
+        url: url.S
+      }
+      """
+    )
+
+  
+  
+  # #TODO
+  # getSessions: [Session]
+  #   @connect(
+  #     source: "supabase"
+  #     http: { GET: "sessions?select=*" }
+  #     selection: """
+  #     id
+  #     speakerName: speaker_name
+  #     speakerSocial: speaker_social
+  #     talkTitle: talk_title
+  #     talkDescription: talk_description
+  #     talkLink: talk_link
+  #     codeLink: code_link
+  #     slidesLink: slides_link
+  #     eventId: event_id
+  #     """
+  #   )
+
+  # #TODO
+  # sessionsByEvent(eventId: ID!): [Session!]!
+  #   @connect(
+  #     source: "supabase"
+  #     http: { GET: "sessions?event_id=eq.{$args.eventId}" }
+  #     selection: """
+  #     id
+  #     speakerName: speaker_name
+  #     speakerSocial: speaker_social
+  #     talkTitle: talk_title
+  #     talkDescription: talk_description
+  #     talkLink: talk_link
+  #     codeLink: code_link
+  #     slidesLink: slides_link
+  #     eventId: event_id
+  #     """
+  #   )
+}
+
+type Mutation {
+  submitProposal(
+    name: String!
+    title: String!
+    abstract: String!
+    location: Location!
+  ): Submission
+    @connect(
+      source: "lambda"
+      http: {
+        POST: "/2015-03-31/functions/mcp-community-SubmitProposal-OK1SZPOHdX5a/invocations"
+        body: """
+        name: $args.name
+        email: $context.email
+        title: $args.title
+        abstract: $args.abstract
+        location: $args.location
+        """
+      }
+      selection: """
+      id
+      name
+      email
+      title
+      abstract
+      location
+      message
+      """
+      errors: { message: "$.message" }
+    )
+
+  updateSubmission(
+    id: ID!
+    name: String
+    title: String
+    abstract: String
+    location: Location
+  ): SubmissionDetails
+    @connect(
+      source: "lambda"
+      http: {
+        POST: "/2015-03-31/functions/mcp-community-UpdateProposal-Yv5A44co3IBT/invocations"
+        body: """
+        id: $args.id
+        email: $context.email
+        updates: {
+          name: $args.name
+          title: $args.title
+          abstract: $args.abstract
+          location: $args.location
+        }
+        """
+      }
+      selection: """
+      id
+      name
+      email
+      title
+      abstract
+      location
+      """
+      errors: { message: "$.message" }
+    )
+}
+
+type Event {
+  id: ID!
+  name: String!
+  location: String!
+  date: String!
+  url: String!
+  # #TODO
+  # sessions: [Session!]!
+  #   @connect(
+  #     source: "supabase"
+  #     http: { GET: "/sessions?event_id=eq.{$this.id}&select=*" }
+  #     selection: """
+  #     id
+  #     speakerName: speaker_name
+  #     speakerSocial: speaker_social
+  #     talkTitle: talk_title
+  #     talkDescription: talk_description
+  #     talkLink: talk_link
+  #     codeLink: code_link
+  #     slidesLink: slides_link
+  #     eventId: event_id
+  #     """
+  #   )
+}
+
+# type Session {
+#   id: ID!
+#   speakerName: String!
+#   speakerSocial: String
+#   talkTitle: String!
+#   talkDescription: String!
+#   talkLink: String
+#   codeLink: String
+#   slidesLink: String
+#   eventId: ID!
+# }
