@@ -1,0 +1,18 @@
+overrides:
+  mutation_mode: all
+operations:
+  source: collection
+  id: default 
+transport:
+  type: streamable_http
+  address: 127.0.0.1
+  port: 5000
+  auth:
+    servers:
+      - https://another-agent-12-staging.authkit.app
+    resource: https://mcp-server-staging-4406c.up.railway.app/mcp
+    audiences:
+      - client_01K1Y89H34GFN34PE6KW
+    scopes:
+      - profile
+endpoint: https://apollo-router-staging.up.railway.app
