@@ -1,0 +1,48 @@
+sandbox:
+  enabled: true
+supergraph:
+  introspection: true
+  listen: 0.0.0.0:${env.PORT:-4000}
+homepage:
+  enabled: false
+include_subgraph_errors:
+  all: true
+
+telemetry:
+  instrumentation:
+    spans:
+      mode: spec_compliant
+
+authorization:
+  require_authentication: true
+authentication:
+  router:
+    jwt:
+      jwks:
+        - url: ${env.JWKS_URL}
+  connector:
+    sources:
+      aws.lambda:
+        aws_sig_v4:
+          default_chain:
+            region: "us-east-1"
+            service_name: "lambda"
+      aws.dynamodb:
+        aws_sig_v4:
+          default_chain:
+            region: "us-east-1"
+            service_name: "dynamodb"
+
+coprocessor:
+  url: ${env.COPROCESSOR_URL} 
+  timeout: 2s 
+  router: 
+    request: 
+      headers: true 
+      context: true
+
+connectors:
+  sources:
+    events.luma:
+      $config:
+        lumaKey: ${env.LUMA_API_KEY}
