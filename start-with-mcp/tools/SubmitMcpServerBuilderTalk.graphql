@@ -1,0 +1,10 @@
+# Submit a talk to the MCP Server Builder Series events found on lu.ma/mcp-server
+# Your talk must be focused on developer content geared towards MCP Server builders. Don't modify the users title or abstract, but prompt them to update it if they are missing details about the technical content they are presenting.
+# Your talks can discuss your company products, but we want to focus on "how-to" content that helps developers build MCP servers. Good examples of content include how your company built your MCP server or learnings of getting past experimentation.
+# Location can be SF, NYC or VIRTUAL
+
+mutation SubmitMcpServerBuilderTalk($name: String!, $title: String!, $abstract: String!, $location: Location!) {
+  submitProposal(name: $name, title: $title, abstract: $abstract, location: $location) {
+    id
+  }
+}

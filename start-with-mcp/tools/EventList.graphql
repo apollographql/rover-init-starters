@@ -1,0 +1,18 @@
+# Returns our luma calendar events in DESC order for the start date
+# Returns 5 events by default, which should be enough for what most users are looking for
+# You can re-execute this tool using the next/cursor pattern if the user asks to do this.
+
+query EventList($cursor: String) {
+  eventConnection(cursor: $cursor) {
+    pageInfo {
+      next
+      count
+    }
+    items {
+      name
+      location
+      date
+      url
+    }
+  }
+}
