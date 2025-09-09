@@ -1,0 +1,421 @@
+# =============================================================================
+# APOLLO MCP TOOLS - EXAMPLE GRAPHQL OPERATIONS
+# =============================================================================
+#
+# This file demonstrates how to create GraphQL operations that become callable
+# tools in MCP (Model Context Protocol). Each operation in this file will be
+# available as a tool that AI assistants like Claude can use to interact with
+# your GraphQL API.
+#
+# HOW IT WORKS:
+# 1. The Apollo MCP Server reads .graphql files from the tools/ directory
+# 2. Each named operation becomes a tool with the operation name
+# 3. AI assistants can call these tools with variables as arguments
+# 4. The MCP server executes the GraphQL operation and returns the result
+#
+# NAMING CONVENTIONS:
+# - Use descriptive names that clearly indicate what the tool does
+# - Start with the operation type: "Get", "List", "Create", "Update", "Delete"
+# - Use PascalCase for operation names
+# - Group related operations in the same file or separate files by domain
+#
+# EDITING WORKFLOW:
+# 1. Add your GraphQL operations to files in this tools/ directory
+# 2. Test operations in GraphQL Playground or your GraphQL client
+# 3. Restart the MCP server to pick up new tools
+# 4. Test the MCP tools using the MCP Inspector or Claude Desktop
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# EXAMPLE 1: SIMPLE QUERY FOR STANDARD GRAPHQL API
+# -----------------------------------------------------------------------------
+# This query fetches basic user information. It will appear as a tool called
+# "GetUserProfile" that AI assistants can use to retrieve user data.
+
+query GetUserProfile($userId: ID!) {
+  # Standard GraphQL field selection
+  user(id: $userId) {
+    id
+    name
+    email
+    
+    # Example of nested selections
+    profile {
+      avatar
+      bio
+      createdAt
+    }
+    
+    # Example of computed fields
+    postsCount
+    followersCount
+  }
+}
+
+# -----------------------------------------------------------------------------
+# EXAMPLE 2: QUERY WITH REST CONNECTOR INTEGRATION (@connect directive)
+# -----------------------------------------------------------------------------
+# This shows how to query data that comes from REST APIs via Apollo Connectors.
+# The @connect directive tells Apollo how to fetch data from your REST endpoints.
+
+query GetProductCatalog($category: String, $limit: Int = 20) {
+  # Using @connect directive to fetch from REST API
+  products(category: $category, limit: $limit)
+    @connect(
+      http: {
+        GET: "/api/v1/products"
+        query: { category: "$category", limit: "$limit" }
+      }
+    ) {
+    
+    # Fields from the REST API response
+    id
+    name
+    price
+    description
+    imageUrl
+    
+    # Nested REST connector call for product details
+    details @connect(
+      http: {
+        GET: "/api/v1/products/{$parent.id}/details"
+      }
+    ) {
+      specifications
+      reviews {
+        rating
+        comment
+        author
+      }
+      inventory {
+        inStock
+        quantity
+        warehouse
+      }
+    }
+    
+    # Another connector call for related products
+    relatedProducts @connect(
+      http: {
+        GET: "/api/v1/products/{$parent.id}/related"
+        query: { limit: 5 }
+      }
+    ) {
+      id
+      name
+      price
+      imageUrl
+    }
+  }
+}
+
+# -----------------------------------------------------------------------------
+# EXAMPLE 3: MUTATION FOR DATA MODIFICATION
+# -----------------------------------------------------------------------------
+# This mutation creates a new blog post. AI assistants can use this tool to
+# create content in your system. Note: Be careful with mutations in MCP!
+
+mutation CreateBlogPost(
+  $title: String!
+  $content: String!
+  $authorId: ID!
+  $tags: [String!]
+  $publishNow: Boolean = false
+) {
+  createPost(input: {
+    title: $title
+    content: $content
+    authorId: $authorId
+    tags: $tags
+    status: $publishNow ? PUBLISHED : DRAFT
+  }) {
+    # Return the created post data
+    id
+    title
+    slug
+    status
+    createdAt
+    
+    # Include author information
+    author {
+      id
+      name
+      email
+    }
+    
+    # Include any validation errors
+    errors {
+      field
+      message
+    }
+  }
+}
+
+# -----------------------------------------------------------------------------
+# EXAMPLE 4: MUTATION WITH REST CONNECTOR (@connect directive)
+# -----------------------------------------------------------------------------
+# This shows how to perform mutations that call REST APIs using connectors.
+
+mutation UpdateUserPreferences(
+  $userId: ID!
+  $preferences: UserPreferencesInput!
+) {
+  # Using @connect to POST to a REST API endpoint
+  updateUserPreferences(userId: $userId, preferences: $preferences)
+    @connect(
+      http: {
+        POST: "/api/v1/users/{$userId}/preferences"
+        body: "$preferences"
+        headers: {
+          "Content-Type": "application/json"
+          "X-User-ID": "$userId"
+        }
+      }
+    ) {
+    
+    # Fields returned from the REST API
+    userId
+    preferences {
+      theme
+      language
+      notifications {
+        email
+        push
+        sms
+      }
+      privacy {
+        profileVisibility
+        showEmail
+        showActivity
+      }
+    }
+    updatedAt
+    
+    # Include any errors from the REST API
+    success
+    message
+  }
+}
+
+# -----------------------------------------------------------------------------
+# EXAMPLE 5: COMPLEX QUERY WITH MULTIPLE DATA SOURCES
+# -----------------------------------------------------------------------------
+# This demonstrates a more complex query that might combine traditional GraphQL
+# fields with REST connector data.
+
+query GetDashboardData($userId: ID!, $dateRange: DateRangeInput!) {
+  # Traditional GraphQL query for user data
+  user(id: $userId) {
+    id
+    name
+    profile {
+      avatar
+      title
+    }
+  }
+  
+  # REST connector for analytics data
+  analytics(userId: $userId, dateRange: $dateRange)
+    @connect(
+      http: {
+        GET: "/api/v1/analytics/user/{$userId}"
+        query: {
+          startDate: "$dateRange.startDate"
+          endDate: "$dateRange.endDate"
+        }
+        headers: {
+          "Authorization": "Bearer {$context.token}"
+        }
+      }
+    ) {
+    
+    pageViews
+    uniqueVisitors
+    averageSessionDuration
+    
+    # Nested data from analytics API
+    topPages {
+      url
+      views
+      averageTime
+    }
+    
+    conversionMetrics {
+      rate
+      total
+      bySource {
+        source
+        conversions
+        rate
+      }
+    }
+  }
+  
+  # Another REST connector for recent activity
+  recentActivity(userId: $userId, limit: 10)
+    @connect(
+      http: {
+        GET: "/api/v1/users/{$userId}/activity"
+        query: { limit: 10 }
+      }
+    ) {
+    
+    id
+    type
+    description
+    timestamp
+    metadata
+  }
+}
+
+# -----------------------------------------------------------------------------
+# EXAMPLE 6: BATCH QUERY FOR EFFICIENCY
+# -----------------------------------------------------------------------------
+# This shows how to create tools that fetch multiple related pieces of data
+# in a single request, which is more efficient than multiple separate calls.
+
+query GetProjectOverview($projectId: ID!) {
+  project(id: $projectId) {
+    # Basic project information
+    id
+    name
+    description
+    status
+    createdAt
+    updatedAt
+    
+    # Team members
+    team {
+      id
+      name
+      role
+      avatar
+    }
+    
+    # Recent tasks
+    tasks(limit: 10, orderBy: { field: UPDATED_AT, direction: DESC }) {
+      id
+      title
+      status
+      priority
+      assignee {
+        id
+        name
+      }
+      dueDate
+    }
+    
+    # Project metrics from REST API
+    metrics @connect(
+      http: {
+        GET: "/api/v1/projects/{$parent.id}/metrics"
+      }
+    ) {
+      completionPercentage
+      totalTasks
+      completedTasks
+      overdueTasks
+      
+      burndownChart {
+        date
+        remainingWork
+        completedWork
+      }
+      
+      teamVelocity {
+        week
+        pointsCompleted
+        pointsCommitted
+      }
+    }
+  }
+}
+
+# -----------------------------------------------------------------------------
+# TOOL CONFIGURATION EXAMPLES
+# -----------------------------------------------------------------------------
+#
+# You can add metadata to your operations using GraphQL comments that the
+# MCP server will recognize:
+#
+# @mcp-tool-description: "Retrieves comprehensive project data including metrics"
+# @mcp-tool-category: "Projects" 
+# @mcp-tool-requires-auth: true
+# @mcp-tool-rate-limit: 10 # requests per minute
+# @mcp-tool-timeout: 15000 # milliseconds
+#
+# These annotations help AI assistants understand when and how to use your tools.
+
+# -----------------------------------------------------------------------------
+# VARIABLE TYPE EXAMPLES
+# -----------------------------------------------------------------------------
+# Here are examples of common GraphQL variable types you might use:
+
+# Input types for complex objects
+# input UserPreferencesInput {
+#   theme: String
+#   language: String
+#   notifications: NotificationPreferencesInput
+# }
+#
+# input DateRangeInput {
+#   startDate: DateTime!
+#   endDate: DateTime!
+# }
+#
+# Enum types for controlled values  
+# enum TaskStatus {
+#   TODO
+#   IN_PROGRESS
+#   IN_REVIEW
+#   COMPLETED
+#   CANCELLED
+# }
+#
+# Scalar types
+# scalar DateTime
+# scalar JSON
+# scalar Upload
+
+# -----------------------------------------------------------------------------
+# BEST PRACTICES FOR MCP TOOLS
+# -----------------------------------------------------------------------------
+#
+# 1. **Clear Operation Names**: Use descriptive names that indicate the purpose
+#    - Good: GetUserDashboard, CreateBlogPost, UpdateProjectStatus
+#    - Bad: Query1, GetData, DoSomething
+#
+# 2. **Comprehensive Field Selection**: Include all fields that AI assistants
+#    might need to provide useful responses
+#
+# 3. **Error Handling**: Always include error fields in mutations so AI
+#    assistants can handle failures gracefully
+#
+# 4. **Variable Defaults**: Provide sensible defaults for optional variables
+#
+# 5. **Documentation**: Use GraphQL comments to explain complex operations
+#
+# 6. **Security**: Be mindful of what data is exposed through MCP tools
+#
+# 7. **Performance**: Use efficient queries and consider pagination for large datasets
+#
+# 8. **Testing**: Test your operations in GraphQL Playground before using them as MCP tools
+#
+# =============================================================================
+# NEXT STEPS
+# =============================================================================
+#
+# 1. Replace these examples with operations specific to your GraphQL schema
+# 2. Test each operation in your GraphQL Playground
+# 3. Restart the MCP server to load new tools  
+# 4. Test the tools using MCP Inspector: npx @mcp/inspector --port 5000
+# 5. Configure Claude Desktop to use your MCP server
+# 6. Start using your GraphQL API through Claude!
+#
+# For more examples and documentation:
+# - Apollo Federation: https://www.apollographql.com/docs/federation/
+# - Apollo Connectors: https://www.apollographql.com/docs/graphos/connectors/
+# - MCP Protocol: https://modelcontextprotocol.io/
+#
+# =============================================================================

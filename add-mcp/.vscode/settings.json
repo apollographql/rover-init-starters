@@ -1,0 +1,502 @@
+{
+  // ==========================================================================
+  // VS CODE SETTINGS FOR APOLLO MCP SERVER DEVELOPMENT
+  // ==========================================================================
+  //
+  // This file configures VS Code to provide excellent GraphQL development
+  // experience when creating MCP tools. It enables syntax highlighting,
+  // auto-completion, schema validation, and more for GraphQL files.
+  
+  // ==========================================================================
+  // GRAPHQL LANGUAGE SUPPORT
+  // ==========================================================================
+  
+  // Associate .graphql files with GraphQL language
+  "files.associations": {
+    "*.graphql": "graphql",
+    "*.gql": "graphql"
+  },
+
+  // GraphQL-specific editor settings
+  "[graphql]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "full",
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 100,
+    
+    // Enable semantic highlighting for GraphQL
+    "editor.semanticHighlighting.enabled": true,
+    
+    // Show suggestions while typing
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    
+    // Auto-complete brackets and quotes
+    "editor.autoClosingBrackets": "always",
+    "editor.autoClosingQuotes": "always",
+    "editor.autoSurround": "languageDefined"
+  },
+
+  // ==========================================================================
+  // GRAPHQL EXTENSION CONFIGURATION
+  // ==========================================================================
+  
+  // GraphQL Language Server configuration
+  "graphql.introspect": {
+    // Your GraphQL endpoint for schema introspection
+    "endpoint": "{{GRAPHQL_ENDPOINT}}",
+    
+    // Headers for authentication (if required)
+    "headers": {
+      // "Authorization": "Bearer {{AUTH_TOKEN}}"
+      // "X-API-Key": "{{API_KEY}}"
+    }
+  },
+
+  // GraphQL validation and linting
+  "graphql.validate": true,
+  "graphql.lint": {
+    "enable": true,
+    "rules": {
+      // Enforce operation naming
+      "operations-without-names": "error",
+      
+      // Enforce field selection
+      "fields-without-selections": "error",
+      
+      // Warn about unused variables
+      "unused-variables": "warn",
+      
+      // Warn about undefined variables
+      "undefined-variables": "error",
+      
+      // Enforce proper fragment usage
+      "unused-fragments": "warn"
+    }
+  },
+
+  // Enable auto-completion from GraphQL schema
+  "graphql.autocomplete": {
+    "enable": true,
+    "showDeprecated": true
+  },
+
+  // ==========================================================================
+  // FILE EXPLORER CONFIGURATION
+  // ==========================================================================
+  
+  // Group GraphQL files in explorer
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.graphql": "*.gql"
+  },
+
+  // Show GraphQL files prominently
+  "workbench.iconTheme": "vs-minimal",
+  "file-icons.associations": {
+    "*.graphql": "graphql",
+    "*.gql": "graphql"
+  },
+
+  // ==========================================================================
+  // EDITOR ENHANCEMENTS FOR MCP DEVELOPMENT
+  // ==========================================================================
+  
+  // Enable breadcrumbs for navigation
+  "breadcrumbs.enabled": true,
+  "breadcrumbs.showFiles": true,
+  "breadcrumbs.showSymbols": true,
+
+  // Show outline view for GraphQL operations
+  "outline.showFields": true,
+  "outline.showFunctions": true,
+  "outline.showVariables": true,
+
+  // Enable folding for GraphQL selections
+  "editor.foldingStrategy": "indentation",
+  "editor.showFoldingControls": "always",
+
+  // ==========================================================================
+  // SEARCH AND FIND CONFIGURATION
+  // ==========================================================================
+  
+  // Include GraphQL files in search
+  "search.include": {
+    "**/*.graphql": true,
+    "**/*.gql": true,
+    "tools/**": true,
+    ".apollo/**": true
+  },
+
+  // Exclude node_modules and build artifacts
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/coverage": true
+  },
+
+  // ==========================================================================
+  // YAML CONFIGURATION FOR APOLLO CONFIG FILES
+  // ==========================================================================
+  
+  // Configure YAML settings for Apollo configuration files
+  "[yaml]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+
+  // Associate Apollo config files with YAML
+  "files.associations": {
+    "mcp.*.yaml": "yaml",
+    ".apollo/*.yaml": "yaml",
+    ".apollo/*.yml": "yaml"
+  },
+
+  // ==========================================================================
+  // DOCKERFILE CONFIGURATION
+  // ==========================================================================
+  
+  // Configure Docker file settings
+  "[dockerfile]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.formatOnSave": true
+  },
+
+  // Associate MCP Dockerfile
+  "files.associations": {
+    "mcp.Dockerfile": "dockerfile",
+    "*.mcp.Dockerfile": "dockerfile"
+  },
+
+  // ==========================================================================
+  // JSON CONFIGURATION FOR CONFIG FILES
+  // ==========================================================================
+  
+  // Configure JSON files (like Claude Desktop config)
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "strings": true
+    }
+  },
+
+  "[jsonc]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true
+  },
+
+  // ==========================================================================
+  // INTEGRATED TERMINAL CONFIGURATION
+  // ==========================================================================
+  
+  // Configure terminal for MCP development workflow
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.env.osx": {},
+  "terminal.integrated.env.linux": {},
+  "terminal.integrated.env.windows": {},
+
+  // Add common MCP development tasks to terminal profiles
+  "terminal.integrated.profiles.osx": {
+    "MCP Development": {
+      "path": "/bin/bash",
+      "args": [
+        "-c",
+        "echo 'MCP Development Environment'; echo 'Available commands:'; echo '  docker build -f mcp.Dockerfile -t mcp-server .'; echo '  docker run -p 5000:5000 --env-file .env mcp-server'; echo '  npx @mcp/inspector --port 5000'; echo ''; exec bash"
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // TASKS AND DEBUGGING CONFIGURATION
+  // ==========================================================================
+  
+  // Enable problem matcher for GraphQL validation
+  "problems.decorations.enabled": true,
+  "problems.showCurrentInStatus": true,
+
+  // Configure git integration for GraphQL files
+  "git.decorations.enabled": true,
+  "scm.diffDecorations": "all",
+
+  // ==========================================================================
+  // EXTENSION RECOMMENDATIONS
+  // ==========================================================================
+  
+  // These settings work best with these VS Code extensions:
+  // - GraphQL: Language Feature Support (graphql.vscode-graphql)
+  // - GraphQL: Syntax Highlighting (graphql.vscode-graphql-syntax)
+  // - Docker (ms-azuretools.vscode-docker)
+  // - YAML (redhat.vscode-yaml)
+  // - Apollo GraphQL (apollographql.vscode-apollo)
+  // - GitLens (eamodio.gitlens)
+  
+  // ==========================================================================
+  // WORKSPACE-SPECIFIC SETTINGS
+  // ==========================================================================
+  
+  // Workspace trust settings
+  "security.workspace.trust.untrustedFiles": "open",
+  
+  // Auto-save settings for development
+  "files.autoSave": "onWindowChange",
+  "files.autoSaveDelay": 1000,
+
+  // Enable hot reload feedback
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/coverage/**": true
+  },
+
+  // ==========================================================================
+  // DEVELOPMENT WORKFLOW ENHANCEMENTS
+  // ==========================================================================
+  
+  // Enable emmet for GraphQL (useful for quick field selection)
+  "emmet.includeLanguages": {
+    "graphql": "css"
+  },
+
+  // Configure auto-rename for consistency
+  "editor.renameOnType": true,
+
+  // Enable parameter hints for GraphQL variables
+  "editor.parameterHints.enabled": true,
+  "editor.parameterHints.cycle": true,
+
+  // ==========================================================================
+  // CUSTOM SNIPPETS SUPPORT
+  // ==========================================================================
+  
+  // These settings enable custom GraphQL snippets
+  "editor.snippetSuggestions": "top",
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+
+  // ==========================================================================
+  // ERROR AND WARNING DISPLAY
+  // ==========================================================================
+  
+  // Configure how GraphQL errors are displayed
+  "problems.sortOrder": "severity",
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "editor.gotoLocation.multipleReferences": "goto",
+
+  // ==========================================================================
+  // FORMATTING AND LINTING
+  // ==========================================================================
+  
+  // Enable format on paste for GraphQL
+  "editor.formatOnPaste": true,
+  
+  // Configure rulers for GraphQL query readability
+  "editor.rulers": [80, 120],
+
+  // ==========================================================================
+  // MINIMAP CONFIGURATION
+  // ==========================================================================
+  
+  // Configure minimap for better navigation of large GraphQL files
+  "editor.minimap.enabled": true,
+  "editor.minimap.maxColumn": 120,
+  "editor.minimap.renderCharacters": false,
+
+  // ==========================================================================
+  // INTELLISENSE CONFIGURATION
+  // ==========================================================================
+  
+  // Enhanced IntelliSense for GraphQL development
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+  // ==========================================================================
+  // CUSTOM KEYBINDINGS SUPPORT
+  // ==========================================================================
+  // 
+  // Consider adding these keybindings to your keybindings.json:
+  // 
+  // {
+  //   "key": "cmd+shift+g",
+  //   "command": "workbench.view.explorer",
+  //   "when": "resourceExtname == .graphql"
+  // },
+  // {
+  //   "key": "f5",
+  //   "command": "workbench.action.tasks.runTask",
+  //   "args": "Start MCP Server"
+  // }
+
+  // ==========================================================================
+  // COMMENTS AND DOCUMENTATION
+  // ==========================================================================
+  
+  // Better comment highlighting in GraphQL files
+  "editor.comments.insertSpace": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "files.insertFinalNewline": true
+}
+
+/*
+=============================================================================
+RECOMMENDED VS CODE EXTENSIONS FOR MCP DEVELOPMENT
+=============================================================================
+
+Install these extensions for the best GraphQL MCP development experience:
+
+ESSENTIAL EXTENSIONS:
+1. GraphQL: Language Feature Support
+   - Extension ID: graphql.vscode-graphql
+   - Provides syntax highlighting, validation, and auto-completion
+
+2. Apollo GraphQL  
+   - Extension ID: apollographql.vscode-apollo
+   - Apollo-specific GraphQL features and schema integration
+
+3. Docker
+   - Extension ID: ms-azuretools.vscode-docker
+   - Docker file support and container management
+
+RECOMMENDED EXTENSIONS:
+4. YAML
+   - Extension ID: redhat.vscode-yaml
+   - Better YAML editing for Apollo config files
+
+5. REST Client
+   - Extension ID: humao.rest-client
+   - Test GraphQL endpoints directly from VS Code
+
+6. GitLens
+   - Extension ID: eamodio.gitlens
+   - Enhanced Git integration and history
+
+7. Error Lens
+   - Extension ID: usernamehw.errorlens
+   - Inline error and warning display
+
+INSTALL COMMAND:
+code --install-extension graphql.vscode-graphql
+code --install-extension apollographql.vscode-apollo
+code --install-extension ms-azuretools.vscode-docker
+code --install-extension redhat.vscode-yaml
+code --install-extension humao.rest-client
+code --install-extension eamodio.gitlens
+code --install-extension usernamehw.errorlens
+
+=============================================================================
+CUSTOM TASKS CONFIGURATION
+=============================================================================
+
+Create a .vscode/tasks.json file with these helpful MCP development tasks:
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start MCP Server",
+      "type": "shell",
+      "command": "docker",
+      "args": [
+        "run", "-p", "5000:5000", 
+        "--env-file", ".env", 
+        "{{PROJECT_NAME}}-mcp"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build MCP Server",
+      "type": "shell", 
+      "command": "docker",
+      "args": [
+        "build", "-f", "mcp.Dockerfile",
+        "-t", "{{PROJECT_NAME}}-mcp", "."
+      ],
+      "group": "build"
+    },
+    {
+      "label": "Test MCP Server",
+      "type": "shell",
+      "command": "npx",
+      "args": ["@mcp/inspector", "--port", "5000"],
+      "group": "test",
+      "dependsOn": "Start MCP Server"
+    },
+    {
+      "label": "Validate GraphQL Tools", 
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "graphql-cli", "validate", 
+        "tools/*.graphql", 
+        "--schema", "{{GRAPHQL_ENDPOINT}}"
+      ],
+      "group": "test"
+    }
+  ]
+}
+
+=============================================================================
+DEBUGGING CONFIGURATION
+=============================================================================
+
+Create a .vscode/launch.json file for debugging:
+
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug MCP Server",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app"
+    }
+  ]
+}
+
+=============================================================================
+WORKSPACE SETTINGS OVERRIDE
+=============================================================================
+
+If you need to override any of these settings for your specific project,
+create a .vscode/settings.json file in your project root (not this template)
+and add your overrides there.
+
+Example project-specific overrides:
+{
+  "graphql.introspect": {
+    "endpoint": "http://localhost:3000/api/graphql",
+    "headers": {
+      "Authorization": "Bearer your-specific-token"
+    }
+  }
+}
+
+=============================================================================
+*/
