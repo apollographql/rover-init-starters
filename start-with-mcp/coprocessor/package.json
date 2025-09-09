@@ -1,0 +1,30 @@
+{
+  "name": "prebuilt-coprocessor",
+  "version": "1.0.0",
+  "description": "Workspace for ",
+  "main": "./index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "author": "",
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "eslint": "^8.35.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/tokenizer": "^0.0.4",
+    "@workos-inc/node": "^7.66.1",
+    "dotenv": "^16.3.1",
+    "express": "^5.1.0",
+    "jose": "^6.0.12",
+    "tiktoken": "^1.0.20"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

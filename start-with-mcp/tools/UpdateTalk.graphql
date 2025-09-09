@@ -1,0 +1,7 @@
+# Update a talk submission with the given ID.
+# Location can be SF, NYC or VIRTUAL
+mutation UpdateTalk($submissionIdToUpdate: ID!, $title: String, $abstract: String, $location: Location) {
+  updateSubmission(id: $submissionIdToUpdate,  title: $title, abstract: $abstract, location: $location) {
+    id
+  }
+}
