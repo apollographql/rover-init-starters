@@ -1,0 +1,198 @@
+# Apollo MCP Server Configuration - Local Development Environment
+# 
+# This configuration file defines how the Apollo MCP (Model Context Protocol) Server
+# will connect to your GraphQL API and provide it as tools for AI assistants like Claude.
+# 
+# MCP allows AI assistants to execute GraphQL queries and mutations against your API,
+# enabling them to read data, perform operations, and interact with your system.
+# 
+# For more information about MCP: https://modelcontextprotocol.io/
+
+# =============================================================================
+# MCP SERVER CONFIGURATION
+# =============================================================================
+
+# Name identifier for this MCP server instance
+# This appears in Claude Desktop and other MCP clients
+name: "{{PROJECT_NAME}} GraphQL API"
+
+# Description shown in MCP client interfaces
+description: "GraphQL API for {{PROJECT_NAME}} with {{#if REST_CONNECTORS}}REST connector integration{{else}}standard GraphQL operations{{/if}}"
+
+# =============================================================================
+# APOLLO MCP SERVER SETTINGS
+# =============================================================================
+
+# The Apollo MCP Server Docker image to use
+# This specific canary build includes the latest MCP features
+image: "ghcr.io/apollographql/apollo-mcp-server:canary-20250903T205844Z-ea32f7d"
+
+# Port configuration
+ports:
+  # Port where MCP server listens for client connections
+  mcp: 5000
+  
+  # Port where your GraphQL endpoint is running
+  graphql: 4000
+
+# =============================================================================
+# GRAPHQL ENDPOINT CONFIGURATION
+# =============================================================================
+
+# Your GraphQL endpoint URL
+# Replace with your actual GraphQL server endpoint
+graphql:
+  endpoint: "{{GRAPHQL_ENDPOINT}}"
+  
+  # Introspection settings
+  # The MCP server needs to introspect your schema to understand available operations
+  introspection:
+    enabled: true
+    # Cache introspection results for better performance
+    cache_ttl: 300  # 5 minutes
+  
+  # Headers to send with every GraphQL request
+  # Add authentication, API keys, or other required headers here
+  headers:
+    # Example: API key authentication
+    # Authorization: "Bearer {{APOLLO_API_KEY}}"
+    
+    # Example: Custom headers for your API
+    # X-API-Version: "v1"
+    # X-Client: "mcp-server"
+    
+    # Common headers for Apollo Server
+    Content-Type: "application/json"
+    Accept: "application/json"
+
+# =============================================================================
+# TOOL CONFIGURATION
+# =============================================================================
+
+# Directory containing GraphQL operation files that become MCP tools
+# Each .graphql file in this directory becomes a callable tool
+tools_directory: "./tools"
+
+# Tool execution settings
+tools:
+  # Maximum execution time for any single GraphQL operation
+  timeout: 30000  # 30 seconds
+  
+  # Enable/disable specific tool categories
+  queries:
+    enabled: true
+    # Allow complex queries with nested selections
+    max_depth: 10
+    
+  mutations:
+    enabled: true
+    # Require confirmation for destructive operations
+    require_confirmation: false  # Set to true for production
+  
+  subscriptions:
+    enabled: false  # Subscriptions not yet supported in MCP context
+
+# =============================================================================
+# DEVELOPMENT SETTINGS
+# =============================================================================
+
+# Development mode settings (only for local development)
+development:
+  # Enable detailed logging
+  verbose_logging: true
+  
+  # Auto-reload when tool files change
+  hot_reload: true
+  
+  # Enable GraphQL Playground integration
+  playground:
+    enabled: true
+    endpoint: "/playground"
+  
+  # CORS settings for local development
+  cors:
+    enabled: true
+    origins:
+      - "http://localhost:3000"
+      - "http://localhost:4000"
+      - "http://127.0.0.1:3000"
+      - "http://127.0.0.1:4000"
+
+# =============================================================================
+# ERROR HANDLING AND MONITORING
+# =============================================================================
+
+# Error handling configuration
+error_handling:
+  # Whether to expose detailed error messages to MCP clients
+  expose_details: true  # Set to false in production
+  
+  # Retry configuration for failed GraphQL requests
+  retry:
+    enabled: true
+    max_attempts: 3
+    backoff_multiplier: 2
+
+# Logging configuration
+logging:
+  level: "debug"  # debug, info, warn, error
+  format: "json"  # json, text
+  
+  # Log all GraphQL operations for debugging
+  log_operations: true
+  
+  # Log execution timing
+  log_timing: true
+
+# =============================================================================
+# SECURITY SETTINGS
+# =============================================================================
+
+security:
+  # Rate limiting to prevent abuse
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60
+    burst_size: 10
+  
+  # Query complexity analysis
+  query_complexity:
+    enabled: true
+    max_complexity: 1000
+    max_depth: 15
+  
+  # Disable introspection in production
+  # introspection_disabled: true  # Uncomment for production
+
+# =============================================================================
+# PERFORMANCE OPTIMIZATION
+# =============================================================================
+
+performance:
+  # Connection pooling for GraphQL requests
+  connection_pool:
+    max_connections: 10
+    idle_timeout: 30000  # 30 seconds
+  
+  # Response caching (careful with mutations!)
+  caching:
+    enabled: false  # Enable carefully, mutations should not be cached
+    ttl: 60  # 1 minute
+  
+  # Request batching (if supported by your GraphQL server)
+  batching:
+    enabled: false  # Enable if your server supports query batching
+    max_batch_size: 10
+
+# =============================================================================
+# ENVIRONMENT-SPECIFIC OVERRIDES
+# =============================================================================
+
+# You can override any of these settings using environment variables:
+# 
+# APOLLO_MCP_ENDPOINT={{GRAPHQL_ENDPOINT}}
+# APOLLO_MCP_PORT=5000
+# APOLLO_MCP_LOG_LEVEL=info
+# APOLLO_MCP_TOOLS_DIR=./tools
+# 
+# Environment variables take precedence over this configuration file.
