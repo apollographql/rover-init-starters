@@ -1,0 +1,323 @@
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-graphql": {
+      "command": "node",
+      "args": [
+        "/usr/local/bin/mcp-client",
+        "--port",
+        "5000",
+        "--host",
+        "localhost"
+      ],
+      "env": {
+        "MCP_SERVER_URL": "http://localhost:5000",
+        "PROJECT_NAME": "{{PROJECT_NAME}}",
+        "GRAPHQL_ENDPOINT": "{{GRAPHQL_ENDPOINT}}"
+      }
+    }
+  }
+}
+
+<!-- 
+=============================================================================
+CLAUDE DESKTOP MCP CONFIGURATION
+=============================================================================
+
+This file configures Claude Desktop to connect to your Apollo MCP Server,
+giving Claude access to your GraphQL API as callable tools.
+
+INSTALLATION INSTRUCTIONS:
+
+1. LOCATE YOUR CLAUDE DESKTOP CONFIG FILE:
+
+   macOS:
+   ~/Library/Application Support/Claude/claude_desktop_config.json
+   
+   Windows:
+   %APPDATA%\Claude\claude_desktop_config.json
+   
+   Linux:
+   ~/.config/Claude/claude_desktop_config.json
+
+2. BACKUP EXISTING CONFIG (if you have one):
+   
+   cp "~/Library/Application Support/Claude/claude_desktop_config.json" \
+      "~/Library/Application Support/Claude/claude_desktop_config.json.backup"
+
+3. UPDATE THE CONFIGURATION:
+
+   Option A - If you don't have an existing config file:
+   
+   # Copy this entire file to the location above
+   cp claude-desktop-config.json "~/Library/Application Support/Claude/claude_desktop_config.json"
+
+   Option B - If you already have a config file with other MCP servers:
+   
+   # Merge the "{{PROJECT_NAME}}-graphql" entry into your existing mcpServers section
+   # Your existing file might look like:
+   # {
+   #   "mcpServers": {
+   #     "existing-server": { ... },
+   #     "{{PROJECT_NAME}}-graphql": {
+   #       // Add the configuration from this file here
+   #     }
+   #   }
+   # }
+
+4. CUSTOMIZE THE CONFIGURATION:
+
+   Replace these placeholders with your actual values:
+   
+   - {{PROJECT_NAME}}: Your project name (e.g., "my-awesome-api")
+   - {{GRAPHQL_ENDPOINT}}: Your GraphQL endpoint URL (e.g., "http://localhost:4000/graphql")
+
+   Example after customization:
+   
+   {
+     "mcpServers": {
+       "my-awesome-api-graphql": {
+         "command": "node",
+         "args": [
+           "/usr/local/bin/mcp-client",
+           "--port",
+           "5000",
+           "--host",
+           "localhost"
+         ],
+         "env": {
+           "MCP_SERVER_URL": "http://localhost:5000",
+           "PROJECT_NAME": "my-awesome-api",
+           "GRAPHQL_ENDPOINT": "http://localhost:4000/graphql"
+         }
+       }
+     }
+   }
+
+5. RESTART CLAUDE DESKTOP:
+
+   - Completely quit Claude Desktop (Cmd+Q on macOS)
+   - Wait a few seconds
+   - Reopen Claude Desktop
+   
+6. VERIFY CONNECTION:
+
+   - Look for a hammer icon (🔨) in Claude Desktop - this indicates MCP tools are loaded
+   - Start a conversation and ask: "What tools do you have available?"
+   - Claude should list your GraphQL operations as available tools
+
+=============================================================================
+ALTERNATIVE CONNECTION METHODS
+=============================================================================
+
+If the standard connection doesn't work, try these alternatives:
+
+METHOD 1 - Direct TCP Connection:
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-graphql": {
+      "command": "npx",
+      "args": [
+        "@mcp/client-tcp",
+        "localhost:5000"
+      ]
+    }
+  }
+}
+
+METHOD 2 - WebSocket Connection:
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-graphql": {
+      "command": "npx",
+      "args": [
+        "@mcp/client-ws",
+        "ws://localhost:5000/mcp"
+      ]
+    }
+  }
+}
+
+METHOD 3 - Docker-based Connection:
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-graphql": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "--network=host",
+        "apollographql/mcp-client:latest",
+        "localhost:5000"
+      ]
+    }
+  }
+}
+
+METHOD 4 - Using Rover CLI:
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-graphql": {
+      "command": "rover",
+      "args": [
+        "mcp",
+        "connect",
+        "--server",
+        "http://localhost:5000"
+      ],
+      "env": {
+        "APOLLO_API_KEY": "{{APOLLO_API_KEY}}"
+      }
+    }
+  }
+}
+
+=============================================================================
+CONFIGURATION OPTIONS
+=============================================================================
+
+You can customize the MCP server behavior by adding environment variables:
+
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-graphql": {
+      "command": "node",
+      "args": [
+        "/usr/local/bin/mcp-client",
+        "--port",
+        "5000",
+        "--host",
+        "localhost"
+      ],
+      "env": {
+        "MCP_SERVER_URL": "http://localhost:5000",
+        "PROJECT_NAME": "{{PROJECT_NAME}}",
+        "GRAPHQL_ENDPOINT": "{{GRAPHQL_ENDPOINT}}",
+        
+        // Optional: Authentication
+        "APOLLO_API_KEY": "{{APOLLO_API_KEY}}",
+        
+        // Optional: Request timeout (milliseconds)
+        "REQUEST_TIMEOUT": "30000",
+        
+        // Optional: Enable debug logging
+        "DEBUG": "true",
+        
+        // Optional: Custom headers
+        "CUSTOM_HEADERS": "{\"X-Client\": \"claude-desktop\"}",
+        
+        // Optional: Rate limiting
+        "RATE_LIMIT": "60"
+      }
+    }
+  }
+}
+
+=============================================================================
+TROUBLESHOOTING
+=============================================================================
+
+ISSUE: No hammer icon appears in Claude Desktop
+SOLUTION: 
+- Ensure MCP server is running: curl http://localhost:5000/health
+- Check config file location and syntax
+- Restart Claude Desktop completely
+- Check Claude Desktop logs:
+  macOS: tail -f ~/Library/Logs/Claude/mcp*.log
+
+ISSUE: "Connection refused" error
+SOLUTION:
+- Verify MCP server is running on port 5000
+- Check firewall settings
+- Try alternative connection methods above
+- Ensure no other service is using port 5000
+
+ISSUE: Tools not appearing or working
+SOLUTION:
+- Verify GraphQL operations in tools/ directory
+- Test MCP server directly: npx @mcp/inspector --port 5000
+- Check server logs: docker logs your-project-mcp
+- Ensure GraphQL endpoint is accessible
+
+ISSUE: Authentication errors
+SOLUTION:
+- Add APOLLO_API_KEY to env section
+- Verify API key has correct permissions
+- Check GraphQL endpoint authentication requirements
+
+=============================================================================
+ADVANCED CONFIGURATION
+=============================================================================
+
+For multiple environments, you can configure different MCP servers:
+
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-local": {
+      "command": "node",
+      "args": ["/usr/local/bin/mcp-client", "--port", "5000"],
+      "env": {
+        "MCP_SERVER_URL": "http://localhost:5000",
+        "GRAPHQL_ENDPOINT": "http://localhost:4000/graphql"
+      }
+    },
+    "{{PROJECT_NAME}}-staging": {
+      "command": "node", 
+      "args": ["/usr/local/bin/mcp-client", "--port", "5001"],
+      "env": {
+        "MCP_SERVER_URL": "http://localhost:5001",
+        "GRAPHQL_ENDPOINT": "https://staging-api.{{PROJECT_NAME}}.com/graphql",
+        "APOLLO_API_KEY": "{{APOLLO_STAGING_API_KEY}}"
+      }
+    }
+  }
+}
+
+For production deployment with HTTPS:
+
+{
+  "mcpServers": {
+    "{{PROJECT_NAME}}-production": {
+      "command": "node",
+      "args": [
+        "/usr/local/bin/mcp-client",
+        "--url",
+        "https://mcp.{{PROJECT_NAME}}.com"
+      ],
+      "env": {
+        "MCP_SERVER_URL": "https://mcp.{{PROJECT_NAME}}.com",
+        "GRAPHQL_ENDPOINT": "https://api.{{PROJECT_NAME}}.com/graphql",
+        "APOLLO_API_KEY": "{{APOLLO_PRODUCTION_API_KEY}}",
+        "TLS_VERIFY": "true"
+      }
+    }
+  }
+}
+
+=============================================================================
+TESTING YOUR CONFIGURATION
+=============================================================================
+
+After setting up the configuration, test it by asking Claude:
+
+1. "What tools do you have available from my GraphQL API?"
+2. "Can you describe the GraphQL operations you can perform?"
+3. "Execute a simple query to test the connection"
+
+If Claude can see and use your GraphQL operations, the configuration is working!
+
+Example conversation:
+You: "Hi Claude! Can you show me what GraphQL tools you have access to?"
+Claude: "I have access to your {{PROJECT_NAME}} GraphQL API with these tools:
+- GetUserProfile: Retrieves user information by ID
+- CreateBlogPost: Creates a new blog post
+- UpdateUserPreferences: Updates user preferences
+Would you like me to help you with any of these operations?"
+
+=============================================================================
+
+For more help:
+- Apollo MCP Server Documentation: https://github.com/apollographql/apollo-mcp-server
+- Claude Desktop MCP Guide: https://docs.anthropic.com/claude/desktop/mcp
+- MCP Protocol Specification: https://modelcontextprotocol.io/
+
+-->
