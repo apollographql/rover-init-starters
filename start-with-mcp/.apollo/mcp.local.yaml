@@ -1,0 +1,17 @@
+overrides:
+  mutation_mode: all
+operations:
+  source: local
+  paths: 
+    - tools
+introspection:
+  introspect:
+    enabled: true
+  search:
+    enabled: true
+  execute:
+    enabled: true
+transport:
+  type: streamable_http
+  port: 5000
+endpoint: http://localhost:4000
