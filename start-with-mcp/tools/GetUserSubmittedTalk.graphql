@@ -1,0 +1,10 @@
+# Get the talks you've submitted using the email you're logged in with (you don't provide the email, you must be authenticated).
+# Use this tool to get the talk ids if you want to update the talk title and abstract
+query GetUserSubmittedTalks {
+  userSubmissions {
+    id
+    title
+    location
+    abstract
+  }
+}
