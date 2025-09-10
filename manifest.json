@@ -33,6 +33,17 @@
       "routing_url": "http://localhost:4000",
       "test_commands": ["echo \"MCP template test coming soon\""],
       "print_depth": 2
+    },
+    {
+      "id": "add-mcp",
+      "display_name": "Add MCP Server to Existing Project",
+      "path": "add-mcp",
+      "language": "any",
+      "federation_version": "=2.11.0",
+      "max_schema_depth": 0,
+      "routing_url": "",
+      "test_commands": ["echo \"Testing MCP augmentation template\""],
+      "print_depth": 2
     }
   ]
 }
