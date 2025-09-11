@@ -108,6 +108,72 @@ Copy the generated configuration to Claude Desktop:
 
 ---
 
+## 🚀 Extending Your MCP Server
+
+Your MCP server includes example tools based on your selection. Each `.graphql` file in the `/tools` directory becomes a tool that Claude can use.
+
+### Understanding Your Examples
+
+Based on your data source selection, you received examples for:
+
+- **External APIs**: REST endpoints, webhooks, and SaaS integrations
+- **AWS Services**: Lambda, DynamoDB, CloudWatch, and S3 examples
+- **GraphQL APIs**: Queries, mutations, and federated graph patterns
+- **All Sources**: A mix of examples from each category
+
+### Adding More Data Sources
+
+#### 🗄️ Databases (PostgreSQL, MySQL, MongoDB)
+While direct database connectors are coming soon, you can connect today by:
+1. Creating a REST API wrapper for your database
+2. Using AWS Lambda to query your database
+3. Using a GraphQL API in front of your database
+
+Example pattern:
+```graphql
+query GetDatabaseRecords($table: String!) {
+  records @connect(
+    http: {
+      POST: "your-database-api-endpoint"
+      body: { table: "{{$table}}" }
+    }
+  ) {
+    id
+    data
+  }
+}
+```
+
+#### 📁 File Systems & Documents
+
+Connect to documents through:
+- S3 or cloud storage APIs
+- Document processing services
+- Custom file API endpoints
+
+#### 💬 Communication Platforms
+
+Most communication tools offer REST APIs:
+- Slack: Use webhook URLs or Slack API
+- Discord: REST API with bot tokens
+- Email: SMTP services with API wrappers
+
+### Customizing Your Tools
+
+1. **Update Endpoints**: Replace example URLs with your actual endpoints
+2. **Add Authentication**: Include necessary headers and tokens
+3. **Modify Fields**: Adjust query/mutation fields to match your schema
+4. **Test Locally**: Use MCP Inspector to verify your tools work correctly
+
+### Resources
+
+- [Apollo Connectors Documentation](https://apollographql.com/docs/connectors)
+- [MCP Server Examples](https://github.com/modelcontextprotocol/servers)
+- [Custom Connector Guide](https://apollographql.com/docs/connectors/custom)
+- [Apollo Federation](https://apollographql.com/docs/federation)
+
+---
+
 ## 🔧 Detailed Setup Guide
 
 ### Project Structure After Setup
