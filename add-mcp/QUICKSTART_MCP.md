@@ -12,6 +12,18 @@ This guide shows you how to add Apollo MCP (Model Context Protocol) Server capab
 - **Enterprise Ready**: Built-in authentication, rate limiting, and monitoring
 - **Development Friendly**: Hot reload, debugging, and testing tools included
 
+## 📖 Documentation Structure
+
+**New to MCP?** Start with focused guides based on your needs:
+
+- **[README.md](README.md)** - Quick 5-minute setup
+- **[Setup Guide](docs/setup.md)** - Complete installation and configuration
+- **[Testing Guide](docs/testing.md)** - Validate your MCP server works
+- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions  
+- **[Deploy Guide](docs/deploy.md)** - Production deployment options
+
+**This comprehensive guide below** contains all information in one place for reference.
+
 ---
 
 ## 📋 Prerequisites

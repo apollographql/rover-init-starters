@@ -1,36 +1,47 @@
-# MCP Tool: Mutate data via GraphQL API
+# ✏️ Let Claude update data in your GraphQL API
 #
-# To connect to your GraphQL endpoint:
-# 1. Update GRAPHQL_ENDPOINT in .env
-# 2. Ensure mutation permissions are configured
-# 3. Modify mutation fields for your schema
+# What Claude can do with this:
+# - "Update user 123's email to newemail@example.com"
+# - "Change the name for user John to John Smith"
+# - "Update user preferences for dark mode"
+# - "Modify user profile with new phone number"
 #
-# Learn more: apollographql.com/docs/connectors
+# To customize:
+# ✏️ Replace with your GraphQL endpoint URL
+# ✏️ Update mutation fields to match your schema
+# ✏️ Configure proper authentication for mutations
 
 mutation UpdateUserProfile($userId: ID!, $updates: UserProfileInput!) {
   """
-  Updates user profile in your GraphQL API.
-  Demonstrates mutation pattern for GraphQL endpoints.
+  Updates user profile data in your GraphQL API.
+  
+  Claude will use this when you ask to update, change, or modify
+  user information in your system.
   """
   updateUser(id: $userId, input: $updates) @connect(
     http: {
-      POST: "{{GRAPHQL_ENDPOINT}}"
+      POST: "https://api.example.com/graphql"  # ✏️ Replace with your GraphQL endpoint
       headers: [{
+        name: "Content-Type"
+        value: "application/json"
+      }, {
         name: "Authorization"
-        value: "Bearer {{API_KEY}}"
+        value: "Bearer YOUR_API_KEY"  # ✏️ Replace with your API key
       }]
-      body: {
-        query: "mutation($userId: ID!, $updates: UserProfileInput!) { updateUser(id: $userId, input: $updates) { id name email updatedAt } }"
-        variables: {
-          userId: "{{$userId}}"
-          updates: "{{$updates}}"
-        }
-      }
     }
+    selection: """
+      query: "mutation($userId: ID!, $updates: UserProfileInput!) { updateUser(id: $userId, input: $updates) { id name email updatedAt } }"
+      variables: {
+        userId: {$args.userId}
+        updates: {$args.updates}
+      }
+    """
   ) {
-    id
-    name
-    email
-    updatedAt
+    id           # Updated user's unique identifier
+    name         # Updated user's full name
+    email        # Updated user's email address
+    updatedAt    # Timestamp of the last update
+    # ✏️ Add more fields from your mutation response: version, status, etc.
+    # ✏️ Update the GraphQL mutation in the selection mapping above to include additional fields
   }
 }

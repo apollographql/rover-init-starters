@@ -1,11 +1,15 @@
-# MCP Tool: Fetch CloudWatch metrics
+# 📊 Let Claude fetch CloudWatch metrics for monitoring
+#
+# What Claude can do with this:
+# - "Show me CPU usage for the last 24 hours"
+# - "Get memory metrics for our EC2 instances"
+# - "Display error rate trends from yesterday"
+# - "Fetch database connection metrics for this week"
 #
 # Prerequisites:
-# 1. Configure AWS credentials
-# 2. Set up CloudWatch permissions
-# 3. Update metric namespace and names
-#
-# Learn more: apollographql.com/docs/connectors/aws
+# ✏️ Configure AWS credentials in your environment
+# ✏️ Set up CloudWatch permissions for metrics access
+# ✏️ Update metric namespace and names to match your resources
 
 query GetCloudWatchMetrics(
   $namespace: String!
@@ -14,8 +18,10 @@ query GetCloudWatchMetrics(
   $endTime: String!
 ) {
   """
-  Retrieves CloudWatch metrics for monitoring.
-  Supports custom time ranges and statistics.
+  Retrieves CloudWatch metrics for system monitoring and analysis.
+  
+  Claude will use this when you ask about system performance,
+  resource usage, error rates, or operational metrics.
   """
   getMetrics(
     namespace: $namespace
@@ -33,22 +39,24 @@ query GetCloudWatchMetrics(
         name: "X-Amz-Target"
         value: "GraniteServiceVersion20100801.GetMetricStatistics"
       }]
-      body: {
-        Namespace: "{{$namespace}}"
-        MetricName: "{{$metricName}}"
-        StartTime: "{{$startTime}}"
-        EndTime: "{{$endTime}}"
-        Period: 300
-        Statistics: ["Average", "Maximum", "Minimum"]
-      }
     }
+    selection: """
+      Namespace: {$args.namespace}
+      MetricName: {$args.metricName}
+      StartTime: {$args.startTime}
+      EndTime: {$args.endTime}
+      Period: 300
+      Statistics: ["Average", "Maximum", "Minimum"]
+    """
   ) {
     datapoints {
-      timestamp
-      average
-      maximum
-      minimum
-      unit
+      timestamp       # Time when the metric was recorded
+      average         # Average value during the period
+      maximum         # Maximum value during the period
+      minimum         # Minimum value during the period
+      unit           # Unit of measurement (Bytes, Percent, etc.)
     }
+    # ✏️ Add more fields from CloudWatch response: sum, sampleCount, etc.
+    # ✏️ Update the selection mapping above to include additional statistics
   }
 }

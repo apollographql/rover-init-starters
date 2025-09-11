@@ -1,26 +1,42 @@
-# MCP Tool: Fetch product catalog from REST API
+# 🛒 Let Claude browse your product catalog
 #
-# To customize:
-# 1. Update the endpoint URL in your connector config
-# 2. Modify the query structure for your data
-# 3. Add authentication headers if needed
+# What Claude can do with this:
+# - "Show me laptops under $1000"
+# - "What electronics are in stock?" 
+# - "Find gaming products on sale"
+# - "Compare prices for headphones"
 #
-# Learn more: apollographql.com/docs/connectors
+# To customize for your store:
+# ✏️ Change "api.example.com" to your actual API URL
+# ✏️ Update field names to match your product data structure
+# ✏️ Add your API authentication headers if needed
 
 query GetProducts($category: String, $limit: Int = 10) {
   """
-  Fetches products from your REST API catalog.
-  Use this to search products by category.
+  Let Claude browse and search your product catalog.
+  
+  Claude will use this when you ask about products, inventory, 
+  pricing, or want to find specific items.
   """
   products(category: $category, limit: $limit) @connect(
     http: {
-      GET: "https://api.example.com/products?category={{$category}}&limit={{$limit}}"
+      GET: "https://api.example.com/products?category={$args.category}&limit={$args.limit}"
+      # ☝️ Replace with your actual product API endpoint
     }
+    selection: """
+      id
+      name
+      description
+      price
+      inStock
+    """
   ) {
-    id
-    name
-    description
-    price
-    inStock
+    id              # Product identifier
+    name            # Product title
+    description     # Product details
+    price          # Current price  
+    inStock        # Availability status
+    # ✏️ Add more fields your API returns: brand, images, rating, etc.
+    # ✏️ Update the selection mapping above to include additional fields
   }
 }

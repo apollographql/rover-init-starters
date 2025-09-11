@@ -1,37 +1,49 @@
-# MCP Tool: Search across multiple data sources
+# 🔍 Let Claude search across your data sources
+#
+# What Claude can do with this:
+# - "Search for documents containing 'project management'"
+# - "Find all items tagged as 'urgent' from last week"
+# - "Show me content related to user authentication"
+# - "Search for files modified recently"
 #
 # To customize:
-# 1. Update the search endpoint URL
-# 2. Modify search parameters and filters
-# 3. Adjust the response fields
-#
-# Learn more: apollographql.com/docs/connectors
+# ✏️ Update the search endpoint URL
+# ✏️ Modify search parameters and filters to match your API
+# ✏️ Adjust the response fields to match your search results structure
 
 query SearchData($query: String!, $filters: SearchFilters) {
   """
-  Performs full-text search across your data.
-  Supports filtering by type, date range, and more.
+  Performs full-text search across your data sources.
+  
+  Claude will use this when you ask to search, find, or look up
+  information across your connected systems.
   """
   search(query: $query, filters: $filters) @connect(
     http: {
       POST: "https://api.example.com/search"
-      body: {
-        q: "{{$query}}"
-        filters: "{{$filters}}"
-      }
+      headers: [{
+        name: "Content-Type"
+        value: "application/json"
+      }]
     }
+    selection: """
+      q: {$args.query}
+      filters: {$args.filters}
+    """
   ) {
     results {
-      id
-      type
-      title
-      snippet
-      relevanceScore
+      id              # Unique result identifier
+      type            # Content type (document, user, product, etc.)
+      title           # Result title or name
+      snippet         # Preview text or description
+      relevanceScore  # Search relevance score
     }
-    totalCount
+    totalCount        # Total number of matching results
     facets {
-      type
-      count
+      type           # Facet category
+      count          # Number of items in this category
     }
+    # ✏️ Add more fields from your search API: url, lastModified, author, etc.
+    # ✏️ Update the selection mapping above to include additional fields
   }
 }
