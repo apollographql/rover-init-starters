@@ -1,0 +1,33 @@
+# MCP Tool: Create order via REST API
+#
+# To customize:
+# 1. Update the endpoint URL for your order API
+# 2. Modify the input fields for your order structure
+# 3. Add required authentication headers
+#
+# Learn more: apollographql.com/docs/connectors
+
+mutation CreateOrder($items: [OrderItemInput!]!, $customerEmail: String!) {
+  """
+  Creates a new order in your e-commerce system.
+  Returns the created order with confirmation details.
+  """
+  createOrder(items: $items, customerEmail: $customerEmail) @connect(
+    http: {
+      POST: "https://api.example.com/orders"
+      headers: [{
+        name: "Content-Type"
+        value: "application/json"
+      }]
+      body: {
+        items: "{{$items}}"
+        customer: { email: "{{$customerEmail}}" }
+      }
+    }
+  ) {
+    orderId
+    status
+    totalAmount
+    estimatedDelivery
+  }
+}

@@ -1,0 +1,37 @@
+# MCP Tool: Search across multiple data sources
+#
+# To customize:
+# 1. Update the search endpoint URL
+# 2. Modify search parameters and filters
+# 3. Adjust the response fields
+#
+# Learn more: apollographql.com/docs/connectors
+
+query SearchData($query: String!, $filters: SearchFilters) {
+  """
+  Performs full-text search across your data.
+  Supports filtering by type, date range, and more.
+  """
+  search(query: $query, filters: $filters) @connect(
+    http: {
+      POST: "https://api.example.com/search"
+      body: {
+        q: "{{$query}}"
+        filters: "{{$filters}}"
+      }
+    }
+  ) {
+    results {
+      id
+      type
+      title
+      snippet
+      relevanceScore
+    }
+    totalCount
+    facets {
+      type
+      count
+    }
+  }
+}

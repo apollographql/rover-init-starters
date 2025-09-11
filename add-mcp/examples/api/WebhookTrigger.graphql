@@ -1,0 +1,33 @@
+# MCP Tool: Trigger webhook events
+#
+# To customize:
+# 1. Replace with your webhook endpoint
+# 2. Modify the event payload structure
+# 3. Add webhook authentication if required
+#
+# Learn more: apollographql.com/docs/connectors
+
+mutation TriggerWebhook($eventType: String!, $payload: JSON!) {
+  """
+  Triggers a webhook event in your system.
+  Useful for notifications, integrations, and automation.
+  """
+  triggerWebhook(eventType: $eventType, payload: $payload) @connect(
+    http: {
+      POST: "https://webhooks.example.com/trigger"
+      headers: [{
+        name: "X-Webhook-Secret"
+        value: "{{WEBHOOK_SECRET}}"
+      }]
+      body: {
+        event: "{{$eventType}}"
+        data: "{{$payload}}"
+        timestamp: "{{NOW}}"
+      }
+    }
+  ) {
+    success
+    eventId
+    message
+  }
+}
