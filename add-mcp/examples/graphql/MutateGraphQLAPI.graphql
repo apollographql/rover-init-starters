@@ -1,0 +1,36 @@
+# MCP Tool: Mutate data via GraphQL API
+#
+# To connect to your GraphQL endpoint:
+# 1. Update GRAPHQL_ENDPOINT in .env
+# 2. Ensure mutation permissions are configured
+# 3. Modify mutation fields for your schema
+#
+# Learn more: apollographql.com/docs/connectors
+
+mutation UpdateUserProfile($userId: ID!, $updates: UserProfileInput!) {
+  """
+  Updates user profile in your GraphQL API.
+  Demonstrates mutation pattern for GraphQL endpoints.
+  """
+  updateUser(id: $userId, input: $updates) @connect(
+    http: {
+      POST: "{{GRAPHQL_ENDPOINT}}"
+      headers: [{
+        name: "Authorization"
+        value: "Bearer {{API_KEY}}"
+      }]
+      body: {
+        query: "mutation($userId: ID!, $updates: UserProfileInput!) { updateUser(id: $userId, input: $updates) { id name email updatedAt } }"
+        variables: {
+          userId: "{{$userId}}"
+          updates: "{{$updates}}"
+        }
+      }
+    }
+  ) {
+    id
+    name
+    email
+    updatedAt
+  }
+}
