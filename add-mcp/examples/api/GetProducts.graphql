@@ -1,0 +1,26 @@
+# MCP Tool: Fetch product catalog from REST API
+#
+# To customize:
+# 1. Update the endpoint URL in your connector config
+# 2. Modify the query structure for your data
+# 3. Add authentication headers if needed
+#
+# Learn more: apollographql.com/docs/connectors
+
+query GetProducts($category: String, $limit: Int = 10) {
+  """
+  Fetches products from your REST API catalog.
+  Use this to search products by category.
+  """
+  products(category: $category, limit: $limit) @connect(
+    http: {
+      GET: "https://api.example.com/products?category={{$category}}&limit={{$limit}}"
+    }
+  ) {
+    id
+    name
+    description
+    price
+    inStock
+  }
+}

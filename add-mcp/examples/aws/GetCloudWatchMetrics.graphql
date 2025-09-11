@@ -1,0 +1,54 @@
+# MCP Tool: Fetch CloudWatch metrics
+#
+# Prerequisites:
+# 1. Configure AWS credentials
+# 2. Set up CloudWatch permissions
+# 3. Update metric namespace and names
+#
+# Learn more: apollographql.com/docs/connectors/aws
+
+query GetCloudWatchMetrics(
+  $namespace: String!
+  $metricName: String!
+  $startTime: String!
+  $endTime: String!
+) {
+  """
+  Retrieves CloudWatch metrics for monitoring.
+  Supports custom time ranges and statistics.
+  """
+  getMetrics(
+    namespace: $namespace
+    metricName: $metricName
+    startTime: $startTime
+    endTime: $endTime
+  ) @connect(
+    source: "aws"
+    http: {
+      POST: "https://monitoring.us-east-1.amazonaws.com/"
+      headers: [{
+        name: "Content-Type"
+        value: "application/x-amz-json-1.1"
+      }, {
+        name: "X-Amz-Target"
+        value: "GraniteServiceVersion20100801.GetMetricStatistics"
+      }]
+      body: {
+        Namespace: "{{$namespace}}"
+        MetricName: "{{$metricName}}"
+        StartTime: "{{$startTime}}"
+        EndTime: "{{$endTime}}"
+        Period: 300
+        Statistics: ["Average", "Maximum", "Minimum"]
+      }
+    }
+  ) {
+    datapoints {
+      timestamp
+      average
+      maximum
+      minimum
+      unit
+    }
+  }
+}

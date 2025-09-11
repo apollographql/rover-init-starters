@@ -1,0 +1,31 @@
+# MCP Tool: Invoke AWS Lambda function
+#
+# Prerequisites:
+# 1. Configure AWS credentials in your environment
+# 2. Set up Lambda function permissions
+# 3. Update function name and payload structure
+#
+# Learn more: apollographql.com/docs/connectors/aws
+
+mutation InvokeLambdaFunction($functionName: String!, $payload: JSON!) {
+  """
+  Invokes an AWS Lambda function with custom payload.
+  Great for serverless processing and integrations.
+  """
+  invokeLambda(functionName: $functionName, payload: $payload) @connect(
+    source: "aws"
+    http: {
+      POST: "https://lambda.us-east-1.amazonaws.com/2015-03-31/functions/{{$functionName}}/invocations"
+      headers: [{
+        name: "Content-Type"
+        value: "application/json"
+      }]
+      body: "{{$payload}}"
+    }
+  ) {
+    statusCode
+    result
+    executionTime
+    logResult
+  }
+}

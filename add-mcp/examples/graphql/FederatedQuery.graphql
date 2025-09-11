@@ -1,0 +1,60 @@
+# MCP Tool: Federated GraphQL query across multiple services
+#
+# This example shows querying across federated graphs:
+# 1. User data from identity service
+# 2. Order data from commerce service
+# 3. Unified through Apollo Federation
+#
+# Learn more: apollographql.com/docs/federation
+
+query GetUserWithOrders($userId: ID!) {
+  """
+  Fetches user profile with their recent orders.
+  Demonstrates federated GraphQL capabilities.
+  """
+  user(id: $userId) @connect(
+    http: {
+      POST: "{{GRAPHQL_ENDPOINT}}"
+      headers: [{
+        name: "Authorization"
+        value: "Bearer {{API_KEY}}"
+      }]
+      body: {
+        query: """
+          query($userId: ID!) {
+            user(id: $userId) {
+              id
+              name
+              email
+              orders(limit: 10) {
+                id
+                status
+                total
+                items {
+                  productId
+                  quantity
+                  price
+                }
+              }
+            }
+          }
+        """
+        variables: { userId: "{{$userId}}" }
+      }
+    }
+  ) {
+    id
+    name
+    email
+    orders {
+      id
+      status
+      total
+      items {
+        productId
+        quantity
+        price
+      }
+    }
+  }
+}
