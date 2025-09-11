@@ -1,18 +1,24 @@
-# MCP Tool: Query DynamoDB table
+# ☁️ Let Claude query your DynamoDB data
 #
-# Prerequisites:
-# 1. Configure AWS connector in connectors/aws.graphql
-# 2. Set up IAM permissions for DynamoDB access
-# 3. Update table name and query parameters
+# What Claude can do with this:
+# - "Show me all submissions from user john@example.com"
+# - "How many pending submissions does user X have?"
+# - "Get recent activity for this user"
+# - "Find incomplete submissions from last week"
 #
-# Learn more: apollographql.com/docs/connectors/aws
+# To customize for your data:
+# ✏️ Replace "YOUR_TABLE_NAME" with your actual DynamoDB table
+# ✏️ Update field names to match your table schema
+# ✏️ Ensure your AWS credentials are configured in your environment
 
-query QueryUserSubmissions($userId: String!) {
+query QueryUserData($userId: String!) {
   """
-  Queries DynamoDB for user submissions.
-  Replace with your own table and attributes.
+  Let Claude search and retrieve user data from your DynamoDB table.
+  
+  Claude will use this when you ask about specific users, their activity,
+  submissions, or any user-related data you store.
   """
-  getUserSubmissions(userId: $userId) @connect(
+  getUserData(userId: $userId) @connect(
     source: "aws"
     http: {
       POST: "https://dynamodb.us-east-1.amazonaws.com/"
@@ -23,21 +29,23 @@ query QueryUserSubmissions($userId: String!) {
         name: "X-Amz-Target"
         value: "DynamoDB_20120810.Query"
       }]
-      body: {
-        TableName: "{{TABLE_NAME}}"
-        KeyConditionExpression: "userId = :userId"
-        ExpressionAttributeValues: {
-          ":userId": { S: "{{$userId}}" }
-        }
-      }
     }
+    selection: """
+      TableName: "YOUR_TABLE_NAME"
+      KeyConditionExpression: "userId = :userId"
+      ExpressionAttributeValues: {
+        ":userId": { S: {$args.userId} }
+      }
+    """
   ) {
     items {
-      submissionId
-      title
-      status
-      createdAt
+      submissionId    # Unique submission identifier
+      title          # Submission title or name
+      status         # Current status (pending, complete, etc.)
+      createdAt      # Timestamp when created
+      # ✏️ Add fields from your table: description, priority, tags, etc.
+      # ✏️ Update the selection mapping above to include additional DynamoDB attributes
     }
-    count
+    count           # Total number of items returned
   }
 }
