@@ -1,16 +1,22 @@
-# MCP Tool: Create order via REST API
+# 💳 Let Claude create orders in your e-commerce system
+#
+# What Claude can do with this:
+# - "Create an order for 2 laptops and 3 mice for customer@email.com"
+# - "Place an order for these items..." 
+# - "Process this customer's shopping cart"
 #
 # To customize:
-# 1. Update the endpoint URL for your order API
-# 2. Modify the input fields for your order structure
-# 3. Add required authentication headers
-#
-# Learn more: apollographql.com/docs/connectors
+# ✏️ Update the endpoint URL for your order API
+# ✏️ Modify the input fields to match your order structure
+# ✏️ Add required authentication headers (API key, JWT, etc.)
 
 mutation CreateOrder($items: [OrderItemInput!]!, $customerEmail: String!) {
   """
   Creates a new order in your e-commerce system.
   Returns the created order with confirmation details.
+  
+  Claude will use this when you ask to place orders,
+  process purchases, or create customer orders.
   """
   createOrder(items: $items, customerEmail: $customerEmail) @connect(
     http: {
@@ -19,15 +25,19 @@ mutation CreateOrder($items: [OrderItemInput!]!, $customerEmail: String!) {
         name: "Content-Type"
         value: "application/json"
       }]
-      body: {
-        items: "{{$items}}"
-        customer: { email: "{{$customerEmail}}" }
-      }
     }
+    selection: """
+      items: {$args.items}
+      customer: { 
+        email: {$args.customerEmail} 
+      }
+    """
   ) {
-    orderId
-    status
-    totalAmount
-    estimatedDelivery
+    orderId           # Unique order identifier
+    status           # Order status (pending, confirmed, etc.)
+    totalAmount      # Total order value
+    estimatedDelivery # Expected delivery date
+    # ✏️ Add more fields from your API response: trackingNumber, paymentStatus, etc.
+    # ✏️ Update the selection mapping above to include additional fields
   }
 }

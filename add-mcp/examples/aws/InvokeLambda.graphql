@@ -1,31 +1,39 @@
-# MCP Tool: Invoke AWS Lambda function
+# ⚡ Let Claude invoke your AWS Lambda functions
+#
+# What Claude can do with this:
+# - "Run the data processing Lambda with this file data"
+# - "Invoke the notification function for user signup"
+# - "Execute the image resizer Lambda with these parameters"
+# - "Trigger the ETL function for daily batch processing"
 #
 # Prerequisites:
-# 1. Configure AWS credentials in your environment
-# 2. Set up Lambda function permissions
-# 3. Update function name and payload structure
-#
-# Learn more: apollographql.com/docs/connectors/aws
+# ✏️ Configure AWS credentials in your environment
+# ✏️ Set up Lambda function execution permissions  
+# ✏️ Update function names to match your deployed functions
 
 mutation InvokeLambdaFunction($functionName: String!, $payload: JSON!) {
   """
-  Invokes an AWS Lambda function with custom payload.
-  Great for serverless processing and integrations.
+  Invokes an AWS Lambda function with a custom payload.
+  
+  Claude will use this when you ask to run serverless functions,
+  process data, trigger workflows, or execute backend operations.
   """
   invokeLambda(functionName: $functionName, payload: $payload) @connect(
     source: "aws"
     http: {
-      POST: "https://lambda.us-east-1.amazonaws.com/2015-03-31/functions/{{$functionName}}/invocations"
+      POST: "https://lambda.us-east-1.amazonaws.com/2015-03-31/functions/{$args.functionName}/invocations"
       headers: [{
         name: "Content-Type"
         value: "application/json"
       }]
-      body: "{{$payload}}"
     }
+    selection: "{$args.payload}"
   ) {
-    statusCode
-    result
-    executionTime
-    logResult
+    statusCode     # HTTP status code from Lambda execution
+    result         # Function return value or response data
+    executionTime  # Function execution duration
+    logResult      # Base64-encoded logs from function execution
+    # ✏️ Add more fields based on your Lambda response: errorMessage, billedDuration, etc.
+    # ✏️ Update the selection mapping above to handle your specific payload structure
   }
 }
