@@ -1,10 +1,10 @@
-# Get Claude to Work with Your API
+# Connect AI Assistants to Your API
 
-**Give Claude instant access to your data and services in 5 minutes.** No GraphQL knowledge required.
+**Give your AI assistant instant access to your data and services in 5 minutes.** No GraphQL knowledge required.
 
 ## ⚡ What You'll Get
 
-Claude will be able to:
+Your AI assistant will be able to:
 - **Query your data** ("Show me users from last week")
 - **Trigger actions** ("Create a new order for customer X") 
 - **Check status** ("Is the payment service healthy?")
@@ -36,29 +36,29 @@ docker build -f mcp.Dockerfile -t my-api-connector .
 docker run --env-file .env -p 5000:5000 my-api-connector
 ```
 
-**Step 4: See what Claude will see**
+**Step 4: See what your AI assistant will see**
 ```bash
-# Open the MCP Inspector in your browser
+# Open the inspector in your browser
 npx @mcp/inspector --port 5000
 
 # Opens at: http://localhost:3000
 ```
 
 **What you'll see:**
-- All the actions Claude can perform with your API
+- All the actions your AI assistant can perform with your API
 - Interactive forms to test each action with real data
-- Exact responses Claude will get from your API
+- Exact responses your AI assistant will get from your API
 
-**Try it:** Click on an action, fill in test data, hit "Run" - if it works here, it'll work with Claude.
+**Try it:** Click on an action, fill in test data, hit "Run" - if it works here, it'll work with your AI assistant.
 
-**🎉 Done!** Claude can now talk to your API using natural language.
+**🎉 Done!** Your AI assistant can now talk to your API using natural language.
 
 ## 📖 Next Steps
 
-**Want Claude to do more with your API?**
+**Want your AI assistant to do more with your API?**
 
 - **📚 [Add Custom Actions](docs/setup.md)** - Create tools for your specific workflows ("generate reports", "update inventory", etc.)
-- **🧪 [Verify Everything Works](docs/testing.md)** - Test Claude's access and add Claude Desktop integration  
+- **🧪 [Verify Everything Works](docs/testing.md)** - Test your AI assistant's access and configure integration  
 - **🚀 [Deploy for Your Team](docs/deploy.md)** - Share this superpower with your entire team
 - **🔧 [When Things Break](docs/troubleshooting.md)** - Quick fixes for common setup issues
 
@@ -74,7 +74,7 @@ npx @mcp/inspector --port 5000
 
 **"Do I need to know GraphQL?"** → Nope. The template handles all the GraphQL stuff automatically.
 
-**"Is this secure?"** → Claude connects to your local copy only. Your data stays on your machine.
+**"Is this secure?"** → Your AI assistant connects to your local copy only. Your data stays on your machine.
 
 ## 🆘 Need Help?
 
@@ -84,4 +84,4 @@ npx @mcp/inspector --port 5000
 
 ---
 
-*Transform any API into Claude-accessible tools • Part of [Apollo Rover Init Starters](https://github.com/apollographql/rover-init-starters)*
+*Transform any API into AI-accessible tools • Part of [Apollo Rover Init Starters](https://github.com/apollographql/rover-init-starters)*
