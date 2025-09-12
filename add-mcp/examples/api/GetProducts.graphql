@@ -15,14 +15,6 @@
 # Uses @connect directive to fetch from REST API
 
 query GetProducts {
-  """
-  Browse your complete product catalog.
-  
-  Your AI assistant will use this when you ask about products, inventory, 
-  or want to see what's available in your store.
-  
-  Compatible with both TypeScript and REST starter templates.
-  """
   products {
     id              # Product unique identifier
     name            # Product title/name

@@ -49,13 +49,11 @@ LABEL org.opencontainers.image.vendor="Apollo GraphQL"
 
 # Note: base image is pre-configured with appropriate user restrictions for security
 
-# Copy MCP configuration files
-# These files define how the MCP server connects to your GraphQL API
-COPY .apollo/ /app/.apollo/
+# Copy MCP configuration file to container root (where server expects it)
+COPY .apollo/mcp.local.yaml /mcp.yaml
 
-# Copy GraphQL tool definitions
-# Each .graphql file becomes a callable MCP tool
-COPY tools/ /app/tools/
+# Copy GraphQL tool definitions to container root
+COPY tools/ /tools/
 
 # Copy environment template (optional, for reference)
 # COPY .env.template /app/.env.template
@@ -84,8 +82,7 @@ EXPOSE 5000
 # 2. Load tools from MCP_TOOLS_DIR (/app/tools)
 # 3. Connect to GRAPHQL_ENDPOINT
 # 4. Start MCP server on MCP_PORT (5000)
-WORKDIR /app
-CMD ["apollo-mcp-server"]
+CMD ["mcp.yaml"]
 
 # =============================================================================
 # TROUBLESHOOTING
