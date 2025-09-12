@@ -2,11 +2,11 @@
 
 **Transform your GraphQL API into AI-accessible tools in under 5 minutes!**
 
-This guide shows you how to add Apollo MCP (Model Context Protocol) Server capabilities to any existing GraphQL project, making your API accessible to AI assistants like Claude.
+This guide shows you how to add Apollo MCP (Model Context Protocol) Server capabilities to any existing GraphQL project, making your API accessible to AI assistants.
 
 ## 🚀 What You'll Get
 
-- **AI-Powered API Access**: Let Claude execute GraphQL queries and mutations against your API
+- **AI-Powered API Access**: Let your AI assistant execute GraphQL queries and mutations against your API
 - **Zero Code Changes**: Works with existing GraphQL APIs without modification
 - **Rich Tool Library**: Convert GraphQL operations into callable AI tools
 - **Enterprise Ready**: Built-in authentication, rate limiting, and monitoring
@@ -31,7 +31,7 @@ This guide shows you how to add Apollo MCP (Model Context Protocol) Server capab
 - **Existing GraphQL API** (running on any port)
 - **Docker** installed on your machine
 - **Node.js 18+** (for CLI tools and testing)
-- **Claude Desktop** (optional, for AI assistant integration)
+- **AI Client** (optional, for AI assistant integration)
 
 ---
 
@@ -100,20 +100,20 @@ rover mcp start --config .apollo/mcp.local.yaml
 ### Step 4: Test Your MCP Server
 
 ```bash
-# Test with MCP Inspector (opens browser interface)
+# Test with inspector (opens browser interface)
 npx @mcp/inspector --port 5000
 
 # Or test with curl
 curl http://localhost:5000/health
 ```
 
-### Step 5: Connect Claude Desktop
+### Step 5: Connect Your AI Client
 
-Copy the generated configuration to Claude Desktop:
+Copy the generated configuration to your AI client:
 
 ```bash
-# The claude-desktop-config.json file contains the configuration
-# Copy its contents to your Claude Desktop configuration
+# The ai-desktop-config.json file contains the configuration
+# Copy its contents to your AI client configuration
 ```
 
 **🎉 Done!** Your GraphQL API is now accessible to AI assistants!
@@ -122,7 +122,7 @@ Copy the generated configuration to Claude Desktop:
 
 ## 🚀 Extending Your MCP Server
 
-Your MCP server includes example tools based on your selection. Each `.graphql` file in the `/tools` directory becomes a tool that Claude can use.
+Your MCP server includes example tools based on your selection. Each `.graphql` file in the `/tools` directory becomes a tool that your AI assistant can use.
 
 ### Understanding Your Examples
 
@@ -175,7 +175,7 @@ Most communication tools offer REST APIs:
 1. **Update Endpoints**: Replace example URLs with your actual endpoints
 2. **Add Authentication**: Include necessary headers and tokens
 3. **Modify Fields**: Adjust query/mutation fields to match your schema
-4. **Test Locally**: Use MCP Inspector to verify your tools work correctly
+4. **Test Locally**: Use an AI assistant like the MCP inspector to verify your tools work correctly
 
 ### Resources
 
@@ -202,7 +202,7 @@ your-graphql-project/
 ├── mcp.Dockerfile          # Docker configuration
 ├── .env.template           # Environment template
 ├── .env                    # Your environment (create this)
-├── claude-desktop-config.json # Claude Desktop integration
+├── ai-desktop-config.json # AI client integration
 └── QUICKSTART_MCP.md       # This guide
 ```
 
@@ -325,9 +325,9 @@ query GetProducts($category: String, $limit: Int = 20) {
 
 ## 🧪 Testing Your MCP Server
 
-### Method 1: MCP Inspector (Visual Interface)
+### Method 1: Inspector (Visual Interface)
 
-The MCP Inspector provides a web interface to test your tools:
+The inspector provides a web interface to test your tools:
 
 ```bash
 # Start the inspector (opens in browser)
@@ -355,23 +355,23 @@ curl -X POST http://localhost:5000/execute \
   -d '{"tool": "GetUserProfile", "arguments": {"userId": "123"}}'
 ```
 
-### Method 3: Claude Desktop Integration
+### Method 3: AI Client Integration
 
-After setting up Claude Desktop (see next section), you can test directly in Claude:
+After setting up your AI client (see next section), you can test directly:
 
 ```
-Claude, can you get the profile for user ID 123?
+Can you get the profile for user ID 123?
 ```
 
-Claude will automatically use your `GetUserProfile` tool!
+Your AI assistant will automatically use your `GetUserProfile` tool!
 
 ---
 
-## 🤖 Claude Desktop Integration
+## 🤖 AI Client Integration
 
 ### Step 1: Copy Configuration
 
-The `claude-desktop-config.json` file contains the MCP server configuration for Claude Desktop.
+The `claude-desktop-config.json` file contains the MCP server configuration for your Claude Desktop AI client.
 
 **On macOS:**
 ```bash
@@ -394,11 +394,10 @@ copy claude-desktop-config.json "%APPDATA%\Claude\claude_desktop_config.json"
 cp claude-desktop-config.json ~/.config/Claude/claude_desktop_config.json
 ```
 
-### Step 2: Restart Claude Desktop
+### Step 2: Restart Your Claude Desktop
 
 After copying the configuration:
 1. Completely quit Claude Desktop
-2. Restart Claude Desktop
 3. You should see a hammer icon (🔨) indicating MCP tools are loaded
 
 ### Step 3: Test Integration
@@ -412,9 +411,9 @@ What tools do you have available?
 
 Claude should respond with a list of your GraphQL tools!
 
-### Troubleshooting Claude Integration
+### Troubleshooting Claude Desktop Integration
 
-**Issue: No hammer icon in Claude Desktop**
+**Issue: No hammer icon available in Claude Desktop**
 ```bash
 # Check MCP server is running
 curl http://localhost:5000/health
@@ -790,14 +789,14 @@ AUTH_HEADER_VALUE="YOUR_API_KEY"
 # Check MCP server is accessible
 curl http://localhost:5000/health
 
-# Verify Claude Desktop config file location and syntax
-cat ~/Library/Application\ Support/Claude/claude_desktop_config.json | jq .
+# Verify AI client config file location and syntax
+cat ~/.config/ai-client/config.json | jq .
 
-# Check Claude Desktop logs (macOS)
-tail -f ~/Library/Logs/Claude/mcp*.log
+# Check AI client logs
+tail -f ~/.config/ai-client/logs/*.log
 
-# Restart Claude Desktop completely
-pkill Claude && open -a Claude
+# Restart AI client completely
+pkill ai-client && open -a ai-client
 ```
 
 #### ❌ "GraphQL introspection failed"
@@ -1016,7 +1015,7 @@ We'd love to hear how you're using Apollo MCP Server! Consider sharing:
 
 **Next Steps:**
 1. Create more GraphQL tools specific to your use case
-2. Explore Claude Desktop's capabilities with your new tools  
+2. Explore your AI client's capabilities with your new tools  
 3. Consider deploying to production for team-wide AI access
 4. Share your experience with the community!
 
