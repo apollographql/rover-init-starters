@@ -1,273 +1,61 @@
 # Apollo MCP Server Configuration - Staging Environment
 # 
-# This staging configuration provides production-ready settings with enhanced
-# security, monitoring, and performance optimizations while still allowing
-# for debugging and testing capabilities.
-# 
-# Key differences from local development:
-# - Enhanced security settings
-# - Stricter rate limiting
-# - Reduced logging verbosity
-# - Production-appropriate timeouts
-# - Introspection controls
+# This staging configuration provides settings with enhanced security
+# Replace {{PROJECT_NAME}} and configure staging endpoint below
+
+# Working staging configuration:
+overrides:
+  mutation_mode: all
+  require_confirmation: true    # Confirmation required for mutations in staging
+operations:
+  source: local
+  paths: 
+    - /tools                    # GraphQL files in /tools become AI tools
+introspection:
+  introspect:
+    enabled: true               # Enabled for testing (disable for production)
+  search:
+    enabled: true
+  execute:
+    enabled: true
+transport:
+  type: streamable_http
+  port: 5000                    # MCP server port
+endpoint: "{{STAGING_GRAPHQL_ENDPOINT}}"  # Your staging GraphQL API endpoint
+
+# Authentication headers for staging
+headers:
+  Authorization: "Bearer {{APOLLO_KEY}}"
+  X-Environment: "staging"
+  Content-Type: "application/json"
 
 # =============================================================================
-# MCP SERVER CONFIGURATION
+# Configuration Details
 # =============================================================================
 
-# Name identifier for this MCP server instance
 name: "{{PROJECT_NAME}} GraphQL API (Staging)"
-
-# Description shown in MCP client interfaces
 description: "Staging environment for {{PROJECT_NAME}} GraphQL API with {{#if REST_CONNECTORS}}REST connector integration{{else}}standard GraphQL operations{{/if}}"
 
-# =============================================================================
-# APOLLO MCP SERVER SETTINGS
-# =============================================================================
+# Enhanced security settings for staging:
+# - mutations require confirmation
+# - authentication with staging API key
+# - reduced timeouts for reliability
+# - introspection enabled for testing
 
-# The Apollo MCP Server Docker image to use
-image: "ghcr.io/apollographql/apollo-mcp-server:canary-20250903T205844Z-ea32f7d"
+# Key staging differences from local:
+# - Authentication required via APOLLO_KEY
+# - Mutation confirmation enabled for safety
+# - Production-appropriate logging and monitoring
+# - Stricter rate limiting and validation
 
-# Port configuration
-ports:
-  # Port where MCP server listens for client connections
-  mcp: 5000
-  
-  # Port where your GraphQL endpoint is running
-  graphql: 4000
+# To deploy staging:
+# 1. Set STAGING_GRAPHQL_ENDPOINT to your staging GraphQL URL
+# 2. Set APOLLO_KEY for authentication
+# 3. Run: docker build -f mcp.Dockerfile -t my-mcp-staging .
+# 4. Run: docker run -p 5000:5000 --env-file .env.staging my-mcp-staging
 
-# =============================================================================
-# GRAPHQL ENDPOINT CONFIGURATION
-# =============================================================================
-
-# Your staging GraphQL endpoint URL
-# Typically points to your staging/preview environment
-graphql:
-  endpoint: "{{STAGING_GRAPHQL_ENDPOINT}}"
-  
-  # Introspection settings for staging
-  introspection:
-    enabled: true  # Still enabled for testing, disable for production
-    cache_ttl: 900  # 15 minutes - longer cache for stability
-  
-  # Headers for staging environment
-  headers:
-    # Authentication with staging credentials
-    Authorization: "Bearer {{APOLLO_STAGING_API_KEY}}"
-    
-    # Environment identification
-    X-Environment: "staging"
-    X-Client: "apollo-mcp-server"
-    X-Version: "{{PROJECT_VERSION}}"
-    
-    # Standard headers
-    Content-Type: "application/json"
-    Accept: "application/json"
-    
-    # Correlation ID for request tracing
-    X-Correlation-ID: "{{CORRELATION_ID}}"
-
-# =============================================================================
-# TOOL CONFIGURATION
-# =============================================================================
-
-# Directory containing GraphQL operation files
-tools_directory: "./tools"
-
-# Tool execution settings with staging-appropriate limits
-tools:
-  # Shorter timeout for staging reliability
-  timeout: 20000  # 20 seconds
-  
-  queries:
-    enabled: true
-    max_depth: 8  # Slightly more restrictive than local
-    
-  mutations:
-    enabled: true
-    # Require confirmation for destructive operations in staging
-    require_confirmation: true
-  
-  subscriptions:
-    enabled: false
-
-# =============================================================================
-# STAGING ENVIRONMENT SETTINGS
-# =============================================================================
-
-staging:
-  # Reduced logging verbosity
-  verbose_logging: false
-  
-  # Hot reload disabled for stability
-  hot_reload: false
-  
-  # GraphQL Playground available but secured
-  playground:
-    enabled: true
-    endpoint: "/playground"
-    # Add basic auth or IP restrictions here if needed
-    # auth_required: true
-  
-  # CORS settings for staging apps
-  cors:
-    enabled: true
-    origins:
-      - "{{STAGING_FRONTEND_URL}}"
-      - "https://{{PROJECT_NAME}}-staging.vercel.app"
-      - "https://{{PROJECT_NAME}}-preview.netlify.app"
-    credentials: true
-
-# =============================================================================
-# ENHANCED SECURITY FOR STAGING
-# =============================================================================
-
-security:
-  # More restrictive rate limiting
-  rate_limit:
-    enabled: true
-    requests_per_minute: 30  # Lower than local dev
-    burst_size: 5
-  
-  # Query complexity analysis
-  query_complexity:
-    enabled: true
-    max_complexity: 750  # More restrictive than local
-    max_depth: 12
-  
-  # Enhanced query validation
-  validation:
-    # Block queries with too many aliases
-    max_aliases: 15
-    
-    # Prevent deeply nested queries
-    max_nested_depth: 12
-    
-    # Limit the number of root fields
-    max_root_fields: 10
-  
-  # Request size limits
-  request_limits:
-    max_query_size: 10000  # 10KB max query size
-    max_variable_size: 5000  # 5KB max variables
-  
-  # IP allowlist (uncomment and configure for enhanced security)
-  # allowed_ips:
-  #   - "192.168.1.0/24"  # Office network
-  #   - "10.0.0.0/8"      # Internal services
-
-# =============================================================================
-# ERROR HANDLING AND MONITORING
-# =============================================================================
-
-error_handling:
-  # Limited error details for security
-  expose_details: false
-  
-  # Enhanced retry logic for staging stability
-  retry:
-    enabled: true
-    max_attempts: 2  # Fewer retries than local
-    backoff_multiplier: 3
-    initial_delay: 1000  # 1 second
-
-# Production-appropriate logging
-logging:
-  level: "info"  # Less verbose than local development
-  format: "json"  # Structured logging for monitoring
-  
-  # Log operations for debugging but not in detail
-  log_operations: true
-  log_operation_details: false  # Don't log variables/results
-  
-  # Performance monitoring
-  log_timing: true
-  
-  # Log to external monitoring service
-  # external_logging:
-  #   enabled: true
-  #   endpoint: "{{LOGGING_ENDPOINT}}"
-  #   api_key: "{{LOGGING_API_KEY}}"
-
-# =============================================================================
-# PERFORMANCE OPTIMIZATION
-# =============================================================================
-
-performance:
-  # Optimized connection pooling
-  connection_pool:
-    max_connections: 5  # Conservative for staging
-    idle_timeout: 60000  # 60 seconds
-    connection_timeout: 5000  # 5 seconds
-  
-  # Selective caching (be careful with mutations!)
-  caching:
-    enabled: true  # Can enable in staging for testing
-    ttl: 180  # 3 minutes
-    # Only cache query operations
-    cache_queries_only: true
-  
-  # Request batching
-  batching:
-    enabled: false  # Disable unless specifically needed
-    max_batch_size: 5
-
-# =============================================================================
-# HEALTH CHECKS AND MONITORING
-# =============================================================================
-
-health_checks:
-  enabled: true
-  endpoint: "/health"
-  
-  # Health check intervals
-  graphql_ping_interval: 30000  # 30 seconds
-  
-  # Dependency checks
-  checks:
-    - name: "graphql_endpoint"
-      type: "graphql"
-      query: "{ __typename }"
-      timeout: 5000
-    
-    - name: "schema_introspection"
-      type: "introspection"
-      timeout: 10000
-
-# Metrics and monitoring
-metrics:
-  enabled: true
-  endpoint: "/metrics"
-  
-  # Export metrics to external monitoring
-  # prometheus:
-  #   enabled: true
-  #   endpoint: "/prometheus"
-  
-  # Track key performance indicators
-  track:
-    - request_count
-    - request_duration
-    - error_rate
-    - cache_hit_rate
-    - active_connections
-
-# =============================================================================
-# ENVIRONMENT VARIABLE OVERRIDES
-# =============================================================================
-
-# Staging-specific environment variables:
-# 
-# APOLLO_MCP_ENDPOINT={{STAGING_GRAPHQL_ENDPOINT}}
-# APOLLO_MCP_API_KEY={{APOLLO_STAGING_API_KEY}}
-# APOLLO_MCP_LOG_LEVEL=info
-# APOLLO_MCP_RATE_LIMIT=30
-# APOLLO_MCP_REQUIRE_CONFIRMATION=true
-# APOLLO_MCP_CACHE_ENABLED=true
-# APOLLO_MCP_INTROSPECTION_ENABLED=true
-# 
-# For production deployment, consider:
-# - Setting APOLLO_MCP_INTROSPECTION_ENABLED=false
-# - Adding IP allowlists
-# - Enabling external logging and metrics
-# - Setting up proper SSL/TLS certificates
+# Environment variables for staging:
+# STAGING_GRAPHQL_ENDPOINT - staging GraphQL endpoint
+# APOLLO_KEY - API key for staging authentication
+# PROJECT_NAME - project identifier
+# MCP_PORT - MCP server port (default: 5000)

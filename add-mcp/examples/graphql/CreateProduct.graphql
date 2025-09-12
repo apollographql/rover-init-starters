@@ -13,14 +13,6 @@
 # the createProduct resolver. The REST template is read-only.
 
 mutation CreateProduct($input: CreateProductInput!) {
-  """
-  Creates a new product in your catalog with the provided details.
-  
-  Your AI assistant will use this when you ask to add products, create new items,
-  or expand your product catalog with new entries.
-  
-  Compatible with start-with-typescript template only.
-  """
   createProduct(input: $input) {
     id              # Newly created product identifier
     name            # Product title/name as created
