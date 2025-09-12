@@ -13,14 +13,6 @@
 # a product(id:) resolver. The REST template only has products (plural).
 
 query GetProduct($productId: ID!) {
-  """
-  Fetch detailed information about a specific product by ID.
-  
-  Your AI assistant will use this when you ask about a particular product,
-  need specific product details, or want to look up a product by ID.
-  
-  Compatible with start-with-typescript template only.
-  """
   product(id: $productId) {
     id              # Product unique identifier
     name            # Product title/name  
