@@ -20,7 +20,7 @@ introspection:
 transport:
   type: streamable_http
   port: 5000                    # MCP server port
-endpoint: http://localhost:4000 # Your GraphQL API endpoint
+endpoint: http://host.docker.internal:4000 # Your GraphQL API endpoint
 
 # =============================================================================
 # Configuration Details
