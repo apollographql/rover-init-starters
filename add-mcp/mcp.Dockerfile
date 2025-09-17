@@ -2,10 +2,6 @@
 # Apollo MCP Server Dockerfile
 # =============================================================================
 #
-# ⚠️ NOTICE ⚠️
-# This Dockerfile uses a build that has limitations
-# for production use. 
-#
 # This Dockerfile sets up the Apollo MCP (Model Context Protocol) Server
 # to expose your GraphQL API as tools that AI assistants like Claude can use.
 #
@@ -15,7 +11,6 @@
 # RECOMMENDED USE:
 # ✅ Development and testing with MCP Inspector or Claude Desktop
 # ✅ Local development and prototyping
-# ❌ Production deployment without security review
 #
 # USAGE:
 # 1. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
@@ -24,9 +19,7 @@
 #
 # =============================================================================
 
-# This uses a build that is NOT a production release
-# Not recommended for production
-FROM ghcr.io/apollographql/apollo-mcp-server:canary-20250903T205844Z-ea32f7d
+FROM ghcr.io/apollographql/apollo-mcp-server:0.8.0
 
 # =============================================================================
 # METADATA AND LABELS
