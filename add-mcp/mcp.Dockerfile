@@ -19,7 +19,7 @@
 #
 # =============================================================================
 
-FROM ghcr.io/apollographql/apollo-mcp-server:0.8.0
+FROM ghcr.io/apollographql/apollo-mcp-server:latest
 
 # =============================================================================
 # METADATA AND LABELS
