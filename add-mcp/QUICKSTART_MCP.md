@@ -112,7 +112,7 @@ curl http://localhost:5000/health
 Copy the generated configuration to your AI client:
 
 ```bash
-# The ai-desktop-config.json file contains the configuration
+# The claude-desktop-config.json file contains the configuration
 # Copy its contents to your AI client configuration
 ```
 
@@ -202,7 +202,7 @@ your-graphql-project/
 ├── mcp.Dockerfile          # Docker configuration
 ├── .env.template           # Environment template
 ├── .env                    # Your environment (create this)
-├── ai-desktop-config.json # AI client integration
+├── claude-desktop-config.json # Claude Desktop integration
 └── QUICKSTART_MCP.md       # This guide
 ```
 
