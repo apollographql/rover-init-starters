@@ -6,7 +6,7 @@
 
 extend schema
   @link( # Enable this schema to use Apollo Federation features
-    url: "https://specs.apollo.dev/federation/v2.10"
+    url: "https://specs.apollo.dev/federation/v2.11"
   )
   @link( # Enable this schema to use Apollo Connectors
     url: "https://specs.apollo.dev/connect/v0.2"
