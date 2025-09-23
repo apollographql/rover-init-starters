@@ -1,9 +1,10 @@
 {
   "mcpServers": {
-    "{{PROJECT_NAME}}-graphql": {
-      "command": "{{MCP_SERVER_BINARY}}",
+    "mcp-{{PROJECT_NAME}}": {
+      "command": "npx",
       "args": [
-        "{{MCP_CONFIG_PATH}}"
+        "mcp-remote",
+        "http://127.0.0.1:5000/mcp"
       ],
       "env": {
         "APOLLO_KEY": "{{APOLLO_KEY}}",
