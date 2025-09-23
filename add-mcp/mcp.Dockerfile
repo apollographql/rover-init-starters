@@ -13,9 +13,10 @@
 # ✅ Local development and prototyping
 #
 # USAGE:
-# 1. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
-# 2. Run:   docker run -p 5000:5000 --env-file .env {{PROJECT_NAME}}
-# 3. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5000/mcp)
+# 1. Setup: cp .env.template .env && edit .env with your values
+# 2. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
+# 3. Run:   docker run -p 5000:5000 --env-file .env {{PROJECT_NAME}}
+# 4. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5000/mcp)
 #
 # =============================================================================
 
@@ -34,7 +35,7 @@ LABEL org.opencontainers.image.vendor="Apollo GraphQL"
 # ENVIRONMENT CONFIGURATION
 # =============================================================================
 
-# Set environment variables for the MCP server within your .env file.
+# Set environment variables for the MCP server by copying .env.template to .env
 
 # =============================================================================
 # COPY APPLICATION FILES
