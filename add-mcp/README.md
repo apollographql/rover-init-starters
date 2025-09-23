@@ -1,87 +1,122 @@
-# Connect AI Assistants to Your API
+# Apollo MCP Server
 
-**Give your AI assistant instant access to your data and services in 5 minutes.** No GraphQL knowledge required.
+**Transform your GraphQL API into AI-accessible tools in under 5 minutes.**
+
+Give your AI assistant instant access to your GraphQL API through Apollo's Model Context Protocol (MCP) Server. No complex setup required.
 
 ## ⚡ What You'll Get
 
 Your AI assistant will be able to:
 - **Query your data** ("Show me users from last week")
-- **Trigger actions** ("Create a new order for customer X") 
+- **Execute mutations** ("Create a new order for customer X")
 - **Check status** ("Is the payment service healthy?")
 - **Analyze trends** ("Compare this month's metrics to last month")
 
-All through natural conversation, using your existing data.
+All through natural conversation, using your existing GraphQL API.
 
 ## 🚀 Quick Start
 
-**Step 1: Add to your project**
+**Step 1: Copy template to your GraphQL project**
 ```bash
-# From your API project directory
+# Navigate to your GraphQL project directory
+cd /path/to/your/graphql/project
+
+# Copy MCP template files
 cp -r /path/to/rover-init-starters/add-mcp/* .
 ```
 
-**Step 2: Point to your API**
+**Step 2: Configure your API endpoint**
 ```bash
-# Create config file
+# Create environment file
 cp .env.template .env
 
-# Edit .env and update this line:
-GRAPHQL_ENDPOINT="http://localhost:4000"  # Your API URL
+# Edit .env with your API details:
+PROJECT_NAME="your-project-name"
+GRAPHQL_ENDPOINT="http://localhost:4000/graphql"
 ```
 
-**Step 3: Start the connector** 
+**Step 3: Start the MCP server**
 ```bash
-# Using Docker (works everywhere)
-docker build -f mcp.Dockerfile -t my-api-connector .
-docker run --env-file .env -p 5000:5000 my-api-connector
+# Build and run with Docker
+docker build -f mcp.Dockerfile -t your-project-mcp .
+docker run -d --name your-project-mcp -p 5000:5000 --env-file .env your-project-mcp
+
+# Verify it's running
+curl http://localhost:5000/health
 ```
 
-**Step 4: See what your AI assistant will see**
+**Step 4: Connect your AI assistant**
 ```bash
-# Open the inspector in your browser
+# Copy the configuration for Claude Desktop
+# macOS:
+cp claude_desktop_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
+
+# Windows:
+copy claude_desktop_config.json "%APPDATA%\Claude\claude_desktop_config.json"
+
+# Linux:
+cp claude_desktop_config.json ~/.config/Claude/claude_desktop_config.json
+```
+
+**Step 5: Test the connection**
+```bash
+# Use the MCP inspector to verify your tools
 npx @mcp/inspector --port 5000
-
-# Opens at: http://localhost:3000
 ```
 
-**What you'll see:**
-- All the actions your AI assistant can perform with your API
-- Interactive forms to test each action with real data
-- Exact responses your AI assistant will get from your API
+**🎉 Done!** Restart Claude Desktop and look for the hammer icon (🔨). Your GraphQL API is now accessible to your AI assistant!
 
-**Try it:** Click on an action, fill in test data, hit "Run" - if it works here, it'll work with your AI assistant.
+## 🛠️ Add Custom Tools
 
-**🎉 Done!** Your AI assistant can now talk to your API using natural language.
+Each `.graphql` file in the `tools/` directory becomes an AI tool. Create new tools by adding GraphQL operations:
 
-## 📖 Next Steps
+```graphql
+# tools/GetUserProfile.graphql
+query GetUserProfile($userId: ID!) {
+  user(id: $userId) {
+    id
+    name
+    email
+    profile {
+      avatar
+      bio
+    }
+  }
+}
+```
 
-**Want your AI assistant to do more with your API?**
+Your AI assistant can now say: "Get the profile for user 123" and it will execute this query automatically.
 
-- **📚 [Add Custom Actions](docs/setup.md)** - Create tools for your specific workflows ("generate reports", "update inventory", etc.)
-- **🧪 [Verify Everything Works](docs/testing.md)** - Test your AI assistant's access and configure integration  
-- **🚀 [Deploy for Your Team](docs/deploy.md)** - Share this superpower with your entire team
-- **🔧 [When Things Break](docs/troubleshooting.md)** - Quick fixes for common setup issues
+## 📋 Prerequisites
 
-## 📋 What You Need
+- **Existing GraphQL API** (running on any port)
+- **Docker** ([install here](https://docs.docker.com/get-docker/))
+- **Node.js 18+** (for CLI tools)
+- **Claude Desktop** (or another MCP-compatible AI client)
 
-- Any API that responds to HTTP requests (REST, GraphQL, anything)
-- Docker installed (if you don't have it: [get Docker](https://docs.docker.com/get-docker/))
-- 5 minutes
+## 📖 Learn More
+
+- **[Apollo MCP Server Quickstart](https://www.apollographql.com/docs/apollo-mcp-server/quickstart)** - Complete setup guide
+- **[Running Your MCP Server](https://www.apollographql.com/docs/apollo-mcp-server/run)** - Deployment and production setup
+- **[Debugging Your MCP Server](https://www.apollographql.com/docs/apollo-mcp-server/debugging)** - Troubleshooting common issues
+- **[Defining Tools in Studio](https://www.apollographql.com/docs/apollo-mcp-server/define-tools)** - Managing tools with Apollo Studio
 
 ## ❓ Common Questions
 
-**"Will this work with my [REST/GraphQL/custom] API?"** → Yes, if it responds to HTTP requests, it'll work.
+**"Will this work with my existing GraphQL API?"** → Yes, any GraphQL API that responds to HTTP requests works out of the box.
 
-**"Do I need to know GraphQL?"** → Nope. The template handles all the GraphQL stuff automatically.
+**"Do I need Apollo knowledge?"** → No, this template handles all Apollo-specific configuration automatically.
 
-**"Is this secure?"** → Your AI assistant connects to your local copy only. Your data stays on your machine.
+**"Is this secure?"** → The MCP server connects to your local API only. Your data stays on your machine unless you deploy to production.
+
+**"Can I use this in production?"** → Yes, see the [deployment documentation](https://www.apollographql.com/docs/apollo-mcp-server/run) for production setup.
 
 ## 🆘 Need Help?
 
-- **Something broken?** → [Quick fixes](docs/troubleshooting.md) (most issues take < 2 minutes to fix)
-- **Want to understand more?** → [Complete technical guide](QUICKSTART_MCP.md)
-- **Want examples?** → Check the `examples/` folder for REST, AWS, and GraphQL patterns
+- **Connection issues?** Check that your GraphQL endpoint is accessible: `curl -X POST http://your-endpoint/graphql -d '{"query":"{ __typename }"}'`
+- **Tools not appearing?** Verify `.graphql` files exist in `tools/` directory and have valid GraphQL syntax
+- **Claude Desktop not connecting?** Ensure the config file is in the correct location and restart Claude Desktop completely
 
 ---
 
-*Transform any API into AI-accessible tools • Part of [Apollo Rover Init Starters](https://github.com/apollographql/rover-init-starters)*
+*Part of [Apollo Rover Init Starters](https://github.com/apollographql/rover-init-starters) • Transform any GraphQL API into AI-accessible tools*
