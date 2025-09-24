@@ -42,11 +42,11 @@ This document outlines the process for contributing new templates to the rover-i
   "id": "typescript",
   "display_name": "Start with TypeScript",
   "path": "start-with-typescript",
-  "commands": ["npm ci", "npm run dev"],
+  "commands": ["npm i", "npm run dev"],
   "language": "TypeScript",
   "federation_version": "=2.10.0",
   "max_schema_depth": 5,
-  "test_commands": ["npm ci", "npm test"],
+  "test_commands": ["npm i", "npm test"],
   "routing_url": "http://localhost:4001",
   "print_depth": 2
 }

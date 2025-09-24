@@ -18,8 +18,8 @@
       "language": "Typescript",
       "federation_version": "=2.10.0",
       "max_schema_depth": 5,
-      "test_commands": ["npm ci","npm test"],
-      "commands": ["npm ci", "npm run dev"],
+      "test_commands": ["npm i","npm test"],
+      "commands": ["npm i", "npm run dev"],
       "routing_url": "http://localhost:4001",
       "print_depth": 2
     },
