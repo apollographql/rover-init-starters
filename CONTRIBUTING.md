@@ -18,7 +18,7 @@ This document outlines the process for contributing new templates to the rover-i
    - Ensure the name is descriptive of the "starting" experience (e.g., `start-with-typescript`). Use kebab-case for folder names.
 
 2. Required Artifacts (must-have items for every starter):
-   - **Getting started documentation**: A `getting-started.md` file (or custom name, see `start_point_file` below). This file should explain what the starter is, how to use it, and any educational context.
+   - **Getting started documentation**: A `GETTING_STARTED.md` file (or custom name, see `start_point_file` below). This file should explain what the starter is, how to use it, and any educational context.
    - **Project files**: All files needed for the starter to build and run (e.g., `package.json`, source files, configs).
    - **Test files**: Include tests to verify the starter works as intended.
    - **Manifest fields mapping**: Ensure your starter provides the following, which will be referenced in `manifest.json`:
@@ -74,11 +74,11 @@ Each template must include the following in `manifest.json`:
 | routing_url      | String       | URL where the subgraph is exposed                                          |
 | max_schema_depth | Int (optional) | Maximum depth for GraphQL file discovery (defaults to 5)                  |
 | print_depth      | Int (optional) | Controls file display depth during init execution                         |
-| start_point_file | String (optional) | Custom name for the "getting started" documentation file (defaults to `getting-started.md`) |
+| start_point_file | String (optional) | Custom name for the "getting started" documentation file (defaults to `GETTING_STARTED.md`) |
 
 
 Required files:
-- Getting started documentation (default: `getting-started.md`)
+- Getting started documentation (default: `GETTING_STARTED.md`)
 - All necessary project files (`package.json`, source files, etc.)
 - Test files to verify the starter works
 
@@ -87,7 +87,7 @@ Required files:
 When making breaking changes to existing templates:
 
 1. Clearly document the changes in your PR description.
-2. Update the template's getting-started documentation to reflect the changes.
+2. Update the template's GETTING_STARTED documentation to reflect the changes.
 3. If removing or updating `manifest.json` fields:
    - Document any removed or changed fields.
    - Provide migration steps if applicable.
@@ -110,7 +110,7 @@ When making breaking changes to existing templates:
 - Follow the existing code style in the repository.
 - Ensure all files are properly formatted.
 - Run linting tools (e.g., ESLint, Prettier) before submitting your PR.
-- Maintain consistent documentation style in getting-started files.
+- Maintain consistent documentation style in GETTING_STARTED files.
 - Follow the established naming conventions for template folders (kebab-case).
 - Reference the repository's style guide if available.
 

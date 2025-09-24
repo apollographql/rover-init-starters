@@ -13,4 +13,4 @@ This command:
 * Provides a starter schema to help you design your GraphQL API
 * Walks you through spinning up a local environment to test your API
 
-Head over to \`getting-started.md\` for next steps.
+Head over to \`GETTING_STARTED.md\` for next steps.
