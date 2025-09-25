@@ -11,10 +11,15 @@
   // GRAPHQL LANGUAGE SUPPORT
   // ==========================================================================
   
-  // Associate .graphql files with GraphQL language
+  // Associate files with their appropriate languages
   "files.associations": {
     "*.graphql": "graphql",
-    "*.gql": "graphql"
+    "*.gql": "graphql",
+    "mcp.*.yaml": "yaml",
+    ".apollo/*.yaml": "yaml",
+    ".apollo/*.yml": "yaml",
+    "mcp.Dockerfile": "dockerfile",
+    "*.mcp.Dockerfile": "dockerfile"
   },
 
   // GraphQL-specific editor settings
@@ -159,12 +164,6 @@
     }
   },
 
-  // Associate Apollo config files with YAML
-  "files.associations": {
-    "mcp.*.yaml": "yaml",
-    ".apollo/*.yaml": "yaml",
-    ".apollo/*.yml": "yaml"
-  },
 
   // ==========================================================================
   // DOCKERFILE CONFIGURATION
@@ -178,11 +177,6 @@
     "editor.formatOnSave": true
   },
 
-  // Associate MCP Dockerfile
-  "files.associations": {
-    "mcp.Dockerfile": "dockerfile",
-    "*.mcp.Dockerfile": "dockerfile"
-  },
 
   // ==========================================================================
   // JSON CONFIGURATION FOR CONFIG FILES
@@ -236,18 +230,6 @@
   // Configure git integration for GraphQL files
   "git.decorations.enabled": true,
   "scm.diffDecorations": "all",
-
-  // ==========================================================================
-  // EXTENSION RECOMMENDATIONS
-  // ==========================================================================
-  
-  // These settings work best with these VS Code extensions:
-  // - GraphQL: Language Feature Support (graphql.vscode-graphql)
-  // - GraphQL: Syntax Highlighting (graphql.vscode-graphql-syntax)
-  // - Docker (ms-azuretools.vscode-docker)
-  // - YAML (redhat.vscode-yaml)
-  // - Apollo GraphQL (apollographql.vscode-apollo)
-  // - GitLens (eamodio.gitlens)
   
   // ==========================================================================
   // WORKSPACE-SPECIFIC SETTINGS
@@ -277,7 +259,7 @@
   },
 
   // Configure auto-rename for consistency
-  "editor.renameOnType": true,
+  "editor.linkedEditing": true,
 
   // Enable parameter hints for GraphQL variables
   "editor.parameterHints.enabled": true,
@@ -328,23 +310,6 @@
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 
   // ==========================================================================
-  // CUSTOM KEYBINDINGS SUPPORT
-  // ==========================================================================
-  // 
-  // Consider adding these keybindings to your keybindings.json:
-  // 
-  // {
-  //   "key": "cmd+shift+g",
-  //   "command": "workbench.view.explorer",
-  //   "when": "resourceExtname == .graphql"
-  // },
-  // {
-  //   "key": "f5",
-  //   "command": "workbench.action.tasks.runTask",
-  //   "args": "Start MCP Server"
-  // }
-
-  // ==========================================================================
   // COMMENTS AND DOCUMENTATION
   // ==========================================================================
   
@@ -354,149 +319,3 @@
   "files.trimFinalNewlines": true,
   "files.insertFinalNewline": true
 }
-
-/*
-=============================================================================
-RECOMMENDED VS CODE EXTENSIONS FOR MCP DEVELOPMENT
-=============================================================================
-
-Install these extensions for the best GraphQL MCP development experience:
-
-ESSENTIAL EXTENSIONS:
-1. GraphQL: Language Feature Support
-   - Extension ID: graphql.vscode-graphql
-   - Provides syntax highlighting, validation, and auto-completion
-
-2. Apollo GraphQL  
-   - Extension ID: apollographql.vscode-apollo
-   - Apollo-specific GraphQL features and schema integration
-
-3. Docker
-   - Extension ID: ms-azuretools.vscode-docker
-   - Docker file support and container management
-
-RECOMMENDED EXTENSIONS:
-4. YAML
-   - Extension ID: redhat.vscode-yaml
-   - Better YAML editing for Apollo config files
-
-5. REST Client
-   - Extension ID: humao.rest-client
-   - Test GraphQL endpoints directly from VS Code
-
-6. GitLens
-   - Extension ID: eamodio.gitlens
-   - Enhanced Git integration and history
-
-7. Error Lens
-   - Extension ID: usernamehw.errorlens
-   - Inline error and warning display
-
-INSTALL COMMAND:
-code --install-extension graphql.vscode-graphql
-code --install-extension apollographql.vscode-apollo
-code --install-extension ms-azuretools.vscode-docker
-code --install-extension redhat.vscode-yaml
-code --install-extension humao.rest-client
-code --install-extension eamodio.gitlens
-code --install-extension usernamehw.errorlens
-
-=============================================================================
-CUSTOM TASKS CONFIGURATION
-=============================================================================
-
-Create a .vscode/tasks.json file with these helpful MCP development tasks:
-
-{
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Start MCP Server",
-      "type": "shell",
-      "command": "docker",
-      "args": [
-        "run", "-p", "5000:5000", 
-        "--env-file", ".env", 
-        "{{PROJECT_NAME}}-mcp"
-      ],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Build MCP Server",
-      "type": "shell", 
-      "command": "docker",
-      "args": [
-        "build", "-f", "mcp.Dockerfile",
-        "-t", "{{PROJECT_NAME}}-mcp", "."
-      ],
-      "group": "build"
-    },
-    {
-      "label": "Test MCP Server",
-      "type": "shell",
-      "command": "npx",
-      "args": ["@mcp/inspector", "--port", "5000"],
-      "group": "test",
-      "dependsOn": "Start MCP Server"
-    },
-    {
-      "label": "Validate GraphQL Tools", 
-      "type": "shell",
-      "command": "npx",
-      "args": [
-        "graphql-cli", "validate", 
-        "tools/*.graphql", 
-        "--schema", "{{GRAPHQL_ENDPOINT}}"
-      ],
-      "group": "test"
-    }
-  ]
-}
-
-=============================================================================
-DEBUGGING CONFIGURATION
-=============================================================================
-
-Create a .vscode/launch.json file for debugging:
-
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Debug MCP Server",
-      "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "restart": true,
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/app"
-    }
-  ]
-}
-
-=============================================================================
-WORKSPACE SETTINGS OVERRIDE
-=============================================================================
-
-If you need to override any of these settings for your specific project,
-create a .vscode/settings.json file in your project root (not this template)
-and add your overrides there.
-
-Example project-specific overrides:
-{
-  "graphql.introspect": {
-    "endpoint": "http://localhost:3000/api/graphql",
-    "headers": {
-      "Authorization": "Bearer your-specific-token"
-    }
-  }
-}
-
-=============================================================================
-*/
