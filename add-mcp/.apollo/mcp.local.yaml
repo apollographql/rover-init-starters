@@ -4,6 +4,9 @@
 # Replace {{PROJECT_NAME}} and configure endpoint below
 
 # Working local configuration:
+graphos:
+  apollo_graph_ref: ${APOLLO_GRAPH_REF}
+  apollo_key: ${APOLLO_KEY}
 overrides:
   mutation_mode: all
 operations:
@@ -26,8 +29,8 @@ endpoint: http://localhost:4000 # Your GraphQL API endpoint
 # Configuration Details
 # =============================================================================
 
-name: "{{PROJECT_NAME}} GraphQL API"
-description: "GraphQL API for {{PROJECT_NAME}} with {{#if REST_CONNECTORS}}REST connector integration{{else}}standard GraphQL operations{{/if}}"
+name: "${PROJECT_NAME} GraphQL API"
+description: "GraphQL API for ${PROJECT_NAME}"
 
 # Essential settings for local development:
 # - mutations enabled for full API access
