@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - start-with-typescript template
 - Schema validation and print_depth support in manifest
 - Template test workflow and schema validation in CI
-- Community link in getting-started.md
+- Community link in GETTING_STARTED.md
 
 ### Changed
 - Updated folder structure and manifest fields to use `commands` array

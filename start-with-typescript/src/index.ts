@@ -8,11 +8,10 @@ import {
 import resolvers from "./resolvers";
 
 const port = "4001";
-const subgraphName = "products";
 
 async function main() {
   let typeDefs = gql(
-    readFileSync("products.graphql", {
+    readFileSync("schema.graphql", {
       encoding: "utf-8",
     })
   );
@@ -23,7 +22,7 @@ async function main() {
     listen: { port: Number.parseInt(port) },
   });
 
-  console.log(`🚀  Subgraph ${subgraphName} ready at ${url}`);
+  console.log(`🚀  Subgraph ready at ${url}`);
 }
 
 main();
