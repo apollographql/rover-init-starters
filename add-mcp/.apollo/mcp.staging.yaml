@@ -1,9 +1,11 @@
 # Apollo MCP Server Configuration - Staging Environment
-# 
 # This staging configuration provides settings with enhanced security
-# Replace {{PROJECT_NAME}} and configure staging endpoint below
 
 # Working staging configuration:
+#
+# SECURITY WARNING: This file contains actual credentials below
+# DO NOT COMMIT this file to version control after adding real values
+# Or add it to .gitignore if you haven't already: echo ".apollo/mcp.*.yaml" >> .gitignore
 graphos:
   apollo_graph_ref: ${APOLLO_GRAPH_REF}
   apollo_key: ${APOLLO_KEY}
