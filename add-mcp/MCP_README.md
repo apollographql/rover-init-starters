@@ -2,9 +2,9 @@
 
 **Transform your GraphQL API into AI-accessible tools in under 5 minutes.**
 
-Give your AI assistant instant access to your GraphQL API through Apollo's Model Context Protocol (MCP) Server. No complex setup required.
+Give your AI assistant instant access to your GraphQL API through Apollo's Model Context Protocol (MCP) Server. Runs your GraphQL API and MCP server together.
 
-## ⚡ What You'll Get
+## What You'll Get
 
 Your AI assistant will be able to:
 - **Query your data** ("Show me users from last week")
@@ -14,18 +14,9 @@ Your AI assistant will be able to:
 
 All through natural conversation, using your existing GraphQL API.
 
-## 🚀 Quick Start
+## Quick Start
 
-**Step 1: Copy template to your GraphQL project**
-```bash
-# Navigate to your GraphQL project directory
-cd /path/to/your/graphql/project
-
-# Copy MCP template files
-cp -r /path/to/rover-init-starters/add-mcp/* .
-```
-
-**Step 2: Configure your API endpoint**
+**Step 1: Configure your environment**
 ```bash
 # Create environment file
 cp .env.template .env
@@ -35,17 +26,7 @@ PROJECT_NAME="your-project-name"
 GRAPHQL_ENDPOINT="http://localhost:4000/graphql"
 ```
 
-**Step 3: Start the MCP server**
-```bash
-# Build and run with Docker
-docker build -f mcp.Dockerfile -t your-project-mcp .
-docker run -d --name your-project-mcp -p 5000:5000 --env-file .env your-project-mcp
-
-# Verify it's running
-curl http://localhost:5000/health
-```
-
-**Step 4: Connect your AI assistant**
+**Step 2: Connect your AI assistant**
 ```bash
 # Copy the configuration for Claude Desktop
 # macOS:
@@ -56,67 +37,80 @@ copy claude_desktop_config.json "%APPDATA%\Claude\claude_desktop_config.json"
 
 # Linux:
 cp claude_desktop_config.json ~/.config/Claude/claude_desktop_config.json
+
+# Restart Claude Desktop
 ```
 
-**Step 5: Test the connection**
+**Step 3: Start everything together**
 ```bash
-# Use the MCP inspector to verify your tools
+# Load environment and start GraphQL API + MCP server
+source .env && rover dev --supergraph-config supergraph.yaml --mcp .apollo/mcp.local.yaml
+
+# This starts:
+# → GraphQL API: http://localhost:4000
+# → MCP Server: http://localhost:5000
+```
+
+**Done!** In Claude Desktop, look for your MCP server named `mcp-{{PROJECT_NAME}}` in the available tools. Your GraphQL API is now accessible to your AI assistant!
+
+**Try it:** Ask Claude "What tools do I have available?" or "Can you get me some information about `mcp-{{PROJECT_NAME}}`?"
+
+## Add Custom Tools
+
+Create AI tools from your GraphQL operations using Apollo Studio. Once `rover dev` is running:
+
+1. **Open Studio Sandbox**: Go to [http://localhost:4000](http://localhost:4000)
+2. **Select your graph**: Choose `{{PROJECT_NAME}}` from the dropdown
+3. **Build operations**: Write queries and mutations in the Explorer
+4. **Save as tools**: Use "Save to Operation Collection" to create MCP tools
+
+[Complete guide →](https://www.apollographql.com/docs/apollo-mcp-server/define-tools#from-operation-collection)
+
+You can then ask your AI assistant questions from the new data and queries will execute from your saved tool automatically.
+
+## Alternative: Docker-Only Setup
+
+If you prefer to run just the MCP server separately (without rover dev):
+
+```bash
+# Build and run with Docker
+docker build -f mcp.Dockerfile -t your-project-mcp .
+docker run -d --name your-project-mcp -p 5000:5000 --env-file .env your-project-mcp
+
+# Verify it's running
+curl http://localhost:5000/health
+
+# Test with MCP inspector
 npx @mcp/inspector --port 5000
 ```
 
-**🎉 Done!** Restart Claude Desktop and look for the hammer icon (🔨). Your GraphQL API is now accessible to your AI assistant!
+## Prerequisites
 
-## 🛠️ Add Custom Tools
-
-Each `.graphql` file in the `tools/` directory becomes an AI tool. Create new tools by adding GraphQL operations:
-
-```graphql
-# tools/GetUserProfile.graphql
-query GetUserProfile($userId: ID!) {
-  user(id: $userId) {
-    id
-    name
-    email
-    profile {
-      avatar
-      bio
-    }
-  }
-}
-```
-
-Your AI assistant can now say: "Get the profile for user 123" and it will execute this query automatically.
-
-## 📋 Prerequisites
-
-- **Existing GraphQL API** (running on any port)
-- **Docker** ([install here](https://docs.docker.com/get-docker/))
-- **Node.js 18+** (for CLI tools)
+- **Apollo Rover CLI** ([install here](https://www.apollographql.com/docs/rover/getting-started/))
+- **Existing GraphQL schema** (or use our examples)
+- **Node.js 18+** (for CLI tools and MCP inspector)
 - **Claude Desktop** (or another MCP-compatible AI client)
+- **Docker** (optional, for Docker-only setup)
 
-## 📖 Learn More
+## Learn More
 
 - **[Apollo MCP Server Quickstart](https://www.apollographql.com/docs/apollo-mcp-server/quickstart)** - Complete setup guide
 - **[Running Your MCP Server](https://www.apollographql.com/docs/apollo-mcp-server/run)** - Deployment and production setup
 - **[Debugging Your MCP Server](https://www.apollographql.com/docs/apollo-mcp-server/debugging)** - Troubleshooting common issues
 - **[Defining Tools in Studio](https://www.apollographql.com/docs/apollo-mcp-server/define-tools)** - Managing tools with Apollo Studio
 
-## ❓ Common Questions
+## Common Questions
 
-**"Will this work with my existing GraphQL API?"** → Yes, any GraphQL API that responds to HTTP requests works out of the box.
+**"Will this work with my existing GraphQL schema?"** → Yes, rover dev works with any GraphQL schema or supergraph configuration.
 
-**"Do I need Apollo knowledge?"** → No, this template handles all Apollo-specific configuration automatically.
+**"Do I need Apollo knowledge?"** → No, this template handles all configuration automatically. Rover CLI guides you through setup.
 
-**"Is this secure?"** → The MCP server connects to your local API only. Your data stays on your machine unless you deploy to production.
+**"Is this secure?"** → Everything runs locally. Your data stays on your machine unless you deploy to production.
 
-**"Can I use this in production?"** → Yes, see the [deployment documentation](https://www.apollographql.com/docs/apollo-mcp-server/run) for production setup.
+**"What's the difference between rover dev and Docker?"** → `rover dev` runs your GraphQL API and MCP server together in one command. Docker runs only the MCP server separately.
 
-## 🆘 Need Help?
+## Need Help?
 
-- **Connection issues?** Check that your GraphQL endpoint is accessible: `curl -X POST http://your-endpoint/graphql -d '{"query":"{ __typename }"}'`
-- **Tools not appearing?** Verify `.graphql` files exist in `tools/` directory and have valid GraphQL syntax
-- **Claude Desktop not connecting?** Ensure the config file is in the correct location and restart Claude Desktop completely
-
----
-
-*Part of [Apollo Rover Init Starters](https://github.com/apollographql/rover-init-starters) • Transform any GraphQL API into AI-accessible tools*
+- **Claude Desktop not connecting?** Ensure the config file is in the correct location and restart Claude Desktop completely.
+- **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 5000 (MCP). Check nothing else is using these ports.
+- **Need more help with MCP server and tools?** Visit our [Apollo MCP server troubleshooting guide](https://www.apollographql.com/docs/apollo-mcp-server/quickstart#troubleshooting).
