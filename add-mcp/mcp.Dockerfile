@@ -9,14 +9,13 @@
 # clients, automatically converting GraphQL operations into callable tools.
 #
 # RECOMMENDED USE:
-# ✅ Development and testing with MCP Inspector or Claude Desktop
-# ✅ Local development and prototyping
+# - Development and testing with MCP Inspector or Claude Desktop
+# - Local development and prototyping
 #
 # USAGE:
-# 1. Setup: cp .env.template .env && edit .env with your values
-# 2. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
-# 3. Run:   docker run -p 5000:5000 --env-file .env {{PROJECT_NAME}}
-# 4. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5000/mcp)
+# 1. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
+# 2. Run:   docker run -p 5000:5000 --env-file .env {{PROJECT_NAME}}
+# 3. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5000/mcp)
 #
 # =============================================================================
 
@@ -32,12 +31,6 @@ LABEL org.opencontainers.image.description="Apollo MCP Server for {{PROJECT_NAME
 LABEL org.opencontainers.image.vendor="Apollo GraphQL"
 
 # =============================================================================
-# ENVIRONMENT CONFIGURATION
-# =============================================================================
-
-# Set environment variables for the MCP server by copying .env.template to .env
-
-# =============================================================================
 # COPY APPLICATION FILES
 # =============================================================================
 
@@ -45,12 +38,6 @@ LABEL org.opencontainers.image.vendor="Apollo GraphQL"
 
 # Copy MCP configuration file to container root (where server expects it)
 COPY .apollo/mcp.local.yaml /mcp.yaml
-
-# Copy GraphQL tool definitions to container root
-COPY tools/ /tools/
-
-# Copy environment template (optional, for reference)
-# COPY .env.template /app/.env.template
 
 # Copy any custom schema files or additional configuration
 # COPY schema.graphql /app/schema.graphql
