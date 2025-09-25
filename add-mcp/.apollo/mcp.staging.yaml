@@ -4,6 +4,9 @@
 # Replace {{PROJECT_NAME}} and configure staging endpoint below
 
 # Working staging configuration:
+graphos:
+  apollo_graph_ref: ${APOLLO_GRAPH_REF}
+  apollo_key: ${APOLLO_KEY}
 overrides:
   mutation_mode: all
   require_confirmation: true    # Confirmation required for mutations in staging
@@ -21,11 +24,11 @@ introspection:
 transport:
   type: streamable_http
   port: 5000                    # MCP server port
-endpoint: "{{STAGING_GRAPHQL_ENDPOINT}}"  # Your staging GraphQL API endpoint
+endpoint: "${STAGING_GRAPHQL_ENDPOINT}"  # Your staging GraphQL API endpoint
 
 # Authentication headers for staging
 headers:
-  Authorization: "Bearer {{APOLLO_KEY}}"
+  Authorization: "Bearer ${APOLLO_KEY}"
   X-Environment: "staging"
   Content-Type: "application/json"
 
@@ -33,8 +36,8 @@ headers:
 # Configuration Details
 # =============================================================================
 
-name: "{{PROJECT_NAME}} GraphQL API (Staging)"
-description: "Staging environment for {{PROJECT_NAME}} GraphQL API with {{#if REST_CONNECTORS}}REST connector integration{{else}}standard GraphQL operations{{/if}}"
+name: "${PROJECT_NAME} GraphQL API (Staging)"
+description: "Staging environment for ${PROJECT_NAME} GraphQL API"
 
 # Enhanced security settings for staging:
 # - mutations require confirmation
