@@ -8,7 +8,7 @@ describe("Product Mutation", () => {
   const server = new ApolloServer({
     schema: buildSubgraphSchema({
       typeDefs: gql(
-        readFileSync("products.graphql", {
+        readFileSync("schema.graphql", {
           encoding: "utf-8",
         })
       ),
