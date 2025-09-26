@@ -16,6 +16,8 @@ introspection:
     enabled: true
   execute:
     enabled: true
+  validate:
+    enabled: true
 transport:
   type: streamable_http
   port: 5000                    # MCP server port
