@@ -32,11 +32,11 @@ Finally, this graph also uses [Apollo Connectors](https://www.apollographql.com/
 
 ## Working on your graph locally
 
-After completing the `rover init` flow, run the command you see in your terminal under **Next steps** (it will start with your `APOLLO_KEY`). This allows you to work with Apollo Router locally, giving you a way to design and test your supergraph in a safe environment, without the need to deploy anything yet.
+After completing the `rover init` flow, follow the instructions shown under **Next steps** in your terminal. This will allow you to work with Apollo Router locally, giving you a way to design and test your supergraph in a safe environment, without the need to deploy anything yet.
 
 You’ll get automatic [build checks](https://www.apollographql.com/docs/graphos/platform/schema-management/checks#build-checks-1), so you can identify issues early and make sure your services work together. It’s a fast way to iterate with confidence before going live.
 
-Once you run the command, the CLI will start watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
+Once you start working locally with Apollo Router, the CLI will start watching your files for updates. Every time you make a change, Rover checks to see if the schema is valid. You can think of it as “hot-reloading” for your GraphQL schema. [More details about the dev command](https://www.apollographql.com/docs/rover/commands/dev).
 
 ## The design process
 
