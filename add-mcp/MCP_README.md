@@ -48,7 +48,7 @@ source .env && rover dev --supergraph-config supergraph.yaml --mcp .apollo/mcp.l
 
 # This starts:
 # → GraphQL API: http://localhost:4000
-# → MCP Server: http://localhost:5000
+# → MCP Server: http://localhost:5001
 ```
 
 **Done!** In Claude Desktop, look for your MCP server named `mcp-{{PROJECT_NAME}}` in the available tools. Your GraphQL API is now accessible to your AI assistant!
@@ -75,13 +75,13 @@ If you prefer to run just the MCP server separately (without rover dev):
 ```bash
 # Build and run with Docker
 docker build -f mcp.Dockerfile -t your-project-mcp .
-docker run -d --name your-project-mcp -p 5000:5000 --env-file .env your-project-mcp
+docker run -d --name your-project-mcp -p 5000:5001 --env-file .env your-project-mcp
 
 # Verify it's running
-curl http://localhost:5000/health
+curl http://localhost:5001/health
 
 # Test with MCP inspector
-npx @mcp/inspector --port 5000
+npx @mcp/inspector --port 5001
 ```
 
 ## Prerequisites
@@ -112,5 +112,5 @@ npx @mcp/inspector --port 5000
 ## Need Help?
 
 - **Claude Desktop not connecting?** Ensure the config file is in the correct location and restart Claude Desktop completely.
-- **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 5000 (MCP). Check nothing else is using these ports.
+- **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 5001 (MCP). Check nothing else is using these ports.
 - **Need more help with MCP server and tools?** Visit our [Apollo MCP server troubleshooting guide](https://www.apollographql.com/docs/apollo-mcp-server/quickstart#troubleshooting).

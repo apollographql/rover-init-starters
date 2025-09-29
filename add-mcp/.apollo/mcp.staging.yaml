@@ -20,7 +20,7 @@ introspection:
     enabled: true
 transport:
   type: streamable_http
-  port: 5000                    # MCP server port
+  port: 5001                    # MCP server port
 endpoint: "${STAGING_GRAPHQL_ENDPOINT}"  # Your staging GraphQL API endpoint
 
 # Authentication headers for staging
@@ -53,10 +53,10 @@ description: "Staging environment for ${PROJECT_NAME} GraphQL API"
 # 2. Set STAGING_GRAPHQL_ENDPOINT to your staging GraphQL URL
 # 3. Set APOLLO_KEY for authentication
 # 4. Run: docker build -f mcp.Dockerfile -t my-mcp-staging .
-# 5. Run: docker run -p 5000:5000 --env-file .env.staging my-mcp-staging
+# 5. Run: docker run -p 5000:5001 --env-file .env.staging my-mcp-staging
 
 # Environment variables for staging:
 # STAGING_GRAPHQL_ENDPOINT - staging GraphQL endpoint
 # APOLLO_KEY - API key for staging authentication
 # PROJECT_NAME - project identifier
-# MCP_PORT - MCP server port (default: 5000)
+# MCP_PORT - MCP server port (default: 5001)
