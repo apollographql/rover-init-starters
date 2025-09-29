@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Run: Cmd/Ctrl+Shift+P → "Tasks: Run Task" → "Start Apollo Router"
+      // Start Apollo Router (4000)
+      "label": "Start Apollo Router",
+      "command": "rover",
+      "args": [
+        "dev",
+        "--supergraph-config",
+        "supergraph.yaml",
+      ],
+      "type": "shell",
+      "dependsOrder": "sequence",
+      "dependsOn": "Load Environment"
+    },
+    {
+      // Loads .env before starting rover dev (auto-runs with Start Apollo Router)
+      "label": "Load Environment",
+      "command": "source",
+      "args": [".env"],
+      "type": "shell"
+    },
+  ]
+}

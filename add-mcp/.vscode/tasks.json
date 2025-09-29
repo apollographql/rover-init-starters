@@ -3,7 +3,7 @@
   "tasks": [
     {
       // Run: Cmd/Ctrl+Shift+P → "Tasks: Run Task" → "Start MCP Server"
-      // Starts GraphQL API (4000) + MCP Server (5001) together
+      // Starts GraphQL API (4000) + MCP Server (5050) together
       "label": "Start MCP Server",
       "command": "rover",
       "args": [
@@ -28,7 +28,7 @@
       // Opens MCP inspector UI in browser to test your AI tools
       "label": "Test MCP Tools",
       "command": "npx",
-      "args": ["@mcp/inspector", "--port", "5001"],
+      "args": ["@mcp/inspector", "--port", "5050"],
       "type": "shell"
     }
   ]
