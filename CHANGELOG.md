@@ -2,7 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v1] - 2025-05-12
+## [v2.0.0] - 2025-09-30
+
+### Added
+- **NEW**: MCP (Model Context Protocol) server template (`add-mcp/`)
+  - Enables AI assistants to access GraphQL APIs
+  - Includes Docker support and VSCode configuration
+  - Quick GraphQL-to-AI integration setup
+- Enhanced `.gitignore` files across templates
+- `.vscode/settings.json` and `.vscode/tasks.json` configuration files
+
+### Breaking Changes
+- **BREAKING**: Standardized template file naming:
+  - `products.graphql` → `schema.graphql`
+  - `getting-started.md` → `GETTING_STARTED.md`
+- Migration guide: Update your template references to use new file names
+
+## [v1.0.0] - 2025-05-12
 
 ### Added
 - start-with-typescript template
