@@ -41,7 +41,7 @@ const schema = {
 function getTemplateDirectories() {
   const entries = fs.readdirSync('.', { withFileTypes: true });
   return entries
-    .filter(entry => entry.isDirectory() && entry.name.startsWith('start-with-'))
+    .filter(entry => entry.isDirectory() && (entry.name.startsWith('start-with-') || entry.name === 'add-mcp'))
     .map(entry => entry.name);
 }
 
