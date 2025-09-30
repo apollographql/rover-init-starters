@@ -20,14 +20,19 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm i
 
     - name: Test TypeScript template
       run: |
         echo "Testing TypeScript template..."
-        npm run test:template start-with-typescript "npm ci" "npm test"
+        npm run test:template start-with-typescript "npm i" "npm test"
 
     - name: Test REST template
       run: |
         echo "Testing REST template..."
         npm run test:template start-with-rest "echo \"REST template test coming soon\""
+
+    - name: Test MCP template
+      run: |
+        echo "Testing MCP template..."
+        npm run test:template add-mcp "echo \"Testing MCP augmentation template\""

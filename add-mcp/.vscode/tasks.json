@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Run: Cmd/Ctrl+Shift+P → "Tasks: Run Task" → "Start MCP Server"
+      // Starts GraphQL API (4000) + MCP Server (5050) together
+      "label": "Start MCP Server",
+      "command": "rover",
+      "args": [
+        "dev",
+        "--supergraph-config",
+        "supergraph.yaml",
+        "--mcp",
+        ".apollo/mcp.local.yaml"
+      ],
+      "type": "shell",
+      "dependsOrder": "sequence",
+      "dependsOn": "Load Environment"
+    },
+    {
+      // Loads .env before starting rover dev (auto-runs with Start MCP Server)
+      "label": "Load Environment",
+      "command": "source",
+      "args": [".env"],
+      "type": "shell"
+    },
+    {
+      // Opens MCP inspector UI in browser to test your AI tools
+      "label": "Test MCP Tools",
+      "command": "npx",
+      "args": ["@mcp/inspector", "--port", "5050"],
+      "type": "shell"
+    }
+  ]
+}

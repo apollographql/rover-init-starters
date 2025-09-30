@@ -1,0 +1,47 @@
+# Apollo MCP Server Configuration - Local Development
+# This configuration connects your GraphQL API to AI assistants via MCP
+
+# Working local configuration:
+overrides:
+  mutation_mode: all
+operations:
+  source: collection
+  id: default                   # localhost:4000 in browser → Sandbox → Collections → Create operations for MCP tools
+                                # Docs: https://www.apollographql.com/docs/apollo-mcp-server/define-tools
+introspection:
+  introspect:
+    enabled: true               # Required for AI to understand your schema
+  search:
+    enabled: true
+  execute:
+    enabled: true
+  validate:
+    enabled: true
+transport:
+  type: streamable_http
+  port: 5050                    # MCP server port
+endpoint: http://localhost:4000 # Your GraphQL API endpoint
+
+# =============================================================================
+# Configuration Details
+# =============================================================================
+
+name: "${PROJECT_NAME} GraphQL API"
+description: "GraphQL API for ${PROJECT_NAME}"
+
+# Essential settings for local development:
+# - mutations enabled for full API access
+# - introspection enabled for schema discovery
+# - tools loaded from operation collections
+# - connects to GraphQL API on port 4000
+
+# To customize:
+# 1. Create operation collections in Apollo Studio Sandbox
+# 2. Update endpoint to match your GraphQL server URL
+# 3. Run: docker build -f mcp.Dockerfile -t my-mcp-server .
+# 4. Run: docker run -p 5050:5050 --env-file .env my-mcp-server
+
+# Environment variables (optional):
+# GRAPHQL_ENDPOINT - override endpoint URL
+# MCP_PORT - override MCP server port (default: 5050)
+# PROJECT_NAME - project identifier for AI assistant

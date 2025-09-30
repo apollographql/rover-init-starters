@@ -1,0 +1,31 @@
+# Gitleaks configuration for allowlisting detected secrets
+# These secrets were detected in files that no longer exist but the commits remain
+
+[[rules]]
+id = "curl-auth-header"
+[rules.allowlist]
+commits = [
+    "37bbb045e7c4cbda32ed9894e53475553da83a0b",
+    "dd01efc558aac6cb3724f46cc5b97a124dde78e3",
+    "0ddbd71c1d29609e9c9901fe9ca1d41ac92fdf9a",
+    "0d722f28d74020dd8a09f2f7b736fd39e745c4ab",
+    "5035981f16d73efc604e91694cd9f8daa904d19c",
+    "9e1c6ae02233a1f5d2578fed8cbca4788454e7ca",
+    "4cd4925cc010f68c913a72a3fa89fe08ac0b17d6",
+    "7c0de7af3c23f56d379c488c1ea1b056b158818d",
+    "61996d7dcbe79a6688eb51ced0db65161729eaf2"
+]
+
+[[rules]]
+id = "apollo-graphos-api-key"
+[rules.allowlist]
+commits = [
+    "37bbb045e7c4cbda32ed9894e53475553da83a0b",
+    "dd01efc558aac6cb3724f46cc5b97a124dde78e3",
+    "0ddbd71c1d29609e9c9901fe9ca1d41ac92fdf9a",
+    "0d722f28d74020dd8a09f2f7b736fd39e745c4ab",
+    "5035981f16d73efc604e91694cd9f8daa904d19c",
+    "9e1c6ae02233a1f5d2578fed8cbca4788454e7ca",
+    "4cd4925cc010f68c913a72a3fa89fe08ac0b17d6",
+    "61996d7dcbe79a6688eb51ced0db65161729eaf2"
+]

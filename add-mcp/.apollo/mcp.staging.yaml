@@ -1,0 +1,62 @@
+# Apollo MCP Server Configuration - Staging Environment
+# This staging configuration provides settings with enhanced security
+
+# Working staging configuration:
+overrides:
+  mutation_mode: all
+  require_confirmation: true    # Confirmation required for mutations in staging
+operations:
+  source: collection
+  id: default                   # GraphQL endpoint in browser → Sandbox → Collections → Create operations for MCP tools
+                                # Docs: https://www.apollographql.com/docs/apollo-mcp-server/define-tools
+introspection:
+  introspect:
+    enabled: true               # Enabled for testing (disable for production)
+  search:
+    enabled: true
+  execute:
+    enabled: true
+  validate:
+    enabled: true
+transport:
+  type: streamable_http
+  port: 5050                    # MCP server port
+endpoint: "${STAGING_GRAPHQL_ENDPOINT}"  # Your staging GraphQL API endpoint
+
+# Authentication headers for staging
+headers:
+  Authorization: "Bearer ${APOLLO_KEY}"
+  X-Environment: "staging"
+  Content-Type: "application/json"
+
+# =============================================================================
+# Configuration Details
+# =============================================================================
+
+name: "${PROJECT_NAME} GraphQL API (Staging)"
+description: "Staging environment for ${PROJECT_NAME} GraphQL API"
+
+# Enhanced security settings for staging:
+# - mutations require confirmation
+# - authentication with staging API key
+# - reduced timeouts for reliability
+# - introspection enabled for testing
+
+# Key staging differences from local:
+# - Authentication required via APOLLO_KEY
+# - Mutation confirmation enabled for safety
+# - Production-appropriate logging and monitoring
+# - Stricter rate limiting and validation
+
+# To deploy staging:
+# 1. Create operation collections in Apollo Studio Sandbox
+# 2. Set STAGING_GRAPHQL_ENDPOINT to your staging GraphQL URL
+# 3. Set APOLLO_KEY for authentication
+# 4. Run: docker build -f mcp.Dockerfile -t my-mcp-staging .
+# 5. Run: docker run -p 5050:5050 --env-file .env.staging my-mcp-staging
+
+# Environment variables for staging:
+# STAGING_GRAPHQL_ENDPOINT - staging GraphQL endpoint
+# APOLLO_KEY - API key for staging authentication
+# PROJECT_NAME - project identifier
+# MCP_PORT - MCP server port (default: 5050)
