@@ -14,8 +14,8 @@
 #
 # USAGE:
 # 1. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
-# 2. Run:   docker run -p 5000:5000 --env-file .env {{PROJECT_NAME}}
-# 3. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5000/mcp)
+# 2. Run:   docker run -p 5050:5050 --env-file .env {{PROJECT_NAME}}
+# 3. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5050/mcp)
 #
 # =============================================================================
 
@@ -51,7 +51,7 @@ COPY .apollo/mcp.local.yaml /mcp.yaml
 
 # Expose the MCP server port
 # The MCP server listens on this port for connections from AI assistants
-EXPOSE 5000
+EXPOSE 5050
 
 # =============================================================================
 # STARTUP COMMAND
@@ -62,7 +62,7 @@ EXPOSE 5000
 # 1. Auto-discover configuration files in current directory
 # 2. Load tools from MCP_TOOLS_DIR (/app/tools)
 # 3. Connect to GRAPHQL_ENDPOINT
-# 4. Start MCP server on MCP_PORT (5000)
+# 4. Start MCP server on MCP_PORT (5050)
 CMD ["mcp.yaml"]
 
 # =============================================================================

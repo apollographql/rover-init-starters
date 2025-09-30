@@ -214,10 +214,19 @@
       "path": "/bin/bash",
       "args": [
         "-c",
-        "echo 'MCP Development Environment'; echo 'Available commands:'; echo '  docker build -f mcp.Dockerfile -t mcp-server .'; echo '  docker run -p 5000:5000 --env-file .env mcp-server'; echo '  npx @mcp/inspector --port 5000'; echo ''; exec bash"
+        "echo 'MCP Development Environment'; echo 'Available commands:'; echo '  docker build -f mcp.Dockerfile -t mcp-server .'; echo '  docker run -p 5050:5050 --env-file .env mcp-server'; echo '  npx @mcp/inspector --port 5050'; echo ''; exec bash"
       ]
+    },
+    "graphos": {
+      "path": "zsh",
+      "args": ["-l"],
+      "env": {
+        "APOLLO_KEY": "{{APOLLO_KEY}}",
+        "APOLLO_GRAPH_REF": "{{APOLLO_GRAPH_REF}}",
+      }
     }
   },
+  "terminal.integrated.defaultProfile.osx": "graphos",
 
   // ==========================================================================
   // TASKS AND DEBUGGING CONFIGURATION
