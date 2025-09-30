@@ -151,7 +151,7 @@
   // ==========================================================================
   // YAML CONFIGURATION FOR APOLLO CONFIG FILES
   // ==========================================================================
-  
+
   // Configure YAML settings for Apollo configuration files
   "[yaml]": {
     "editor.tabSize": 2,
@@ -162,6 +162,29 @@
       "comments": false,
       "strings": true
     }
+  },
+
+  // ==========================================================================
+  // JSON SCHEMA CONFIGURATION FOR APOLLO ROUTER AND MCP SERVER
+  // ==========================================================================
+
+  // YAML Schema validation for Apollo configuration files
+  // This provides intellisense, validation, and auto-completion for Apollo config files
+  // For detailed instructions, see: .vscode/schemas/README.md
+  "yaml.schemas": {
+    // Apollo MCP Server configuration schema
+    ".vscode/schemas/mcp-server.schema.json": [
+      ".apollo/mcp.*.yaml",
+      "mcp.*.yaml"
+    ],
+
+    // Apollo Router configuration schema (basic version)
+    // For complete schema, run: ./router config schema > .vscode/schemas/router-config.schema.json
+    ".vscode/schemas/router-config.schema.json": [
+      "router.yaml",
+      "*/router.yaml",
+      ".apollo/router*.yaml"
+    ]
   },
 
 
