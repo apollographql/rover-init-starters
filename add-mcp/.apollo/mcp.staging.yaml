@@ -59,4 +59,4 @@ description: "Staging environment for ${PROJECT_NAME} GraphQL API"
 # STAGING_GRAPHQL_ENDPOINT - staging GraphQL endpoint
 # APOLLO_KEY - API key for staging authentication
 # PROJECT_NAME - project identifier
-# MCP_PORT - MCP server port (default: 5050)
+# MCP_PORT - MCP server port
