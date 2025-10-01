@@ -1,70 +1,103 @@
-# Apollo Configuration Schemas for VS Code
+# Apollo MCP Server & Router Schema Configuration
 
-This directory contains JSON schemas that provide IntelliSense, validation, and auto-completion for Apollo configuration files in VS Code.
+## Overview
+This directory contains JSON schemas for Apollo MCP Server and Router YAML configuration files, providing IntelliSense, validation, and documentation in VS Code.
 
-## MCP Server Schema
+## Features
+**Schema Validation** - Red squiggly lines for invalid properties/values
+**Hover Documentation** - Descriptions when hovering over properties
+**Property Autocomplete** - Suggestions for valid property names
+**Error Messages** - Clear messages showing valid values
+**Enum Autocomplete** - See known issues below
 
-**File:** `mcp-server.schema.json`
+## Files
+- `mcp-server.schema.json` - Apollo MCP Server configuration schema
+- `router-config.schema.json` - Apollo Router configuration schema (basic)
 
-Provides validation and IntelliSense for Apollo MCP Server configuration files:
-- `.apollo/mcp.*.yaml`
-- `mcp.*.yaml`
+## Setup
+The schemas are automatically configured in `.vscode/settings.json`.
 
-This schema covers all known MCP server configuration options including:
-- Transport configuration (stdio, streamable_http, websocket)
-- GraphQL introspection settings
-- Operation sources (collection, manifest, introspection)
-- Authentication and CORS settings
-- Logging configuration
+### Environment Variables
+Apollo MCP Server expects these environment variables:
+- `APOLLO_KEY` - Your Apollo GraphOS API key
+- `APOLLO_GRAPH_REF` - Your graph reference (e.g., `my-graph@current`)
+- `GRAPHQL_TOKEN` - Bearer token for GraphQL API authentication (if needed)
 
-## Router Configuration Schema
+No additional setup needed for the schemas themselves.
 
-**File:** `router-config.schema.json`
+## Known Issues & Workarounds
 
-Provides basic validation for Apollo Router configuration files:
-- `router.yaml`
-- `.apollo/router*.yaml`
+### Enum Autocomplete Limitation
+The Red Hat YAML extension has a known issue where enum values don't autocomplete in nested properties. For example:
 
-### Generating Complete Router Schema
-
-For the most complete and up-to-date Apollo Router configuration schema, generate it locally:
-
-```bash
-# Make sure you have Apollo Router installed
-# Download from: https://github.com/apollographql/router/releases
-
-# Generate the complete schema
-./router config schema > .vscode/schemas/router-config.schema.json
+```yaml
+transport:
+  type: # <-- No autocomplete dropdown here
 ```
 
-This will replace the basic schema with the complete, official schema that includes all router configuration options.
+**You'll still see:**
+- Validation (red squiggly for invalid values)
+- Error tooltip showing valid options: "stdio", "streamable_http", "sse"
 
-## VS Code Configuration
+**Recommended Workarounds:**
 
-The schemas are automatically configured in `.vscode/settings.json`:
+#### Option 1: Use Configuration Snippets
+Type these prefixes to insert full configuration blocks:
+- `mcpbasic` - Basic MCP config
+- `mcphttp` - HTTP transport with auth
+- `mcpfull` - Complete configuration
+
+#### Option 2: Reference Valid Values
+Valid transport types (copy from here):
+- `stdio` - Standard I/O for process communication
+- `streamable_http` - HTTP streaming for web clients
+- `sse` - Server-Sent Events for real-time updates
+
+#### Option 3: Use Error Messages
+Type an invalid value, see the error tooltip, then copy the correct value from the error message.
+
+## Customization
+
+### Adding Your Own Patterns
+To apply schemas to your own file patterns, edit `.vscode/settings.json`:
 
 ```json
-{
-  "yaml.schemas": {
-    ".vscode/schemas/mcp-server.schema.json": [
-      ".apollo/mcp.*.yaml",
-      "mcp.*.yaml"
-    ],
-    ".vscode/schemas/router-config.schema.json": [
-      "router.yaml",
-      "*/router.yaml",
-      ".apollo/router*.yaml"
-    ]
-  }
+"yaml.schemas": {
+  ".vscode/schemas/mcp-server.schema.json": [
+    "your-pattern-here.yaml"
+  ]
 }
 ```
 
-## Usage
+### Updating Schemas
+Schemas are based on Apollo MCP Server documentation. To update:
 
-Once configured, VS Code will automatically provide:
-- ✅ Auto-completion for configuration properties
-- ✅ Validation errors for invalid configurations
-- ✅ Documentation on hover for configuration options
-- ✅ Schema-aware formatting and linting
+1. Check [Apollo MCP Server docs](https://www.apollographql.com/docs/apollo-mcp-server/)
+2. Update the schema JSON files
+3. Test validation with a sample YAML file
 
-Perfect for live demos and development! 🎬
+### Disabling Schemas
+To temporarily disable schema validation, comment out in `.vscode/settings.json`:
+
+```json
+"yaml.schemas": {
+  // ".vscode/schemas/mcp-server.schema.json": [...]
+}
+```
+
+## Why Enum Autocomplete Doesn't Work
+
+This is a long-standing limitation of the Red Hat YAML Language Support extension. The extension can validate enum values but doesn't provide IntelliSense for them in nested object properties.
+
+**Related Issues:**
+- [redhat-developer/yaml-language-server#108](https://github.com/redhat-developer/yaml-language-server/issues/108)
+- [redhat-developer/vscode-yaml#174](https://github.com/redhat-developer/vscode-yaml/issues/174)
+
+## Contributing
+If you find inaccuracies in the schemas or have improvements:
+1. Verify against [official Apollo documentation](https://www.apollographql.com/docs/)
+2. Test your changes with sample YAML files
+3. Update this README if adding new features/workarounds
+
+## License
+These schemas are provided as development aids based on Apollo's public documentation.

@@ -161,8 +161,16 @@
       "other": true,
       "comments": false,
       "strings": true
-    }
+    },
+    "editor.suggest.showWords": false
   },
+
+  // YAML extension specific settings
+  "yaml.completion": true,
+  "yaml.hover": true,
+  "yaml.validate": true,
+  "yaml.suggest.parentSkeletonSelectedFirst": true,
+  "yaml.schemaStore.enable": true,
 
   // ==========================================================================
   // JSON SCHEMA CONFIGURATION FOR APOLLO ROUTER AND MCP SERVER
@@ -245,7 +253,7 @@
       "args": ["-l"],
       "env": {
         "APOLLO_KEY": "{{APOLLO_KEY}}",
-        "APOLLO_GRAPH_REF": "{{APOLLO_GRAPH_REF}}",
+        "APOLLO_GRAPH_REF": "{{APOLLO_GRAPH_REF}}"
       }
     }
   },

@@ -4,104 +4,108 @@
   "description": "JSON schema for Apollo MCP Server YAML configuration files",
   "type": "object",
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "Human-readable name for this MCP server instance"
-    },
-    "description": {
-      "type": "string",
-      "description": "Description of what this MCP server provides"
-    },
     "endpoint": {
       "type": "string",
       "format": "uri",
-      "description": "GraphQL API endpoint URL (e.g., http://localhost:4000)"
+      "default": "http://localhost:4000/",
+      "description": "Target GraphQL endpoint URL",
+      "examples": [
+        "http://localhost:4000/",
+        "https://api.example.com/graphql",
+        "https://studio.apollographql.com/sandbox/explorer"
+      ],
+      "pattern": "^https?://"
     },
-    "overrides": {
+    "graphos": {
       "type": "object",
-      "description": "Configuration overrides for MCP server behavior",
+      "description": "Apollo GraphOS credential overrides",
       "properties": {
-        "mutation_mode": {
+        "apollo_key": {
           "type": "string",
-          "enum": ["all", "none", "safe"],
-          "description": "Controls which GraphQL mutations are exposed as MCP tools. 'all' exposes all mutations, 'none' disables mutations, 'safe' only exposes approved mutations"
-        }
-      },
-      "additionalProperties": false
-    },
-    "operations": {
-      "type": "object",
-      "description": "Configuration for GraphQL operations source",
-      "properties": {
-        "source": {
+          "description": "Apollo GraphOS API key (can use ${APOLLO_KEY} env var)"
+        },
+        "apollo_graph_ref": {
           "type": "string",
-          "enum": ["collection", "manifest", "introspection"],
-          "description": "Source of GraphQL operations: 'collection' uses Apollo Studio collections, 'manifest' uses a manifest file, 'introspection' discovers operations via schema introspection"
+          "description": "GraphOS graph reference (can use ${APOLLO_GRAPH_REF} env var, e.g., my-graph@current)"
         },
-        "id": {
+        "apollo_registry_url": {
           "type": "string",
-          "description": "Identifier for the operation collection (when source is 'collection')"
-        }
-      },
-      "additionalProperties": false
-    },
-    "introspection": {
-      "type": "object",
-      "description": "GraphQL introspection capabilities configuration",
-      "properties": {
-        "introspect": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "description": "Enable schema introspection for AI to understand your GraphQL schema"
-            }
-          }
+          "format": "uri",
+          "description": "Apollo registry URL override"
         },
-        "search": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "description": "Enable search capabilities across the GraphQL schema"
-            }
-          }
-        },
-        "execute": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "description": "Enable query/mutation execution capabilities"
-            }
-          }
-        },
-        "validate": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "description": "Enable GraphQL query validation"
-            }
-          }
+        "apollo_uplink_endpoints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "description": "Uplink URL overrides"
         }
       },
       "additionalProperties": false
     },
     "transport": {
       "type": "object",
-      "description": "MCP transport configuration",
+      "description": "Server transport configuration",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["stdio", "streamable_http", "websocket"],
-          "description": "Transport protocol for MCP communication. 'stdio' for process communication, 'streamable_http' for HTTP streaming, 'websocket' for WebSocket connections"
+          "enum": ["stdio", "streamable_http", "sse"],
+          "default": "stdio",
+          "description": "Transport method - stdio for process communication, streamable_http for HTTP streaming, sse for Server-Sent Events",
+          "x-intellisense": {
+            "enumDescriptions": [
+              "Standard I/O - for process communication",
+              "HTTP streaming - for web-based clients",
+              "Server-Sent Events - for real-time updates"
+            ]
+          }
+        },
+        "address": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "IP address to bind (for HTTP/SSE transports)"
         },
         "port": {
           "type": "integer",
           "minimum": 1,
           "maximum": 65535,
-          "description": "Port number for HTTP/WebSocket transport (not used for stdio)"
+          "default": 5000,
+          "description": "Port to bind (for HTTP/SSE transports)"
+        },
+        "auth": {
+          "type": "object",
+          "description": "Authentication settings for HTTP transport",
+          "properties": {
+            "servers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              },
+              "description": "Upstream OAuth server URLs"
+            },
+            "audiences": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Accepted JWT audiences (aud claims)"
+            },
+            "resource": {
+              "type": "string",
+              "format": "uri",
+              "description": "Externally available server URL"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Queryable OAuth scopes"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -131,17 +135,80 @@
       },
       "additionalProperties": false
     },
-    "authentication": {
+    "headers": {
       "type": "object",
-      "description": "Authentication configuration",
+      "description": "Hard-coded headers sent with GraphQL requests",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "examples": [
+        {
+          "Authorization": "Bearer ${AUTH_TOKEN}",
+          "X-API-Key": "${API_KEY}"
+        }
+      ]
+    },
+    "operations": {
+      "type": "object",
+      "description": "Operations configuration",
       "properties": {
-        "bearer_token": {
+        "source": {
           "type": "string",
-          "description": "Bearer token for GraphQL API authentication"
+          "enum": ["introspection", "manifest", "studio"],
+          "description": "Source for GraphQL operations"
         },
-        "api_key": {
+        "manifest": {
           "type": "string",
-          "description": "API key for GraphQL API authentication"
+          "description": "Path to manifest file when source is 'manifest'"
+        }
+      },
+      "additionalProperties": false
+    },
+    "schema": {
+      "type": "object",
+      "description": "Schema configuration",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["introspection", "file", "studio"],
+          "description": "Source for GraphQL schema"
+        },
+        "file": {
+          "type": "string",
+          "description": "Path to schema file when source is 'file'"
+        }
+      },
+      "additionalProperties": false
+    },
+    "introspection": {
+      "type": "object",
+      "description": "Introspection configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable schema introspection"
+        },
+        "cache_ttl": {
+          "type": "integer",
+          "description": "Cache TTL in seconds"
+        }
+      },
+      "additionalProperties": false
+    },
+    "overrides": {
+      "type": "object",
+      "description": "Server behavior overrides",
+      "properties": {
+        "mutation_mode": {
+          "type": "string",
+          "enum": ["all", "none", "safe"],
+          "default": "safe",
+          "description": "Controls which GraphQL mutations are exposed as MCP tools"
+        },
+        "max_query_depth": {
+          "type": "integer",
+          "description": "Maximum query depth allowed"
         }
       },
       "additionalProperties": false
@@ -153,16 +220,103 @@
         "level": {
           "type": "string",
           "enum": ["error", "warn", "info", "debug", "trace"],
-          "description": "Log level for the MCP server"
+          "default": "info",
+          "description": "Log level"
         },
         "format": {
           "type": "string",
           "enum": ["json", "text"],
+          "default": "text",
           "description": "Log output format"
+        }
+      },
+      "additionalProperties": false
+    },
+    "health_check": {
+      "type": "object",
+      "description": "Health check endpoint configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable health check endpoint"
+        },
+        "path": {
+          "type": "string",
+          "default": "/health",
+          "description": "Health check endpoint path"
+        }
+      },
+      "additionalProperties": false
+    },
+    "custom_scalars": {
+      "type": "string",
+      "description": "Path to custom scalar map file"
+    },
+    "telemetry": {
+      "type": "object",
+      "description": "Metrics and trace export configuration",
+      "properties": {
+        "service_name": {
+          "type": "string",
+          "description": "Service name in telemetry data"
+        },
+        "version": {
+          "type": "string",
+          "description": "Service version in telemetry data"
+        },
+        "exporters": {
+          "type": "object",
+          "properties": {
+            "metrics": {
+              "type": "object",
+              "description": "Metrics export configuration"
+            },
+            "tracing": {
+              "type": "object",
+              "description": "Trace export configuration"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "examples": [
+    {
+      "endpoint": "http://localhost:4000/",
+      "transport": {
+        "type": "stdio"
+      }
+    },
+    {
+      "endpoint": "https://api.example.com/graphql",
+      "graphos": {
+        "apollo_key": "${APOLLO_KEY}",
+        "apollo_graph_ref": "${APOLLO_GRAPH_REF}"
+      },
+      "transport": {
+        "type": "streamable_http",
+        "port": 5000,
+        "auth": {
+          "servers": ["https://auth.example.com"],
+          "audiences": ["api.example.com"],
+          "scopes": ["read:data", "write:data"]
+        }
+      },
+      "headers": {
+        "Authorization": "Bearer ${GRAPHQL_TOKEN}"
+      },
+      "cors": {
+        "origin": ["http://localhost:3000", "https://app.example.com"],
+        "credentials": true
+      },
+      "logging": {
+        "level": "debug",
+        "format": "json"
+      }
+    }
+  ]
 }
