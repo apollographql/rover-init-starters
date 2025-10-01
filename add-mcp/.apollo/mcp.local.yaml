@@ -39,9 +39,9 @@ description: "GraphQL API for ${PROJECT_NAME}"
 # 1. Create operation collections in Apollo Studio Sandbox
 # 2. Update endpoint to match your GraphQL server URL
 # 3. Run: docker build -f mcp.Dockerfile -t my-mcp-server .
-# 4. Run: docker run -p 5050:5050 --env-file .env my-mcp-server
+# 4. Run: docker run -p 5050:5000 --env-file .env my-mcp-server
 
 # Environment variables (optional):
 # GRAPHQL_ENDPOINT - override endpoint URL
-# MCP_PORT - override MCP server port (default: 5050)
+# MCP_PORT - override MCP server port
 # PROJECT_NAME - project identifier for AI assistant
