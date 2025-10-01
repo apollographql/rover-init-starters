@@ -43,5 +43,5 @@ description: "GraphQL API for ${PROJECT_NAME}"
 
 # Environment variables (optional):
 # GRAPHQL_ENDPOINT - override endpoint URL
-# MCP_PORT - override MCP server port (default: 5050)
+# MCP_PORT - override MCP server port
 # PROJECT_NAME - project identifier for AI assistant
