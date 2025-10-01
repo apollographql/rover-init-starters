@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Apollo Router Configuration",
+  "description": "JSON schema for Apollo Router YAML configuration files. For the complete, up-to-date schema, generate it locally with: ./router config schema > router-config.schema.json",
+  "type": "object",
+  "properties": {
+    "supergraph": {
+      "type": "object",
+      "description": "Supergraph configuration",
+      "properties": {
+        "introspection": {
+          "type": "boolean",
+          "description": "Enable GraphQL introspection on the supergraph"
+        },
+        "defer_support": {
+          "type": "boolean",
+          "description": "Enable @defer directive support"
+        }
+      }
+    },
+    "federation_version": {
+      "type": "string",
+      "description": "Apollo Federation version to use"
+    },
+    "cors": {
+      "type": "object",
+      "description": "CORS configuration",
+      "properties": {
+        "origins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Allowed origins for CORS requests"
+        },
+        "allow_credentials": {
+          "type": "boolean",
+          "description": "Allow credentials in CORS requests"
+        }
+      }
+    },
+    "headers": {
+      "type": "object",
+      "description": "Header forwarding and manipulation configuration",
+      "properties": {
+        "all": {
+          "type": "object",
+          "description": "Configuration applied to all requests"
+        },
+        "subgraphs": {
+          "type": "object",
+          "description": "Per-subgraph header configuration"
+        }
+      }
+    },
+    "plugins": {
+      "type": "object",
+      "description": "Router plugin configuration"
+    },
+    "rhai": {
+      "type": "object",
+      "description": "Rhai scripting configuration",
+      "properties": {
+        "scripts": {
+          "type": "string",
+          "description": "Path to Rhai scripts directory"
+        }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "description": "Authentication and authorization configuration"
+    },
+    "authorization": {
+      "type": "object",
+      "description": "Authorization directives configuration"
+    },
+    "limits": {
+      "type": "object",
+      "description": "Query complexity and rate limiting configuration",
+      "properties": {
+        "max_depth": {
+          "type": "integer",
+          "description": "Maximum query depth allowed"
+        },
+        "max_height": {
+          "type": "integer",
+          "description": "Maximum query height allowed"
+        },
+        "max_aliases": {
+          "type": "integer",
+          "description": "Maximum number of aliases allowed in a query"
+        }
+      }
+    },
+    "include_subgraph_errors": {
+      "type": "object",
+      "description": "Configuration for including subgraph errors in responses",
+      "properties": {
+        "all": {
+          "type": "boolean",
+          "description": "Include all subgraph errors"
+        },
+        "subgraphs": {
+          "type": "object",
+          "description": "Per-subgraph error inclusion settings"
+        }
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-generated-note": "This is a basic schema. For the complete Apollo Router configuration schema, run: ./router config schema > router-config.schema.json"
+}

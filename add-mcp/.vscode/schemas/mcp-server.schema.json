@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Apollo MCP Server Configuration",
+  "description": "JSON schema for Apollo MCP Server YAML configuration files",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for this MCP server instance"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what this MCP server provides"
+    },
+    "endpoint": {
+      "type": "string",
+      "format": "uri",
+      "description": "GraphQL API endpoint URL (e.g., http://localhost:4000)"
+    },
+    "overrides": {
+      "type": "object",
+      "description": "Configuration overrides for MCP server behavior",
+      "properties": {
+        "mutation_mode": {
+          "type": "string",
+          "enum": ["all", "none", "safe"],
+          "description": "Controls which GraphQL mutations are exposed as MCP tools. 'all' exposes all mutations, 'none' disables mutations, 'safe' only exposes approved mutations"
+        }
+      },
+      "additionalProperties": false
+    },
+    "operations": {
+      "type": "object",
+      "description": "Configuration for GraphQL operations source",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["collection", "manifest", "introspection"],
+          "description": "Source of GraphQL operations: 'collection' uses Apollo Studio collections, 'manifest' uses a manifest file, 'introspection' discovers operations via schema introspection"
+        },
+        "id": {
+          "type": "string",
+          "description": "Identifier for the operation collection (when source is 'collection')"
+        }
+      },
+      "additionalProperties": false
+    },
+    "introspection": {
+      "type": "object",
+      "description": "GraphQL introspection capabilities configuration",
+      "properties": {
+        "introspect": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable schema introspection for AI to understand your GraphQL schema"
+            }
+          }
+        },
+        "search": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable search capabilities across the GraphQL schema"
+            }
+          }
+        },
+        "execute": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable query/mutation execution capabilities"
+            }
+          }
+        },
+        "validate": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable GraphQL query validation"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "transport": {
+      "type": "object",
+      "description": "MCP transport configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["stdio", "streamable_http", "websocket"],
+          "description": "Transport protocol for MCP communication. 'stdio' for process communication, 'streamable_http' for HTTP streaming, 'websocket' for WebSocket connections"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Port number for HTTP/WebSocket transport (not used for stdio)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "cors": {
+      "type": "object",
+      "description": "CORS configuration for HTTP transport",
+      "properties": {
+        "origin": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Allowed origins for CORS requests"
+        },
+        "credentials": {
+          "type": "boolean",
+          "description": "Allow credentials in CORS requests"
+        }
+      },
+      "additionalProperties": false
+    },
+    "authentication": {
+      "type": "object",
+      "description": "Authentication configuration",
+      "properties": {
+        "bearer_token": {
+          "type": "string",
+          "description": "Bearer token for GraphQL API authentication"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "API key for GraphQL API authentication"
+        }
+      },
+      "additionalProperties": false
+    },
+    "logging": {
+      "type": "object",
+      "description": "Logging configuration",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["error", "warn", "info", "debug", "trace"],
+          "description": "Log level for the MCP server"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["json", "text"],
+          "description": "Log output format"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
