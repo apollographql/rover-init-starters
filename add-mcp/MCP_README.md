@@ -75,7 +75,7 @@ If you prefer to run just the MCP server separately (without rover dev):
 ```bash
 # Build and run with Docker
 docker build -f mcp.Dockerfile -t your-project-mcp .
-docker run -d --name your-project-mcp -p 5050:5000 --env-file .env your-project-mcp
+docker run -d --name your-project-mcp -p 5050:5050 --env-file .env your-project-mcp
 
 # Verify it's running
 curl http://localhost:5050/health
