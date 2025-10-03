@@ -10,6 +10,8 @@
         "dev",
         "--supergraph-config",
         "supergraph.yaml",
+        "--router-config",
+        "router.yaml",
       ],
       "type": "shell",
       "dependsOrder": "sequence",

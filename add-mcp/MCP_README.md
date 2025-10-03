@@ -16,7 +16,22 @@ All through natural conversation, using your existing GraphQL API.
 
 ## Quick Start
 
-**Step 1: Configure your environment**
+**Step 1: Connect an AI client to your MCP server**
+
+Your MCP server details:
+```
+Server name: {{PROJECT_NAME}}
+MCP endpoint: http://127.0.0.1:5050/mcp
+```
+
+For Claude Desktop setup instructions:
+```bash
+rover docs open mcp-qs
+```
+
+This will open the complete guide for configuring Claude Desktop to connect to your MCP server.
+
+**Step 2: Configure your environment**
 ```bash
 # Create environment file
 cp .env.template .env
@@ -26,34 +41,28 @@ PROJECT_NAME="your-project-name"
 GRAPHQL_ENDPOINT="http://localhost:4000/graphql"
 ```
 
-**Step 2: Connect your AI assistant**
-```bash
-# Copy the configuration for Claude Desktop
-# macOS:
-cp claude_desktop_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
-
-# Windows:
-copy claude_desktop_config.json "%APPDATA%\Claude\claude_desktop_config.json"
-
-# Linux:
-cp claude_desktop_config.json ~/.config/Claude/claude_desktop_config.json
-
-# Restart Claude Desktop
-```
-
-**Step 3: Start everything together**
+**Step 3: Start your MCP server**
 ```bash
 # Load environment and start GraphQL API + MCP server
-source .env && rover dev --supergraph-config supergraph.yaml --mcp .apollo/mcp.local.yaml
+set -a && source .env && set +a && rover dev --supergraph-config supergraph.yaml --mcp .apollo/mcp.local.yaml
 
 # This starts:
 # → GraphQL API: http://localhost:4000
 # → MCP Server: http://localhost:5050
 ```
 
-**Done!** In Claude Desktop, look for your MCP server named `mcp-{{PROJECT_NAME}}` in the available tools. Your GraphQL API is now accessible to your AI assistant!
+**Done!** In Claude Desktop, look for your MCP server named `{{PROJECT_NAME}}` in the available tools. Your GraphQL API is now accessible to your AI assistant!
 
-**Try it:** Ask Claude "What tools do I have available?" or "Can you get me some information about `mcp-{{PROJECT_NAME}}`?"
+**Try it:** Ask Claude "What tools do I have available?" or "Can you get me some information about `{{PROJECT_NAME}}`?"
+
+## VS Code Quick Start (Alternative)
+
+If you're using VS Code, we've configured tasks to make this even easier:
+
+1. **Start MCP Server**: `Cmd/Ctrl+Shift+P` → "Tasks: Run Task" → "Start MCP Server"
+2. **Test MCP Tools**: `Cmd/Ctrl+Shift+P` → "Tasks: Run Task" → "Test MCP Tools"
+
+The VS Code task will automatically load your `.env` file and start both the GraphQL API and MCP server.
 
 ## Add Custom Tools
 
@@ -81,7 +90,7 @@ docker run -d --name your-project-mcp -p 5050:5050 --env-file .env your-project-
 curl http://localhost:5050/health
 
 # Test with MCP inspector
-npx @mcp/inspector --port 5050
+npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:5050/mcp
 ```
 
 ## Prerequisites
@@ -109,8 +118,11 @@ npx @mcp/inspector --port 5050
 
 **"What's the difference between rover dev and Docker?"** → `rover dev` runs your GraphQL API and MCP server together in one command. Docker runs only the MCP server separately.
 
+**"How do I configure Claude Desktop?"** → Run `rover docs open mcp-qs` for the complete setup guide, or visit the [Apollo MCP Server docs](https://www.apollographql.com/docs/apollo-mcp-server/quickstart).
+
 ## Need Help?
 
-- **Claude Desktop not connecting?** Ensure the config file is in the correct location and restart Claude Desktop completely.
+- **AI client not connecting?** Ensure you've followed the setup instructions from `rover docs open mcp-qs` and restarted your AI client completely.
 - **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 5050 (MCP). Check nothing else is using these ports.
+- **Environment variables not loading?** Make sure you're using `set -a && source .env && set +a` to properly export variables before running `rover dev`.
 - **Need more help with MCP server and tools?** Visit our [Apollo MCP server troubleshooting guide](https://www.apollographql.com/docs/apollo-mcp-server/quickstart#troubleshooting).

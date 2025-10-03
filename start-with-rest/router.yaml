@@ -1,0 +1,6 @@
+connectors:
+  preview_connect_v0_3: true
+  # sources:
+  #   subgraph.source_name:
+  #     $config:
+  #       apiKey: ${env.API_KEY}
