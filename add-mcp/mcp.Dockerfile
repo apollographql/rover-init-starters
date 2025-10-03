@@ -14,8 +14,8 @@
 #
 # USAGE:
 # 1. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
-# 2. Run:   docker run -p 5050:5050 --env-file .env {{PROJECT_NAME}}
-# 3. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5050/mcp)
+# 2. Run:   docker run -p 5000:5000 --env-file .env {{PROJECT_NAME}}
+# 3. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:5000/mcp)
 #
 # =============================================================================
 

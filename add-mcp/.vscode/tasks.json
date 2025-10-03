@@ -3,7 +3,7 @@
   "tasks": [
     {
       // Run: Cmd/Ctrl+Shift+P → "Tasks: Run Task" → "Start MCP Server"
-      // Starts GraphQL API (4000) + MCP Server (5050) together
+      // Starts GraphQL API (4000) + MCP Server (500) together
       "label": "Start MCP Server",
       "command": "rover",
       "args": [
