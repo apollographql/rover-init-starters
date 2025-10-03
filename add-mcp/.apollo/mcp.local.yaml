@@ -20,7 +20,7 @@ introspection:
     enabled: true
 transport:
   type: streamable_http
-  port: 5000                    # MCP server port
+  port: 5050                    # MCP server port
 endpoint: http://localhost:4000 # Your GraphQL API endpoint
 
 # =============================================================================
@@ -40,7 +40,7 @@ description: "GraphQL API for ${PROJECT_NAME}"
 # 1. Create operation collections in Apollo Studio Sandbox
 # 2. Update endpoint to match your GraphQL server URL
 # 3. Run: docker build -f mcp.Dockerfile -t my-mcp-server .
-# 4. Run: docker run -p 5000:5000 --env-file .env my-mcp-server
+# 4. Run: docker run -p 5050:5050 --env-file .env my-mcp-server
 
 # Environment variables (optional):
 # GRAPHQL_ENDPOINT - override endpoint URL
