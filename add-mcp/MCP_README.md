@@ -26,7 +26,7 @@ MCP endpoint: http://127.0.0.1:5050/mcp
 
 For Claude Desktop setup instructions:
 ```bash
-rover docs open mcp-claude
+rover docs open mcp-qs
 ```
 
 This will open the complete guide for configuring Claude Desktop to connect to your MCP server.
@@ -118,11 +118,11 @@ npx @modelcontextprotocol/inspector --transport http --server-url http://localho
 
 **"What's the difference between rover dev and Docker?"** → `rover dev` runs your GraphQL API and MCP server together in one command. Docker runs only the MCP server separately.
 
-**"How do I configure Claude Desktop?"** → Run `rover docs open mcp-claude` for the complete setup guide, or visit the [Apollo MCP Server docs](https://www.apollographql.com/docs/apollo-mcp-server/quickstart).
+**"How do I configure Claude Desktop?"** → Run `rover docs open mcp-qs` for the complete setup guide, or visit the [Apollo MCP Server docs](https://www.apollographql.com/docs/apollo-mcp-server/quickstart).
 
 ## Need Help?
 
-- **AI client not connecting?** Ensure you've followed the setup instructions from `rover docs open mcp-claude` and restarted your AI client completely.
+- **AI client not connecting?** Ensure you've followed the setup instructions from `rover docs open mcp-qs` and restarted your AI client completely.
 - **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 5050 (MCP). Check nothing else is using these ports.
 - **Environment variables not loading?** Make sure you're using `set -a && source .env && set +a` to properly export variables before running `rover dev`.
 - **Need more help with MCP server and tools?** Visit our [Apollo MCP server troubleshooting guide](https://www.apollographql.com/docs/apollo-mcp-server/quickstart#troubleshooting).
