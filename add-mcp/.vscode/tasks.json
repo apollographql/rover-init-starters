@@ -28,7 +28,7 @@
       // Opens MCP inspector UI in browser to test your AI tools
       "label": "Test MCP Tools",
       "command": "npx",
-      "args": ["@mcp/inspector", "--port", "5050"],
+      "args": ["@modelcontextprotocol/inspector", "--transport", "http", "--server-url", "http://localhost:5000/mcp"],
       "type": "shell"
     }
   ]
