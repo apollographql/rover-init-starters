@@ -51,7 +51,7 @@ COPY .apollo/mcp.local.yaml /mcp.yaml
 
 # Expose the MCP server port
 # The MCP server listens on this port for connections from AI assistants
-EXPOSE 5050
+EXPOSE 5000
 
 # =============================================================================
 # STARTUP COMMAND
@@ -62,7 +62,7 @@ EXPOSE 5050
 # 1. Auto-discover configuration files in current directory
 # 2. Load tools from MCP_TOOLS_DIR (/app/tools)
 # 3. Connect to GRAPHQL_ENDPOINT
-# 4. Start MCP server on MCP_PORT (5050)
+# 4. Start MCP server on MCP_PORT (5000)
 CMD ["mcp.yaml"]
 
 # =============================================================================
