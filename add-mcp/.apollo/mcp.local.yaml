@@ -4,6 +4,7 @@
 # Working local configuration:
 overrides:
   mutation_mode: all
+  require_confirmation: true    # Confirmation required for mutations
 operations:
   source: collection
   id: default                   # localhost:4000 in browser → Sandbox → Collections → Create operations for MCP tools
