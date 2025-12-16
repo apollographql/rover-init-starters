@@ -10,12 +10,23 @@ Provides validation and IntelliSense for Apollo MCP Server configuration files:
 - `.apollo/mcp.*.yaml`
 - `mcp.*.yaml`
 
-This schema covers all known MCP server configuration options including:
-- Transport configuration (stdio, streamable_http, websocket)
-- GraphQL introspection settings
-- Operation sources (collection, manifest, introspection)
-- Authentication and CORS settings
-- Logging configuration
+### Automatic Sync
+
+The `mcp-server.schema.json` file is **automatically synced** from the [Apollo MCP Server releases](https://github.com/apollographql/apollo-mcp-server/releases).
+
+**Current version:** See `VERSION` file
+
+**Sync process:** A GitHub Actions workflow ([sync-mcp-schema.yml](/.github/workflows/sync-mcp-schema.yml)) runs daily to check for new releases and creates a PR when updates are available.
+
+### Manual Update
+
+You can also manually download the latest schema:
+
+```bash
+# Download latest schema
+curl -L -o .vscode/schemas/mcp-server.schema.json \
+  "https://github.com/apollographql/apollo-mcp-server/releases/download/$(curl -s https://api.github.com/repos/apollographql/apollo-mcp-server/releases/latest | jq -r '.tag_name')/config.schema.json"
+```
 
 ## Router Configuration Schema
 
