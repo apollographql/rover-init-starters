@@ -34,7 +34,8 @@ jobs:
           for file in add-mcp/.apollo/mcp.*.yaml; do
             if [ -f "$file" ]; then
               echo "Validating $file..."
-              js-yaml "$file" | ajv validate -s /tmp/mcp-schema.json --spec=draft2020 -d - || exit 1
+              js-yaml "$file" > /tmp/config.json
+              ajv validate -s /tmp/mcp-schema.json --spec=draft2020 --strict=false -d /tmp/config.json || exit 1
               echo "✓ $file is valid"
             fi
           done
