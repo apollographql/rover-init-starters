@@ -1,0 +1,116 @@
+{
+  // Apollo Router Configuration Snippets
+
+  "Router Basic": {
+    "scope": "yaml",
+    "prefix": ["router", "routerbasic"],
+    "body": [
+      "supergraph:",
+      "  introspection: ${1:false}",
+      "  defer_support: ${2:true}",
+      "",
+      "cors:",
+      "  origins:",
+      "    - ${3:http://localhost:3000}",
+      "  allow_credentials: ${4:true}",
+      "$0"
+    ],
+    "description": "Basic Apollo Router configuration"
+  },
+
+  "Router with Limits": {
+    "scope": "yaml",
+    "prefix": ["routerlimits", "limits"],
+    "body": [
+      "limits:",
+      "  max_depth: ${1:10}",
+      "  max_height: ${2:100}",
+      "  max_aliases: ${3:30}",
+      "$0"
+    ],
+    "description": "Add query complexity limits"
+  },
+
+  "Router Headers": {
+    "scope": "yaml",
+    "prefix": ["routerheaders", "headers"],
+    "body": [
+      "headers:",
+      "  all:",
+      "    request:",
+      "      - propagate:",
+      "          matching: ${1:^x-.*}",
+      "      - insert:",
+      "          name: ${2:x-custom-header}",
+      "          value: ${3:custom-value}",
+      "  subgraphs:",
+      "    ${4:subgraph-name}:",
+      "      request:",
+      "        - remove:",
+      "            named: ${5:x-internal-header}",
+      "$0"
+    ],
+    "description": "Configure header forwarding and manipulation"
+  },
+
+  "Router Subgraph Errors": {
+    "scope": "yaml",
+    "prefix": ["routererrors", "subgrapherrors"],
+    "body": [
+      "include_subgraph_errors:",
+      "  all: ${1:true}",
+      "  subgraphs:",
+      "    ${2:accounts}: ${3:true}",
+      "    ${4:products}: ${5:false}",
+      "$0"
+    ],
+    "description": "Configure subgraph error inclusion"
+  },
+
+  "Router Full Config": {
+    "scope": "yaml",
+    "prefix": ["routerfull"],
+    "body": [
+      "# Apollo Router Configuration",
+      "supergraph:",
+      "  introspection: ${1:false}",
+      "  defer_support: ${2:true}",
+      "",
+      "# CORS Configuration",
+      "cors:",
+      "  origins:",
+      "    - ${3:http://localhost:3000}",
+      "    - ${4:https://app.example.com}",
+      "  allow_credentials: ${5:true}",
+      "",
+      "# Query Limits",
+      "limits:",
+      "  max_depth: ${6:15}",
+      "  max_height: ${7:200}",
+      "  max_aliases: ${8:30}",
+      "",
+      "# Header Propagation",
+      "headers:",
+      "  all:",
+      "    request:",
+      "      - propagate:",
+      "          matching: ^x-.*",
+      "      - propagate:",
+      "          named: authorization",
+      "",
+      "# Subgraph Error Handling",
+      "include_subgraph_errors:",
+      "  all: ${9:false}",
+      "",
+      "# Rhai Scripts",
+      "rhai:",
+      "  scripts: ${10:./scripts}",
+      "",
+      "# Plugins",
+      "plugins:",
+      "  # Add your plugins here",
+      "$0"
+    ],
+    "description": "Complete Apollo Router configuration template"
+  }
+}
