@@ -1,0 +1,42 @@
+name: Validate Template Files
+
+on:
+  pull_request:
+    paths:
+      - 'add-mcp/**/*.yaml'
+      - 'add-mcp/**/*.yml'
+      - 'add-mcp/.vscode/schemas/**'
+
+jobs:
+  validate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install validation tools
+        run: npm install -g ajv-cli ajv-formats js-yaml
+
+      - name: Download latest schema
+        run: |
+          curl -L -o /tmp/mcp-schema.json \
+            "https://github.com/apollographql/apollo-mcp-server/releases/download/$(curl -s https://api.github.com/repos/apollographql/apollo-mcp-server/releases/latest | jq -r '.tag_name')/config.schema.json"
+
+      - name: Validate MCP YAML files
+        run: |
+          echo "Validating MCP configuration YAML files..."
+          
+          # Find all MCP config files
+          for file in add-mcp/.apollo/mcp.*.yaml; do
+            if [ -f "$file" ]; then
+              echo "Validating $file..."
+              js-yaml "$file" | ajv validate -s /tmp/mcp-schema.json --spec=draft2020 -d - || exit 1
+              echo "✓ $file is valid"
+            fi
+          done
+          
+          echo "All MCP configuration files validated successfully!"

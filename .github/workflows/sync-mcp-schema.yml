@@ -1,0 +1,85 @@
+name: Sync Apollo MCP Server Schema
+
+on:
+  # Run on a schedule (daily check)
+  schedule:
+    - cron: "0 0 * * *"  # Daily at midnight UTC
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+  # Also trigger on repository_dispatch from Apollo (if they set this up)
+  repository_dispatch:
+    types: [apollo-mcp-server-release]
+
+jobs:
+  sync-schema:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get latest Apollo MCP Server release
+        id: get-release
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/apollographql/apollo-mcp-server/releases/latest | jq -r '.tag_name')
+          echo "version=$LATEST" >> $GITHUB_OUTPUT
+          echo "Latest version: $LATEST"
+
+      - name: Get current schema version
+        id: current-version
+        run: |
+          if [ -f "add-mcp/.vscode/schemas/VERSION" ]; then
+            CURRENT=$(cat add-mcp/.vscode/schemas/VERSION)
+          else
+            CURRENT="none"
+          fi
+          echo "version=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT"
+
+      - name: Check if update needed
+        id: check-update
+        run: |
+          if [ "${{ steps.get-release.outputs.version }}" != "${{ steps.current-version.outputs.version }}" ]; then
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "Update needed: ${{ steps.current-version.outputs.version }} -> ${{ steps.get-release.outputs.version }}"
+          else
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+            echo "Schema is up to date"
+          fi
+
+      - name: Download new schema
+        if: steps.check-update.outputs.needs_update == 'true'
+        run: |
+          VERSION="${{ steps.get-release.outputs.version }}"
+          curl -L -o add-mcp/.vscode/schemas/mcp-server.schema.json \
+            "https://github.com/apollographql/apollo-mcp-server/releases/download/${VERSION}/config.schema.json"
+          echo "$VERSION" > add-mcp/.vscode/schemas/VERSION
+
+      - name: Create Pull Request
+        if: steps.check-update.outputs.needs_update == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update MCP server schema to ${{ steps.get-release.outputs.version }}"
+          title: "Update MCP Server Schema to ${{ steps.get-release.outputs.version }}"
+          body: |
+            ## Automated Schema Update
+
+            This PR updates the Apollo MCP Server configuration schema from `${{ steps.current-version.outputs.version }}` to `${{ steps.get-release.outputs.version }}`.
+
+            **Release Notes:** https://github.com/apollographql/apollo-mcp-server/releases/tag/${{ steps.get-release.outputs.version }}
+
+            ### Changes
+            - Updated `add-mcp/.vscode/schemas/mcp-server.schema.json` to official Apollo schema
+            - Updated `add-mcp/.vscode/schemas/VERSION` to track current version
+
+            ### Testing
+            - [ ] Verify schema validation works in VS Code
+            - [ ] Check no false positives on existing template YAML files
+          branch: update-mcp-schema-${{ steps.get-release.outputs.version }}
+          labels: dependencies, automated
