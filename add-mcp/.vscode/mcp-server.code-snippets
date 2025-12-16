@@ -1,0 +1,212 @@
+{
+  // Apollo MCP Server Configuration Snippets
+  // Based on official Apollo MCP Server documentation
+  //
+  // These snippets provide complete configuration templates for common
+  // Apollo MCP Server setups. Use prefixes like 'mcp', 'mcphttp', 'mcpfull'.
+
+  "MCP Basic Config": {
+    "scope": "yaml",
+    "prefix": ["mcp", "mcpbasic"],
+    "body": [
+      "# Apollo MCP Server Configuration",
+      "endpoint: ${1:http://localhost:4000/}",
+      "transport:",
+      "  type: ${2|stdio,streamable_http,sse|}",
+      "$0"
+    ],
+    "description": "Basic Apollo MCP Server configuration"
+  },
+
+  "MCP with GraphOS": {
+    "scope": "yaml",
+    "prefix": ["mcpgraphos", "mcpstudio"],
+    "body": [
+      "# Apollo MCP Server with GraphOS",
+      "endpoint: ${1:http://localhost:4000/}",
+      "graphos:",
+      "  apollo_key: \\${${2:APOLLO_KEY}}",
+      "  apollo_graph_ref: \\${${3:APOLLO_GRAPH_REF}}",
+      "transport:",
+      "  type: ${4|stdio,streamable_http,sse|}",
+      "$0"
+    ],
+    "description": "MCP Server with Apollo GraphOS configuration"
+  },
+
+  "MCP HTTP with Auth": {
+    "scope": "yaml",
+    "prefix": ["mcphttp", "mcpauth"],
+    "body": [
+      "# Apollo MCP Server with HTTP transport and authentication",
+      "endpoint: ${1:https://api.example.com/graphql}",
+      "transport:",
+      "  type: streamable_http",
+      "  address: ${2:127.0.0.1}",
+      "  port: ${3:5000}",
+      "  auth:",
+      "    servers:",
+      "      - ${4:https://auth.example.com}",
+      "    audiences:",
+      "      - ${5:api.example.com}",
+      "    resource: ${6:https://mcp.example.com}",
+      "    scopes:",
+      "      - ${7:read:data}",
+      "      - ${8:write:data}",
+      "$0"
+    ],
+    "description": "HTTP transport with OAuth 2.0 authentication"
+  },
+
+  "MCP Headers": {
+    "scope": "yaml",
+    "prefix": ["mcpheaders", "headers"],
+    "body": [
+      "headers:",
+      "  Authorization: Bearer \\${${1:GRAPHQL_TOKEN}}",
+      "  X-API-Key: \\${${2:API_KEY}}",
+      "$0"
+    ],
+    "description": "Add headers for GraphQL requests"
+  },
+
+  "MCP CORS Config": {
+    "scope": "yaml",
+    "prefix": ["mcpcors", "cors"],
+    "body": [
+      "cors:",
+      "  origin:",
+      "    - ${1:http://localhost:3000}",
+      "    - ${2:https://app.example.com}",
+      "  credentials: ${3:true}",
+      "$0"
+    ],
+    "description": "CORS configuration for HTTP transport"
+  },
+
+  "MCP Complete Config": {
+    "scope": "yaml",
+    "prefix": ["mcpfull", "mcpcomplete"],
+    "body": [
+      "# Apollo MCP Server Full Configuration",
+      "endpoint: ${1:https://api.example.com/graphql}",
+      "",
+      "# GraphOS Integration",
+      "graphos:",
+      "  apollo_key: \\${${2:APOLLO_KEY}}",
+      "  apollo_graph_ref: \\${${3:APOLLO_GRAPH_REF}}",
+      "",
+      "# Transport Settings",
+      "transport:",
+      "  type: ${4|streamable_http,sse,stdio|}",
+      "  address: ${5:127.0.0.1}",
+      "  port: ${6:5000}",
+      "  auth:",
+      "    servers:",
+      "      - ${7:https://auth.example.com}",
+      "    audiences:",
+      "      - ${8:api.example.com}",
+      "    scopes:",
+      "      - ${9:read:data}",
+      "      - ${10:write:data}",
+      "",
+      "# CORS Configuration",
+      "cors:",
+      "  origin:",
+      "    - ${11:http://localhost:3000}",
+      "  credentials: ${12:true}",
+      "",
+      "# Request Headers",
+      "headers:",
+      "  Authorization: Bearer \\${${13:GRAPHQL_TOKEN}}",
+      "",
+      "# Schema & Operations",
+      "schema:",
+      "  source: ${14|introspection,file,studio|}",
+      "operations:",
+      "  source: ${15|introspection,manifest,studio|}",
+      "",
+      "# Server Overrides",
+      "overrides:",
+      "  mutation_mode: ${16|safe,all,none|}",
+      "",
+      "# Introspection",
+      "introspection:",
+      "  enabled: ${17:true}",
+      "  cache_ttl: ${18:300}",
+      "",
+      "# Health Check",
+      "health_check:",
+      "  enabled: ${19:true}",
+      "  path: ${20:/health}",
+      "",
+      "# Logging",
+      "logging:",
+      "  level: ${21|info,debug,warn,error,trace|}",
+      "  format: ${22|text,json|}",
+      "",
+      "# Telemetry",
+      "telemetry:",
+      "  service_name: ${23:mcp-server}",
+      "  version: ${24:1.0.0}",
+      "$0"
+    ],
+    "description": "Complete Apollo MCP Server configuration with all features"
+  },
+
+  "MCP Docker Run": {
+    "scope": "yaml,dockerfile,sh",
+    "prefix": ["mcpdocker"],
+    "body": [
+      "docker run \\\\",
+      "  -it --rm \\\\",
+      "  -p ${1:5000}:${1:5000} \\\\",
+      "  -v \\${PWD}/${2:config.yaml}:/config.yaml \\\\",
+      "  -v \\${PWD}:/data \\\\",
+      "  ghcr.io/apollographql/apollo-mcp-server:latest /config.yaml",
+      "$0"
+    ],
+    "description": "Docker run command for Apollo MCP Server"
+  },
+
+  "MCP Telemetry": {
+    "scope": "yaml",
+    "prefix": ["mcptelemetry", "telemetry"],
+    "body": [
+      "telemetry:",
+      "  service_name: ${1:apollo-mcp-server}",
+      "  version: ${2:1.0.0}",
+      "  exporters:",
+      "    metrics:",
+      "      ${3:# Metrics export config}",
+      "    tracing:",
+      "      ${4:# Trace export config}",
+      "$0"
+    ],
+    "description": "Telemetry configuration for monitoring"
+  },
+
+  "MCP Schema Source": {
+    "scope": "yaml",
+    "prefix": ["mcpschema", "schema"],
+    "body": [
+      "schema:",
+      "  source: ${1|introspection,file,studio|}",
+      "  ${2:file: ./schema.graphql}",
+      "$0"
+    ],
+    "description": "Schema source configuration"
+  },
+
+  "MCP Operations Source": {
+    "scope": "yaml",
+    "prefix": ["mcpops", "operations"],
+    "body": [
+      "operations:",
+      "  source: ${1|introspection,manifest,studio|}",
+      "  ${2:manifest: ./manifest.json}",
+      "$0"
+    ],
+    "description": "Operations source configuration"
+  }
+}
