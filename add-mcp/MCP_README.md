@@ -21,7 +21,7 @@ All through natural conversation, using your existing GraphQL API.
 Your MCP server details:
 ```
 Server name: {{PROJECT_NAME}}
-MCP endpoint: http://127.0.0.1:5050/mcp
+MCP endpoint: http://127.0.0.1:8000/mcp
 ```
 
 For Claude Desktop setup instructions:
@@ -48,7 +48,7 @@ set -a && source .env && set +a && rover dev --supergraph-config supergraph.yaml
 
 # This starts:
 # → GraphQL API: http://localhost:4000
-# → MCP Server: http://localhost:5050
+# → MCP Server: http://localhost:8000
 ```
 
 **Done!** In Claude Desktop, look for your MCP server named `{{PROJECT_NAME}}` in the available tools. Your GraphQL API is now accessible to your AI assistant!
@@ -95,13 +95,13 @@ If you prefer to run just the MCP server separately (without rover dev):
 ```bash
 # Build and run with Docker
 docker build -f mcp.Dockerfile -t your-project-mcp .
-docker run -d --name your-project-mcp -p 5050:5050 --env-file .env your-project-mcp
+docker run -d --name your-project-mcp -p 8000:8000 --env-file .env your-project-mcp
 
 # Verify it's running
-curl http://localhost:5050/health
+curl http://localhost:8000/health
 
 # Test with MCP inspector
-npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:5050/mcp
+npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:8000/mcp
 ```
 
 ## Prerequisites
@@ -134,6 +134,6 @@ npx @modelcontextprotocol/inspector --transport http --server-url http://localho
 ## Need Help?
 
 - **AI client not connecting?** Ensure you've followed the setup instructions from `rover docs open mcp-qs` and restarted your AI client completely.
-- **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 5050 (MCP). Check nothing else is using these ports.
+- **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 8000 (MCP). Check nothing else is using these ports.
 - **Environment variables not loading?** Make sure you're using `set -a && source .env && set +a` to properly export variables before running `rover dev`.
 - **Need more help with MCP server and tools?** Visit our [Apollo MCP server troubleshooting guide](https://www.apollographql.com/docs/apollo-mcp-server/quickstart#troubleshooting).
