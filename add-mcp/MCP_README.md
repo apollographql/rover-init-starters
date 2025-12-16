@@ -64,6 +64,17 @@ If you're using VS Code, we've configured tasks to make this even easier:
 
 The VS Code task will automatically load your `.env` file and start both the GraphQL API and MCP server.
 
+### VS Code Configuration Files
+
+This template includes helpful VS Code configuration in the `.vscode/` directory:
+
+- **`settings.json`** - Editor settings for GraphQL, YAML, and Dockerfile support
+- **`tasks.json`** - Pre-configured tasks for starting the MCP server
+- **`mcp-server.code-snippets`** - Autocomplete shortcuts for MCP configuration (type `mcp`, `mcphttp`, etc.)
+- **`router.code-snippets`** - Autocomplete shortcuts for Router configuration
+- **`schemas/`** - JSON schemas for YAML validation and autocomplete
+
+
 ## Add Custom Tools
 
 Create AI tools from your GraphQL operations using Apollo Studio. Once `rover dev` is running:
