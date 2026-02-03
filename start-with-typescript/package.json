@@ -28,7 +28,6 @@
   "dependencies": {
     "@apollo/server": "^5.0.0",
     "@apollo/subgraph": "^2.3.1",
-    "apollo-server-errors": "^3.3.1",
     "graphql": "latest",
     "graphql-tag": "latest"
   },
