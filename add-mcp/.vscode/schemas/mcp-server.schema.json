@@ -8,6 +8,10 @@
       "description": "CORS configuration",
       "$ref": "#/$defs/CorsConfig"
     },
+    "server_info": {
+      "description": "Server metadata configuration",
+      "$ref": "#/$defs/ServerInfoConfig"
+    },
     "custom_scalars": {
       "description": "Path to a custom scalar map",
       "type": [
@@ -84,6 +88,7 @@
       "$ref": "#/$defs/Transport"
     }
   },
+  "additionalProperties": false,
   "$defs": {
     "CorsConfig": {
       "description": "CORS configuration options",
@@ -168,7 +173,47 @@
           "minimum": 0,
           "default": 7200
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "ServerInfoConfig": {
+      "description": "Server metadata configuration returned in the MCP initialize response.\nAll fields are optional and fall back to defaults if not provided.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name of the MCP server implementation",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "version": {
+          "description": "The version of the MCP server implementation",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "title": {
+          "description": "Human-readable title for the server",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "website_url": {
+          "description": "URL to the server's website or documentation",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      },
+      "additionalProperties": false
     },
     "GraphOSConfig": {
       "description": "Credentials to use with GraphOS",
@@ -207,7 +252,8 @@
           },
           "default": []
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HealthCheckConfig": {
       "description": "Configuration options for the health check component.",
@@ -302,7 +348,8 @@
           "description": "Validate configuration for checking operations before execution",
           "$ref": "#/$defs/ValidateConfig"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ExecuteConfig": {
       "description": "Execution-specific introspection configuration",
@@ -312,8 +359,17 @@
           "description": "Enable introspection for execution",
           "type": "boolean",
           "default": false
+        },
+        "hint": {
+          "description": "Optional custom hint appended to the execute tool description",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
-      }
+      },
+      "additionalProperties": false
     },
     "IntrospectConfig": {
       "description": "Introspect-specific introspection configuration",
@@ -328,8 +384,17 @@
           "description": "Minify introspection results",
           "type": "boolean",
           "default": false
+        },
+        "hint": {
+          "description": "Optional custom hint appended to the introspect tool description",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SearchConfig": {
       "description": "Search tool configuration",
@@ -358,8 +423,17 @@
           "description": "Minify search results",
           "type": "boolean",
           "default": false
+        },
+        "hint": {
+          "description": "Optional custom hint appended to the search tool description",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ValidateConfig": {
       "description": "Validation tool configuration",
@@ -369,8 +443,17 @@
           "description": "Enable validation tool",
           "type": "boolean",
           "default": false
+        },
+        "hint": {
+          "description": "Optional custom hint appended to the validate tool description",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Logging": {
       "description": "Logging related options",
@@ -399,7 +482,8 @@
           "description": "Log file rotation period to use when log file path provided\n[default: Hourly]",
           "$ref": "#/$defs/LogRotationKind"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "LogRotationKind": {
       "type": "string",
@@ -436,7 +520,8 @@
             "null"
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Exporters": {
       "type": "object",
@@ -461,7 +546,8 @@
             }
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "MetricsExporters": {
       "type": "object",
@@ -485,8 +571,17 @@
           "items": {
             "$ref": "#/$defs/TelemetryAttribute"
           }
+        },
+        "export_interval": {
+          "description": "Interval at which metrics are exported.\n\nAccepts human-readable durations (e.g., \"30s\", \"1m\", \"5m\").\nDefaults to 30 seconds when not specified.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
-      }
+      },
+      "additionalProperties": false
     },
     "MetricTelemetryExporter": {
       "description": "Metric telemetry exporter options",
@@ -513,6 +608,7 @@
               "const": "grpc"
             }
           },
+          "additionalProperties": false,
           "required": [
             "protocol",
             "endpoint"
@@ -541,6 +637,7 @@
               "const": "http/protobuf"
             }
           },
+          "additionalProperties": false,
           "required": [
             "protocol",
             "endpoint"
@@ -634,7 +731,8 @@
             "$ref": "#/$defs/TelemetryAttribute"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "TraceTelemetryExporter": {
       "description": "Trace telemetry exporter options",
@@ -657,6 +755,7 @@
               "const": "grpc"
             }
           },
+          "additionalProperties": false,
           "required": [
             "protocol",
             "endpoint"
@@ -681,6 +780,7 @@
               "const": "http/protobuf"
             }
           },
+          "additionalProperties": false,
           "required": [
             "protocol",
             "endpoint"
@@ -729,6 +829,7 @@
               "const": "collection"
             }
           },
+          "additionalProperties": false,
           "required": [
             "source",
             "id"
@@ -745,7 +846,8 @@
           },
           "required": [
             "source"
-          ]
+          ],
+          "additionalProperties": false
         },
         {
           "description": "Load operations by introspecting the schema\n\nNote: Requires introspection to be enabled",
@@ -758,7 +860,8 @@
           },
           "required": [
             "source"
-          ]
+          ],
+          "additionalProperties": false
         },
         {
           "description": "Load operations from local GraphQL files / folders",
@@ -775,6 +878,7 @@
               "const": "local"
             }
           },
+          "additionalProperties": false,
           "required": [
             "source",
             "paths"
@@ -792,6 +896,7 @@
               "const": "manifest"
             }
           },
+          "additionalProperties": false,
           "required": [
             "source",
             "path"
@@ -808,7 +913,8 @@
           },
           "required": [
             "source"
-          ]
+          ],
+          "additionalProperties": false
         }
       ]
     },
@@ -841,7 +947,8 @@
           "$ref": "#/$defs/MutationMode",
           "default": "none"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "MutationMode": {
       "oneOf": [
@@ -877,6 +984,7 @@
               "const": "local"
             }
           },
+          "additionalProperties": false,
           "required": [
             "source",
             "path"
@@ -893,7 +1001,8 @@
           },
           "required": [
             "source"
-          ]
+          ],
+          "additionalProperties": false
         }
       ]
     },
@@ -910,7 +1019,8 @@
           },
           "required": [
             "type"
-          ]
+          ],
+          "additionalProperties": false
         },
         {
           "description": "Host the MCP server on the supplied configuration, using SSE for communication\n\nNote: This is deprecated in favor of HTTP streams.",
@@ -946,6 +1056,7 @@
               "const": "sse"
             }
           },
+          "additionalProperties": false,
           "required": [
             "type"
           ]
@@ -980,14 +1091,20 @@
               "default": 8000
             },
             "stateful_mode": {
+              "description": "Enable stateful mode for session management",
               "type": "boolean",
               "default": true
+            },
+            "host_validation": {
+              "description": "Host header validation configuration for DNS rebinding protection.",
+              "$ref": "#/$defs/HostValidationConfig"
             },
             "type": {
               "type": "string",
               "const": "streamable_http"
             }
           },
+          "additionalProperties": false,
           "required": [
             "type"
           ]
@@ -1039,6 +1156,11 @@
             "type": "string"
           }
         },
+        "scope_mode": {
+          "description": "Scope enforcement mode: disabled, require_all (default), or require_any.",
+          "$ref": "#/$defs/ScopeMode",
+          "default": "require_all"
+        },
         "disable_auth_token_passthrough": {
           "description": "Whether to disable the auth token passthrough to upstream API",
           "type": "boolean",
@@ -1057,10 +1179,31 @@
           "default": null
         }
       },
+      "additionalProperties": false,
       "required": [
         "servers",
         "resource",
         "scopes"
+      ]
+    },
+    "ScopeMode": {
+      "description": "Scope enforcement mode for authenticated requests.",
+      "oneOf": [
+        {
+          "description": "Skip scope enforcement entirely.",
+          "type": "string",
+          "const": "disabled"
+        },
+        {
+          "description": "Token must have ALL configured scopes (default).",
+          "type": "string",
+          "const": "require_all"
+        },
+        {
+          "description": "Token must have at least ONE configured scope.",
+          "type": "string",
+          "const": "require_any"
+        }
       ]
     },
     "TlsConfig": {
@@ -1079,7 +1222,28 @@
           "type": "boolean",
           "default": false
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "HostValidationConfig": {
+      "description": "Configuration for Host header validation to prevent DNS rebinding attacks.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enable Host header validation (enabled by default for security)",
+          "type": "boolean",
+          "default": true
+        },
+        "allowed_hosts": {
+          "description": "Additional allowed hosts beyond localhost, 127.0.0.1, ::1, and 0.0.0.0.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
