@@ -3,7 +3,7 @@
 
 [[rules]]
 id = "curl-auth-header"
-[rules.allowlist]
+[[rules.allowlists]]
 commits = [
     "37bbb045e7c4cbda32ed9894e53475553da83a0b",
     "dd01efc558aac6cb3724f46cc5b97a124dde78e3",
@@ -18,7 +18,7 @@ commits = [
 
 [[rules]]
 id = "apollo-graphos-api-key"
-[rules.allowlist]
+[[rules.allowlists]]
 commits = [
     "37bbb045e7c4cbda32ed9894e53475553da83a0b",
     "dd01efc558aac6cb3724f46cc5b97a124dde78e3",
