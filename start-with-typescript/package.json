@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@apollo/server": "5.5.1",
-    "@apollo/subgraph": "2.14.0",
+    "@apollo/subgraph": "2.14.1",
     "graphql": "16.14.1",
     "graphql-tag": "2.12.6"
   },
