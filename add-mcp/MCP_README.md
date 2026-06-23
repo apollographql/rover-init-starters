@@ -44,7 +44,7 @@ GRAPHQL_ENDPOINT="http://localhost:4000/graphql"
 **Step 3: Start your MCP server**
 ```bash
 # Load environment and start GraphQL API + MCP server
-set -a && source .env && set +a && rover dev --supergraph-config supergraph.yaml --mcp .apollo/mcp.local.yaml
+rover dev --supergraph-config supergraph.yaml --mcp .apollo/mcp.local.yaml
 
 # This starts:
 # → GraphQL API: http://localhost:4000
@@ -135,5 +135,4 @@ npx @modelcontextprotocol/inspector --transport http --server-url http://localho
 
 - **AI client not connecting?** Ensure you've followed the setup instructions from `rover docs open mcp-qs` and restarted your AI client completely.
 - **Port conflicts?** Rover dev uses ports 4000 (GraphQL) and 8000 (MCP). Check nothing else is using these ports.
-- **Environment variables not loading?** Make sure you're using `set -a && source .env && set +a` to properly export variables before running `rover dev`.
 - **Need more help with MCP server and tools?** Visit our [Apollo MCP server troubleshooting guide](https://www.apollographql.com/docs/apollo-mcp-server/quickstart#troubleshooting).
