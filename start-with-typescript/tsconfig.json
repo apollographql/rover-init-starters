@@ -15,7 +15,11 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["esnext", "esnext.asynciterable", "DOM"],
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "baseUrl": "../subgraph-template-typescript-apollo-server-boilerplate",
+    "paths": {
+      "*": ["types/*"]
+    }
   },
   "exclude": [
     "codegen.ts", "dist"]

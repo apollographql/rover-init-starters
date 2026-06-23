@@ -32,9 +32,8 @@ headers:
 # Configuration Details
 # =============================================================================
 
-server_info:
-  title: "${PROJECT_NAME} GraphQL API (Staging)"
-  description: "Staging environment for ${PROJECT_NAME} GraphQL API"
+name: "${PROJECT_NAME} GraphQL API (Staging)"
+description: "Staging environment for ${PROJECT_NAME} GraphQL API"
 
 # Enhanced security settings for staging:
 # - mutations require confirmation
