@@ -1197,6 +1197,14 @@
           },
           "default": []
         },
+        "issuers": {
+          "description": "List of accepted token issuers (the JWT `iss` claim).\n\nWhen non-empty, a token's `iss` claim must exactly match one of these\nvalues or the token is rejected. When empty (default), issuer validation\nis skipped. Not `Vec<Url>`: like `servers`, `Url::parse` appends `/` to\nbare-authority inputs, which would break exact `iss` string matching.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
         "allow_any_audience": {
           "description": "Allow any audience (skip validation) - use with caution",
           "type": "boolean",
