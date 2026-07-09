@@ -67,6 +67,13 @@
         }
       }
     },
+    "rhai": {
+      "description": "Rhai scripting configuration",
+      "$ref": "#/$defs/RhaiConfig",
+      "default": {
+        "scripts": "rhai"
+      }
+    },
     "introspection": {
       "description": "Introspection configuration",
       "$ref": "#/$defs/Introspection"
@@ -340,6 +347,17 @@
             "null"
           ],
           "default": null
+        }
+      },
+      "additionalProperties": false
+    },
+    "RhaiConfig": {
+      "type": "object",
+      "properties": {
+        "scripts": {
+          "description": "Directory containing Rhai scripts. The server loads `main.rhai` from this directory.",
+          "type": "string",
+          "default": "rhai"
         }
       },
       "additionalProperties": false
@@ -1162,7 +1180,7 @@
               "default": true
             },
             "host_validation": {
-              "description": "Host header validation configuration for DNS rebinding protection.",
+              "description": "Host and Origin header validation configuration for DNS rebinding\nand cross-origin protection.",
               "$ref": "#/$defs/HostValidationConfig"
             },
             "type": {
@@ -1191,6 +1209,14 @@
         },
         "audiences": {
           "description": "List of accepted audiences for the OAuth tokens",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "issuers": {
+          "description": "List of accepted token issuers (the JWT `iss` claim).\n\nWhen non-empty, a token's `iss` claim must exactly match one of these\nvalues or the token is rejected. When empty (default), issuer validation\nis skipped. Not `Vec<Url>`: like `servers`, `Url::parse` appends `/` to\nbare-authority inputs, which would break exact `iss` string matching.",
           "type": "array",
           "items": {
             "type": "string"
@@ -1304,16 +1330,24 @@
       "additionalProperties": false
     },
     "HostValidationConfig": {
-      "description": "Configuration for Host header validation to prevent DNS rebinding attacks.\n\nHost validation is enforced by rmcp's Streamable HTTP transport via\n[`StreamableHttpServerConfig::allowed_hosts`]. This struct is a thin,\nstable surface for our YAML schema; [`HostValidationConfig::apply_to`]\ntranslates it onto the rmcp config.",
+      "description": "Configuration for Host and Origin header validation to prevent DNS\nrebinding and cross-origin attacks.\n\nBoth checks are enforced by rmcp's Streamable HTTP transport via\n[`StreamableHttpServerConfig::allowed_hosts`] and\n[`StreamableHttpServerConfig::allowed_origins`]. This struct is a thin,\nstable surface for our YAML schema; [`HostValidationConfig::apply_to`]\ntranslates it onto the rmcp config.",
       "type": "object",
       "properties": {
         "enabled": {
-          "description": "Enable Host header validation (enabled by default for security).",
+          "description": "Enable Host and Origin header validation (enabled by default for security).",
           "type": "boolean",
           "default": true
         },
         "allowed_hosts": {
           "description": "Additional allowed hosts beyond the loopback defaults\n(`localhost`, `127.0.0.1`, `::1`). Entries may be bare hostnames\n(any port allowed) or `host:port` authorities.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "allowed_origins": {
+          "description": "Allowed browser origins for inbound `Origin` validation (RFC 6454).\nEmpty (the default) leaves Origin validation disabled, matching rmcp.\nWhen non-empty, requests carrying an `Origin` header must match one of\nthese `(scheme, host, port)` entries; entries must include a scheme\n(for example `https://app.example.com`), and `\"null\"` matches the\nbrowser's `Origin: null`.",
           "type": "array",
           "items": {
             "type": "string"
