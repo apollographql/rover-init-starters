@@ -4,6 +4,10 @@
   "description": "Configuration for the MCP server",
   "type": "object",
   "properties": {
+    "caching": {
+      "description": "Cache hints for MCP list/read responses.",
+      "$ref": "#/$defs/Caching"
+    },
     "cors": {
       "description": "CORS configuration",
       "$ref": "#/$defs/CorsConfig"
@@ -105,6 +109,20 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "Caching": {
+      "description": "Caching behavior for MCP list/read responses.",
+      "type": "object",
+      "properties": {
+        "ttl_ms": {
+          "description": "Time, in milliseconds, that `tools/list`, `resources/list`, `resources/read`, and\n`prompts/list` responses may be treated as fresh by clients.",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "default": 300000
+        }
+      },
+      "additionalProperties": false
+    },
     "CorsConfig": {
       "description": "CORS configuration options",
       "type": "object",
@@ -163,7 +181,8 @@
             "mcp-protocol-version",
             "mcp-session-id",
             "traceparent",
-            "tracestate"
+            "tracestate",
+            "baggage"
           ]
         },
         "expose_headers": {
@@ -243,7 +262,7 @@
       "type": "object",
       "properties": {
         "apollo_key": {
-          "description": "The apollo key",
+          "description": "The Apollo key.\n\nStored as `SecretString` so its debug representation is redacted. It may still be specified\nliterally in YAML.",
           "type": [
             "string",
             "null"
@@ -597,6 +616,7 @@
           ]
         },
         "omitted_attributes": {
+          "description": "Apollo metric attributes excluded before export.",
           "type": [
             "array",
             "null"
@@ -776,6 +796,7 @@
           ]
         },
         "omitted_attributes": {
+          "description": "Apollo span attributes excluded before export.",
           "type": [
             "array",
             "null"
@@ -997,12 +1018,12 @@
           "default": false
         },
         "mutation_mode": {
-          "description": "Set the mutation mode access level for the MCP server",
+          "description": "Select which GraphQL mutation operation types the MCP server exposes. This configuration\ngate does not provide per-invocation approval.",
           "$ref": "#/$defs/MutationMode",
           "default": "none"
         },
         "descriptions": {
-          "description": "Optional map from operation name to tool description. When provided,\nthese descriptions override the auto-generated tool descriptions for\nthe matching operations, regardless of the operation source.",
+          "description": "Optional map from exact operation name to top-level tool description. Matching entries\noverride source-derived descriptions regardless of the operation source. Unmatched entries\nare ignored and do not affect operation names, input descriptions, or executable documents.",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -1018,33 +1039,30 @@
           "default": {}
         },
         "required_scopes": {
-          "description": "Per-operation OAuth scope requirements for step-up authorization.\nKeys are operation names; values are lists of required scopes.\nWhen a token lacks the required scopes for an operation, the server\nreturns HTTP 403 with `WWW-Authenticate: Bearer error=\"insufficient_scope\"`.",
+          "description": "Per-operation OAuth scope requirements for step-up authorization.\nKeys must exactly match the MCP tool name sent in `tools/call`; unmatched\nkeys impose no additional restriction. Values are lists of required\nscopes (all-of), or lists of alternative required scope groups (OR of\nAND). Requirements add to any global scope requirement. When a token\nlacks the required scopes for an operation, the server returns HTTP 403\nwith `WWW-Authenticate: Bearer error=\"insufficient_scope\"`.",
           "type": "object",
           "additionalProperties": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "default": {}
+            "$ref": "#/$defs/OperationRequiredScopes"
+          }
         }
       },
       "additionalProperties": false
     },
     "MutationMode": {
+      "description": "Controls which GraphQL mutation operation types Apollo MCP Server exposes.\n\nThis is a configuration gate, not a per-invocation approval mechanism.",
       "oneOf": [
         {
-          "description": "Don't allow any mutations",
+          "description": "Block mutation operations. Predefined mutations from configured operation sources are\nskipped, and ad hoc mutations submitted to the `execute` tool are rejected.",
           "type": "string",
           "const": "none"
         },
         {
-          "description": "Allow explicit mutations, but don't allow the LLM to build them",
+          "description": "Allow predefined mutations loaded from configured operation sources, but reject ad hoc\nmutations submitted to the `execute` tool.",
           "type": "string",
           "const": "explicit"
         },
         {
-          "description": "Allow the LLM to build mutations",
+          "description": "Allow predefined mutations and ad hoc mutations submitted to an enabled `execute` tool.",
           "type": "string",
           "const": "all"
         }
@@ -1092,6 +1110,29 @@
       },
       "additionalProperties": false
     },
+    "OperationRequiredScopes": {
+      "description": "Untagged wire shape for [`OperationRequiredScopes`], shared between\n`Deserialize` and `JsonSchema` so the generated schema and the parser\ncan't drift apart.",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "minItems": 1
+        }
+      ]
+    },
     "SchemaSource": {
       "description": "Source for upstream GraphQL schema",
       "oneOf": [
@@ -1126,13 +1167,27 @@
             "source"
           ],
           "additionalProperties": false
+        },
+        {
+          "description": "Fetch the latest published schema from the GraphOS Platform API.\nUnlike uplink, this works for non-federated graphs.",
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "const": "graphos"
+            }
+          },
+          "required": [
+            "source"
+          ],
+          "additionalProperties": false
         }
       ]
     },
     "Transport": {
       "oneOf": [
         {
-          "description": "Use standard IO for server <> client communication",
+          "description": "Use standard IO for server <> client communication.\nAuthentication middleware is not available for this transport.",
           "type": "object",
           "properties": {
             "type": {
@@ -1140,17 +1195,17 @@
               "const": "stdio"
             }
           },
+          "additionalProperties": false,
           "required": [
             "type"
-          ],
-          "additionalProperties": false
+          ]
         },
         {
           "description": "Host the MCP server on the configuration, using streamable HTTP messages.",
           "type": "object",
           "properties": {
             "auth": {
-              "description": "Authentication configuration",
+              "description": "Authentication configuration for Streamable HTTP requests.",
               "anyOf": [
                 {
                   "$ref": "#/$defs/Config"
@@ -1175,7 +1230,7 @@
               "default": 8000
             },
             "stateful_mode": {
-              "description": "Enable stateful mode for session management",
+              "description": "Enable legacy HTTP sessions. Sessionless requests do not receive unsolicited notifications.",
               "type": "boolean",
               "default": true
             },
@@ -1216,7 +1271,7 @@
           "default": []
         },
         "issuers": {
-          "description": "List of accepted token issuers (the JWT `iss` claim).\n\nWhen non-empty, a token's `iss` claim must exactly match one of these\nvalues or the token is rejected. When empty (default), issuer validation\nis skipped. Not `Vec<Url>`: like `servers`, `Url::parse` appends `/` to\nbare-authority inputs, which would break exact `iss` string matching.",
+          "description": "Optional allowlist for token issuers (the JWT `iss` claim).\nNot `Vec<Url>`: `Url::parse` appends `/` to bare-authority inputs,\nbreaking exact `iss` string matching.\n\nWhen non-empty, a token's `iss` claim must match one of these values and\nthe discovered issuer of the server whose key verified it. When empty\n(default), these token issuer checks are skipped; authorization-server\nmetadata issuer validation still applies.",
           "type": "array",
           "items": {
             "type": "string"
@@ -1242,14 +1297,15 @@
           "format": "uri"
         },
         "scopes": {
-          "description": "Supported OAuth scopes by this resource server",
+          "description": "Supported OAuth scopes by this resource server.\n\nWhen empty (default), no global scope requirement applies.",
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "default": []
         },
         "scope_mode": {
-          "description": "Scope enforcement mode: disabled, require_all (default), or require_any.",
+          "description": "Global scope enforcement mode: disabled, require_all (default), or require_any.\nThis does not change the all-of semantics of per-operation requirements.",
           "$ref": "#/$defs/ScopeMode",
           "default": "require_all"
         },
@@ -1258,9 +1314,14 @@
           "type": "boolean",
           "default": false
         },
+        "skip_token_validation": {
+          "description": "Requests that skip OAuth token validation.\n\nEach list keys on a different part of the request: JSON-RPC method name,\nrequested tool name, or HTTP header name. An empty list is off, so there\nis no separate switch to enable them.",
+          "$ref": "#/$defs/SkipTokenValidation"
+        },
         "allow_anonymous_mcp_discovery": {
-          "description": "Allow unauthenticated access to MCP discovery methods (e.g. `tools/list`).\n\nWhen enabled, requests without a bearer token that contain a discovery\nJSON-RPC method call will be allowed through without authentication.\nAll other requests still require valid authentication.",
+          "description": "Deprecated. Use `skip_token_validation.methods` instead.\n\nEnabling this is the same as listing `initialize`, `tools/list`, and\n`resources/list` in `skip_token_validation.methods`. Setting both is an\nerror, because the two would describe the same list twice.",
           "type": "boolean",
+          "deprecated": true,
           "default": false
         },
         "tls": {
@@ -1286,15 +1347,14 @@
       "additionalProperties": false,
       "required": [
         "servers",
-        "resource",
-        "scopes"
+        "resource"
       ]
     },
     "ScopeMode": {
-      "description": "Scope enforcement mode for authenticated requests.",
+      "description": "Enforcement mode for the global OAuth scope requirement on authenticated\nrequests.\n\nThis mode only affects the global `scopes` list. Per-operation scope\nrequirements are checked separately and always require all of that\noperation's scopes.",
       "oneOf": [
         {
-          "description": "Skip scope enforcement entirely.",
+          "description": "Skip the global scope requirement. Per-operation requirements still apply.",
           "type": "string",
           "const": "disabled"
         },
@@ -1309,6 +1369,36 @@
           "const": "require_any"
         }
       ]
+    },
+    "SkipTokenValidation": {
+      "description": "Requests that skip OAuth token validation.\n\nEvery list applies only to a request that carries no `Authorization` header.\nA request that presents a token is always validated, so an expired token is\nrejected even when the request matches a list.",
+      "type": "object",
+      "properties": {
+        "methods": {
+          "description": "JSON-RPC method names, such as `tools/list`.\n\n`tools/call` is rejected here, because every tool call uses that one\nmethod name. Name the tools in `tools` instead. Other methods that name\none of many items through a request parameter, such as `resources/read`\nand `prompts/get`, are rejected for the same reason.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "tools": {
+          "description": "Tool names, matched against the requested tool of a `tools/call`. This\nis the only list that tells one tool from another.\n\nA call carrying an `?app=` query parameter never matches, because the\ndispatcher resolves that app's own tool rather than the operation this\nname refers to.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "headers": {
+          "description": "HTTP header names, such as `x-api-key`.\n\nA request that carries a listed header skips token validation, and a\nlater layer authenticates it. This moves authentication elsewhere rather\nthan removing it, because the middleware cannot judge a credential it\ndoes not understand.\n\nA match here is decided before the body is read, so it skips validation\nfor every method and tool, including ones absent from `methods` and\n`tools`. It does not scope down to only those lists.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "TlsConfig": {
       "description": "TLS configuration for OAuth server connections",
@@ -1334,7 +1424,7 @@
       "type": "object",
       "properties": {
         "enabled": {
-          "description": "Enable Host and Origin header validation (enabled by default for security).",
+          "description": "Enable Host validation and any configured Origin validation (default: true).",
           "type": "boolean",
           "default": true
         },
