@@ -170,20 +170,12 @@
   // INTEGRATED TERMINAL CONFIGURATION
   // ==========================================================================
 
-  // Configure terminal for Apollo Key and Graph Ref
+  // Open terminals in the project root.
+  // APOLLO_KEY and APOLLO_GRAPH_REF live only in .env, which is gitignored.
+  // Do not add them here: this file is meant to be committed.
+  // `rover dev` loads .env automatically, but does not override variables
+  // already set in your shell. See MCP_README.md for the full start command.
   "terminal.integrated.cwd": "${workspaceFolder}",
-  "terminal.integrated.env.osx": {
-    "APOLLO_KEY": "{{APOLLO_KEY}}",
-    "APOLLO_GRAPH_REF": "{{APOLLO_GRAPH_REF}}"
-  },
-  "terminal.integrated.env.linux": {
-    "APOLLO_KEY": "{{APOLLO_KEY}}",
-    "APOLLO_GRAPH_REF": "{{APOLLO_GRAPH_REF}}"
-  },
-  "terminal.integrated.env.windows": {
-    "APOLLO_KEY": "{{APOLLO_KEY}}",
-    "APOLLO_GRAPH_REF": "{{APOLLO_GRAPH_REF}}"
-  },
 
   // ==========================================================================
   // TASKS AND DEBUGGING CONFIGURATION

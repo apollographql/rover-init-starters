@@ -28,7 +28,6 @@ endpoint: http://localhost:4000 # Your GraphQL API endpoint
 
 server_info:
   title: "${PROJECT_NAME} GraphQL API"
-  description: "GraphQL API for ${PROJECT_NAME}"
 
 # Essential settings for local development:
 # - mutations enabled for full API access
@@ -43,6 +42,6 @@ server_info:
 # 4. Run: docker run -p 8000:8000 --env-file .env my-mcp-server
 
 # Environment variables (optional):
-# GRAPHQL_ENDPOINT - override endpoint URL
-# MCP_PORT - override MCP server port
+# APOLLO_MCP_ENDPOINT - override endpoint URL
+# APOLLO_MCP_TRANSPORT__PORT - override MCP server port
 # PROJECT_NAME - project identifier for AI assistant
