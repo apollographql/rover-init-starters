@@ -92,13 +92,16 @@ You can then ask your AI assistant questions from the new data and queries will 
 
 If you prefer to run just the MCP server separately (without rover dev):
 
+> [!NOTE]
+> The MCP server has no authentication and can run mutations against your API. These commands make it reachable only from your own machine. Do not publish port 8000 on all interfaces (`-p 8000:8000`) on a shared network.
+
 ```bash
 # Build and run with Docker
 docker build -f mcp.Dockerfile -t your-project-mcp .
-docker run -d --name your-project-mcp -p 8000:8000 --env-file .env your-project-mcp
+docker run -d --name your-project-mcp -p 127.0.0.1:8000:8000 --env-file .env your-project-mcp
 
 # On Linux, use host networking so the container can reach the API on localhost:4000
-docker run -d --name your-project-mcp --network=host -e APOLLO_MCP_ENDPOINT=http://localhost:4000 --env-file .env your-project-mcp
+docker run -d --name your-project-mcp --network=host -e APOLLO_MCP_TRANSPORT__ADDRESS=127.0.0.1 -e APOLLO_MCP_ENDPOINT=http://localhost:4000 --env-file .env your-project-mcp
 
 # Verify it's running
 docker logs your-project-mcp
