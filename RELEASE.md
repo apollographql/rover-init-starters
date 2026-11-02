@@ -1,70 +1,69 @@
 # Rover Init Starters – Release Process
 
-**Purpose**: This document outlines the release process for the rover-init-starters repo. For template contribution and requirements, always follow the latest `CONTRIBUTING.md` guidelines. This document focuses on the steps and checks specific to preparing and publishing a release.
+**Purpose**: This document describes how changes reach users of `rover init`. For template structure, manifest fields and validation requirements, follow `CONTRIBUTING.md`.
 
-## Pre-Release Checklist
+## Branches
 
-Before preparing a release, ensure all new and updated templates strictly follow the `CONTRIBUTING.md` guidelines. Do not duplicate those steps here—refer to that document for template structure, manifest fields, and validation requirements.
+- `main` is the development branch. All PRs, including Renovate and other automated PRs, target `main` first.
+- `release/v3` is the live branch. `rover init` downloads templates from it when a user runs the command, so a change merged into `release/v3` reaches users immediately. There is no separate publish step.
+- `release/v2` and `releases/v1` are older release branches. Do not change them unless a fix for older Rover versions is needed.
 
-- For each template, run the commands and `test_commands` listed in `manifest.json` and ensure all build and tests pass.
-- Confirm that CI checks (see `.github/workflows/templates-test.yml`) pass for all templates.
-- Review for breaking changes:
-  - If fields are removed or updated in `manifest.json`, document them clearly and tag @team-growth for review. Breaking changes may require a new versioned branch.
-  - Provide migration steps for affected templates and ensure documentation is complete.
+`main` usually contains changes that are not ready to ship. **Never merge `main` into `release/v3` as a whole.** Move individual changes with a backport PR, as described below.
 
-## Prepare Release PR
+## Shipping a change to `release/v3`
 
-1. **Create PR from `main` to `releases/v1`**
-   - Use title: `Release [YYYY-MM-DD]`
-   - Description should include:
-     - List of new/updated templates
-     - Links to related PRs or discussions
-     - Breaking changes summary (if any)
-     - Migration steps for affected templates (link to docs or include inline)
-     - Tag all contributors involved
+### 1. Merge the change into `main`
 
-2. **Update `CHANGELOG.md`** (repo root)
-   - Use the following format:
+Open the PR against `main` as usual. Before merging, decide whether the change should ship:
 
-```markdown
-## [v1] - 2025-05-07
+- **Ship it**: bug fixes, security fixes and dependency updates that users need, and finished template changes.
+- **Do not ship it yet**: work in progress, changes that depend on unreleased Rover or router versions, and repo tooling that only affects CI.
 
-### Added
-- start-with-typescript template
+### 2. Open the backport PR
 
-### Changed
-- start-with-go: updated folder structure and commands
+**Recommended: use the label.** Add the `backport release/v3` label to the PR. You can add it before or after the merge. When the PR is merged, the [Backport workflow](.github/workflows/backport.yml) cherry-picks it onto a new branch and opens a PR to `release/v3`. The original author is assigned.
 
-### Breaking Changes
-- Removed deprecated `config` field from manifest.json
-- Migration guide: [link to migration steps]
-```
+The workflow does not merge anything. If the cherry-pick has conflicts, it comments on the original PR and you backport by hand.
 
-## Merge & Tag
-
-1. Squash & merge into `releases/v1`.
-2. Create a Git tag in format: `v1.YYYYMMDD`
+**By hand:**
 
 ```bash
-git tag v1.20250507
-git push origin v1.20250507
+git fetch origin
+git switch -c <topic>-release-v3 origin/release/v3
+git cherry-pick -x <merge-commit-sha-from-main>
+git push -u origin <topic>-release-v3
+gh pr create --base release/v3
 ```
 
-3. Confirm CI passes on the `releases/v1` branch.
+### 3. Review the backport PR
 
-## Post-Release
+- Confirm CI passes. If the PR was opened by the workflow without a GitHub App token, CI does not start on its own: close and reopen the PR to run the checks.
+- If the change affects users, add an entry under `## [Unreleased]` in `CHANGELOG.md` on the backport branch.
+- Check the diff contains only the intended change. A cherry-pick can pull in context that differs between `main` and `release/v3`.
+- For breaking changes (removed or renamed `manifest.json` fields, renamed template files), tag @team-growth for review and include migration steps. A breaking change may need a new release branch instead.
 
-1. Verify new templates appear via `rover init`.
-2. Announce the release in Slack or internal channels. Use a checklist or release template for consistency.
-3. If breaking changes were included:
-   - Ensure migration documentation is complete (in PR, docs folder, or linked from changelog)
-   - Monitor for any issues from users
-   - Be prepared to provide support for migration
+### 4. Merge and verify
 
-## Versioning & Branching
+Squash and merge the backport PR. Then confirm the change with a real run:
 
-- `releases/v1` is the current release branch. If a breaking change requires a new version, coordinate with @team-growth to create a new branch (e.g., `releases/v2`).
-- Tag all releases using the `v1.YYYYMMDD` format.
+```bash
+rover init
+```
+
+Choose the affected template and check that it builds and its tests pass.
+
+## Backport workflow setup
+
+The workflow works with the default `GITHUB_TOKEN`. PRs opened with `GITHUB_TOKEN` do not trigger other workflows, so CI does not start on backport PRs until someone closes and reopens them.
+
+To have CI start automatically, a repo admin can create a GitHub App with `contents: write` and `pull-requests: write` permissions, install it on this repo, and set:
+
+- Repository variable `BACKPORT_APP_ID`
+- Repository secret `BACKPORT_APP_PRIVATE_KEY`
+
+## Announcing changes
+
+For notable changes, announce in Slack or internal channels once the backport PR is merged.
 
 ---
 
