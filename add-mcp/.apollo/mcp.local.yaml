@@ -39,7 +39,7 @@ server_info:
 # 1. Create operation collections in Apollo Studio Sandbox
 # 2. Update endpoint to match your GraphQL server URL
 # 3. Run: docker build -f mcp.Dockerfile -t my-mcp-server .
-# 4. Run: docker run -p 8000:8000 --env-file .env my-mcp-server
+# 4. Run: docker run -p 127.0.0.1:8000:8000 --env-file .env my-mcp-server
 
 # Environment variables (optional):
 # APOLLO_MCP_ENDPOINT - override endpoint URL
