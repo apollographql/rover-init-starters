@@ -23,8 +23,10 @@ transport:
 endpoint: "${STAGING_GRAPHQL_ENDPOINT}"  # Your staging GraphQL API endpoint
 
 # Authentication headers for staging
+# ${env.APOLLO_KEY} is read from the environment when the server starts,
+# so the key is never written into this file.
 headers:
-  Authorization: "Bearer ${APOLLO_KEY}"
+  Authorization: "Bearer ${env.APOLLO_KEY}"
   X-Environment: "staging"
   Content-Type: "application/json"
 
@@ -34,7 +36,6 @@ headers:
 
 server_info:
   title: "${PROJECT_NAME} GraphQL API (Staging)"
-  description: "Staging environment for ${PROJECT_NAME} GraphQL API"
 
 # Enhanced security settings for staging:
 # - mutations require confirmation
@@ -53,10 +54,10 @@ server_info:
 # 2. Set STAGING_GRAPHQL_ENDPOINT to your staging GraphQL URL
 # 3. Set APOLLO_KEY for authentication
 # 4. Run: docker build -f mcp.Dockerfile -t my-mcp-staging .
-# 5. Run: docker run -p 8000:8000 --env-file .env.staging my-mcp-staging
+# 5. Run: docker run -p 127.0.0.1:8000:8000 --env-file .env.staging my-mcp-staging
 
 # Environment variables for staging:
 # STAGING_GRAPHQL_ENDPOINT - staging GraphQL endpoint
 # APOLLO_KEY - API key for staging authentication
 # PROJECT_NAME - project identifier
-# MCP_PORT - MCP server port
+# APOLLO_MCP_TRANSPORT__PORT - override MCP server port
