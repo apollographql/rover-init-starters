@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- `start-with-typescript`: `buildSubgraphSchema` now receives an array of
+  modules (`[{ typeDefs, resolvers }]`). `@apollo/subgraph` 2.15 removed the
+  `{ typeDefs, resolvers }` object form, so a fresh install that resolved 2.15
+  failed to compile.
 - `add-mcp`: MCP config files now load on apollo-mcp-server 1.7 and later.
   `name`/`description` are replaced by `server_info.title`, which every
   supported server version accepts.
