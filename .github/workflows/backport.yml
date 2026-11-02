@@ -6,8 +6,12 @@ name: Backport
 # Nothing is merged into the release branch automatically. The backport PR
 # still needs CI and a review, because rover init downloads release/v3 live.
 
+# Uses pull_request, not pull_request_target. GitHub blocks pull_request_target
+# on public repos by default from December 2, 2026. For PRs from branches in
+# this repo, pull_request still gets a writable token. PRs from forks get a
+# read-only token, so backport those by hand (see RELEASE.md).
 on:
-  pull_request_target:
+  pull_request:
     types: [closed, labeled]
 
 permissions:
@@ -39,10 +43,14 @@ jobs:
           app-id: ${{ vars.BACKPORT_APP_ID }}
           private-key: ${{ secrets.BACKPORT_APP_PRIVATE_KEY }}
 
-      # The action only fetches and cherry-picks commits. It does not run code
-      # from the PR, which is what makes pull_request_target safe here.
+      # The action pushes with the credentials checkout stores, so checkout must
+      # use the App token when there is one. Pushing a change to
+      # .github/workflows/* needs the App's "workflows: write" permission;
+      # GITHUB_TOKEN cannot push those changes at all.
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          token: ${{ steps.app-token.outputs.token || github.token }}
 
       - name: Create backport PRs
         id: backport
@@ -72,3 +80,11 @@ jobs:
             gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --body \
               "CI does not start on PRs opened by \`GITHUB_TOKEN\`. Close and reopen this PR to run the checks before merging."
           done
+
+      # The action reports failures as a comment on the original PR but still
+      # ends green. Fail the run so a missed backport is visible.
+      - name: Fail if a backport was not created
+        if: steps.backport.outputs.was_successful == 'false'
+        run: |
+          echo "::error::Backport failed. See the comment on the original PR, then backport by hand (RELEASE.md)."
+          exit 1

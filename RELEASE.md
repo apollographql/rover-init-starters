@@ -23,7 +23,10 @@ Open the PR against `main` as usual. Before merging, decide whether the change s
 
 **Recommended: use the label.** Add the `backport release/v3` label to the PR. You can add it before or after the merge. When the PR is merged, the [Backport workflow](.github/workflows/backport.yml) cherry-picks it onto a new branch and opens a PR to `release/v3`. The original author is assigned.
 
-The workflow does not merge anything. If the cherry-pick has conflicts, it comments on the original PR and you backport by hand.
+The workflow does not merge anything. If the backport fails, the workflow run fails and the action comments on the original PR; then backport by hand. Backport by hand in these cases too:
+
+- The PR came from a fork. Fork PRs get a read-only token, so the workflow cannot push.
+- The PR changes `.github/workflows/*` and no GitHub App is set up (see below). `GITHUB_TOKEN` cannot push workflow changes.
 
 **By hand:**
 
@@ -56,7 +59,11 @@ Choose the affected template and check that it builds and its tests pass.
 
 The workflow works with the default `GITHUB_TOKEN`. PRs opened with `GITHUB_TOKEN` do not trigger other workflows, so CI does not start on backport PRs until someone closes and reopens them.
 
-To have CI start automatically, a repo admin can create a GitHub App with `contents: write` and `pull-requests: write` permissions, install it on this repo, and set:
+To have CI start automatically, and to backport PRs that change `.github/workflows/*`, a repo admin can create a GitHub App with these repository permissions, install it on this repo, and set the variable and secret below:
+
+- Contents: Read and write
+- Pull requests: Read and write
+- Workflows: Read and write
 
 - Repository variable `BACKPORT_APP_ID`
 - Repository secret `BACKPORT_APP_PRIVATE_KEY`
