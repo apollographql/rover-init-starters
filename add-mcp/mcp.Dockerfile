@@ -14,12 +14,17 @@
 #
 # USAGE:
 # 1. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
-# 2. Run:   docker run -p 8000:8000 --env-file .env {{PROJECT_NAME}}
-# 3. Test:  npx @mcp/inspector (Transport: HTTP, URL: http://localhost:8000/mcp)
+# 2. Run:   docker run -p 127.0.0.1:8000:8000 --env-file .env {{PROJECT_NAME}}
+#    On Linux, host.docker.internal does not reach a GraphQL API that
+#    listens only on 127.0.0.1 (the rover dev default). Use host networking:
+#    docker run --network=host -e APOLLO_MCP_TRANSPORT__ADDRESS=127.0.0.1 -e APOLLO_MCP_ENDPOINT=http://localhost:4000 --env-file .env {{PROJECT_NAME}}
+# 3. Test:  npx @modelcontextprotocol/inspector (Transport: HTTP, URL: http://localhost:8000/mcp)
 #
 # =============================================================================
 
-FROM ghcr.io/apollographql/apollo-mcp-server:latest
+# Pinned to an exact release so a new major version cannot break this file.
+# To upgrade, change the tag and check that the config in .apollo/ still loads.
+FROM ghcr.io/apollographql/apollo-mcp-server:v2.1.0
 
 # =============================================================================
 # METADATA AND LABELS
@@ -36,8 +41,9 @@ LABEL org.opencontainers.image.vendor="Apollo GraphQL"
 
 # Note: base image is pre-configured with appropriate user restrictions for security
 
-# Copy MCP configuration file to container root (where server expects it)
-COPY .apollo/mcp.local.yaml /mcp.yaml
+# Copy MCP configuration file into the image's working directory (/data),
+# where CMD ["mcp.yaml"] below looks for it
+COPY .apollo/mcp.local.yaml /data/mcp.yaml
 
 # Copy any custom schema files or additional configuration
 # COPY schema.graphql /app/schema.graphql
@@ -49,6 +55,11 @@ COPY .apollo/mcp.local.yaml /mcp.yaml
 
 # Note: Base image is pre-configured with proper non-root user security
 
+# Inside the container, localhost is the container itself, not your machine.
+# Point the server at the GraphQL API running on the host instead.
+# This overrides the `endpoint` value in mcp.yaml.
+ENV APOLLO_MCP_ENDPOINT=http://host.docker.internal:4000
+
 # Expose the MCP server port
 # The MCP server listens on this port for connections from AI assistants
 EXPOSE 8000
@@ -59,10 +70,9 @@ EXPOSE 8000
 
 # Start the Apollo MCP Server
 # The server will:
-# 1. Auto-discover configuration files in current directory
-# 2. Load tools from MCP_TOOLS_DIR (/app/tools)
-# 3. Connect to GRAPHQL_ENDPOINT
-# 4. Start MCP server on MCP_PORT (8000)
+# 1. Read mcp.yaml from the working directory (/data)
+# 2. Connect to APOLLO_MCP_ENDPOINT (set above)
+# 3. Start MCP server on port 8000
 CMD ["mcp.yaml"]
 
 # =============================================================================
@@ -72,7 +82,7 @@ CMD ["mcp.yaml"]
 # Common issues and solutions:
 #
 # 1. Connection refused to GraphQL endpoint:
-#    - Ensure GRAPHQL_ENDPOINT is accessible from the container
+#    - Ensure APOLLO_MCP_ENDPOINT is reachable from the container
 #    - Check if GraphQL server is running
 #    - Verify network connectivity between containers
 #

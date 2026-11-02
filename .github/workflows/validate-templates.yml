@@ -1,17 +1,45 @@
 name: Validate Template Files
 
+# Validates the MCP config templates against the config schema of the latest
+# apollo-mcp-server release.
+#
+# - On pull requests: validates the PR's files.
+# - Daily and on manual runs: validates `main` and `release/v3`. Rover
+#   downloads `release/v3` at run time, so a new server release can break
+#   scaffolded projects without any change in this repo. A failure opens an
+#   issue (or comments on the open one) so it does not go unnoticed.
+#
+# Scheduled workflows run only from the default branch, so this file must be
+# on `main` for the daily check to run.
+
 on:
   pull_request:
     paths:
       - 'add-mcp/**/*.yaml'
       - 'add-mcp/**/*.yml'
       - 'add-mcp/.vscode/schemas/**'
+      - '.github/workflows/validate-templates.yml'
+  schedule:
+    - cron: '0 6 * * *' # Daily at 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   validate-yaml:
+    name: Validate MCP config (${{ matrix.ref || 'pull request' }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Pull requests check their own files (empty ref = default checkout).
+        # Scheduled and manual runs check every branch Rover can download.
+        ref: ${{ github.event_name == 'pull_request' && fromJSON('[""]') || fromJSON('["main", "release/v3"]') }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -22,14 +50,18 @@ jobs:
         run: npm install -g ajv-cli ajv-formats js-yaml
 
       - name: Download latest schema
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          curl -L -o /tmp/mcp-schema.json \
-            "https://github.com/apollographql/apollo-mcp-server/releases/download/$(curl -s https://api.github.com/repos/apollographql/apollo-mcp-server/releases/latest | jq -r '.tag_name')/config.schema.json"
+          tag=$(gh release view --repo apollographql/apollo-mcp-server --json tagName --jq .tagName)
+          echo "Validating against apollo-mcp-server $tag"
+          gh release download "$tag" --repo apollographql/apollo-mcp-server \
+            --pattern config.schema.json --output /tmp/mcp-schema.json
 
       - name: Validate MCP YAML files
         run: |
           echo "Validating MCP configuration YAML files..."
-          
+
           # Find all MCP config files
           for file in add-mcp/.apollo/mcp.*.yaml; do
             if [ -f "$file" ]; then
@@ -39,5 +71,34 @@ jobs:
               echo "✓ $file is valid"
             fi
           done
-          
+
           echo "All MCP configuration files validated successfully!"
+
+  report-failure:
+    name: Open issue on scheduled failure
+    needs: validate-yaml
+    if: failure() && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update tracking issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="MCP config templates fail validation against the latest apollo-mcp-server"
+          number=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "Still failing: $RUN_URL"
+          else
+            gh issue create --title "$title" --body "$(cat <<EOF
+          The scheduled validation of \`add-mcp/.apollo/mcp.*.yaml\` failed against the latest apollo-mcp-server config schema.
+
+          Rover downloads \`release/v3\` at run time, so if \`release/v3\` is failing, \`rover init --mcp\` scaffolds are likely broken for users now.
+
+          Failed run: $RUN_URL
+          EOF
+          )"
+          fi

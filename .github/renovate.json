@@ -7,8 +7,13 @@
   ],
   "packageRules": [
     {
+      "description": "Batch all non-major updates into one weekly PR so a single review covers them",
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
+      "groupName": "non-major dependencies",
+      "schedule": ["before 6am on monday"],
+      "minimumReleaseAge": "3 days",
+      "minimumReleaseAgeBehaviour": "timestamp-optional",
       "automerge": true
     }
   ],
