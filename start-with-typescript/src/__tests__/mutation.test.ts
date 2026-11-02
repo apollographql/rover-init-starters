@@ -6,14 +6,16 @@ import resolvers from "../resolvers";
 
 describe("Product Mutation", () => {
   const server = new ApolloServer({
-    schema: buildSubgraphSchema({
-      typeDefs: gql(
-        readFileSync("schema.graphql", {
-          encoding: "utf-8",
-        })
-      ),
-      resolvers,
-    }),
+    schema: buildSubgraphSchema([
+      {
+        typeDefs: gql(
+          readFileSync("schema.graphql", {
+            encoding: "utf-8",
+          })
+        ),
+        resolvers,
+      },
+    ]),
   });
 
   it("creates a new product", async () => {
