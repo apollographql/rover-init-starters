@@ -18,6 +18,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          # create-pull-request sets up its own credentials from `token:`.
+          # Keeping the token out of .git/config means the npm tools below
+          # cannot use it.
+          persist-credentials: false
 
       - name: Get latest Apollo MCP Server release
         id: get-release
@@ -97,7 +102,7 @@ jobs:
         id: validate
         if: steps.check-update.outputs.needs_update == 'true'
         run: |
-          npm install -g ajv-cli ajv-formats js-yaml
+          npm install -g --ignore-scripts ajv-cli@5.0.0 ajv-formats@3.0.1 js-yaml@5.5.0
           STATUS=pass
           for file in add-mcp/.apollo/mcp.*.yaml; do
             [ -f "$file" ] || continue
@@ -137,10 +142,17 @@ jobs:
             ### Template validation
             `add-mcp/.apollo/mcp.*.yaml` against the new schema: **${{ steps.validate.outputs.status }}**
 
+            If validation failed, fix the templates in a separate PR to `main`. This branch is rebuilt from `main` on every run, so commits pushed to it are overwritten.
+
             ### Testing
             - [ ] Verify schema validation works in VS Code
             - [ ] Check no false positives on existing template YAML files
+          # Commit only the schema files, even if another step changed the workspace.
+          add-paths: |
+            add-mcp/.vscode/schemas/mcp-server.schema.json
+            add-mcp/.vscode/schemas/VERSION
           # One rolling branch: a newer release updates this PR instead of opening another.
+          # Each run rebuilds it from main, so do not push other commits to it.
           branch: update-mcp-schema
           delete-branch: true
           labels: dependencies, automated
@@ -148,5 +160,5 @@ jobs:
       - name: Fail if templates do not validate
         if: steps.validate.outputs.status == 'fail'
         run: |
-          echo "::error::Template YAML does not validate against ${{ steps.get-release.outputs.version }}. The PR was opened so the change is visible; fix the templates before merging."
+          echo "::error::Template YAML does not validate against ${{ steps.get-release.outputs.version }}. Fix add-mcp/.apollo/mcp.*.yaml in a separate PR to main. The update-mcp-schema branch is rebuilt from main on every run, so commits pushed to it are overwritten. After the fix merges, re-run this workflow to update and re-validate the PR."
           exit 1
