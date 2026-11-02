@@ -1,0 +1,90 @@
+name: Backport
+
+# Opens a cherry-pick PR to a release branch when a PR merged into main has
+# a label of the form "backport <branch>", for example "backport release/v3".
+#
+# Nothing is merged into the release branch automatically. The backport PR
+# still needs CI and a review, because rover init downloads release/v3 live.
+
+# Uses pull_request, not pull_request_target. GitHub blocks pull_request_target
+# on public repos by default from December 2, 2026. For PRs from branches in
+# this repo, pull_request still gets a writable token. PRs from forks get a
+# read-only token, so backport those by hand (see RELEASE.md).
+on:
+  pull_request:
+    types: [closed, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  backport:
+    # Run when a PR with a backport label merges, or when a backport label
+    # is added to a PR that is already merged.
+    if: >
+      github.event.pull_request.merged == true &&
+      (
+        (github.event.action == 'closed' &&
+         contains(toJSON(github.event.pull_request.labels.*.name), '"backport ')) ||
+        (github.event.action == 'labeled' &&
+         startsWith(github.event.label.name, 'backport '))
+      )
+    runs-on: ubuntu-latest
+    steps:
+      # Optional: PRs opened with GITHUB_TOKEN do not trigger other workflows,
+      # so CI does not run on the backport PR. Set the BACKPORT_APP_ID variable
+      # and BACKPORT_APP_PRIVATE_KEY secret to open PRs as a GitHub App instead.
+      - name: Create GitHub App token
+        id: app-token
+        if: vars.BACKPORT_APP_ID != ''
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
+        with:
+          app-id: ${{ vars.BACKPORT_APP_ID }}
+          private-key: ${{ secrets.BACKPORT_APP_PRIVATE_KEY }}
+
+      # The action pushes with the credentials checkout stores, so checkout must
+      # use the App token when there is one. Pushing a change to
+      # .github/workflows/* needs the App's "workflows: write" permission;
+      # GITHUB_TOKEN cannot push those changes at all.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Create backport PRs
+        id: backport
+        uses: korthout/backport-action@8560fb503c275d433c56f05a2f64850093baa9f7  # v4.7.0
+        with:
+          github_token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          label_pattern: '^backport ([^ ]+)$'
+          merge_commits: skip
+          add_author_as_assignee: true
+          add_labels: automated
+          pull_title: '[${target_branch}] ${pull_title}'
+          pull_description: |
+            Backport of #${pull_number} to `${target_branch}`.
+
+            `${target_branch}` is downloaded live by `rover init`. Review this
+            PR and confirm CI passes before merging. If the source PR changed
+            user-facing behavior, add a `CHANGELOG.md` entry under
+            `[Unreleased]` on this branch.
+
+      - name: Ask for CI when running without an app token
+        if: steps.app-token.outcome != 'success' && steps.backport.outputs.created_pull_numbers != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PRS: ${{ steps.backport.outputs.created_pull_numbers }}
+        run: |
+          for pr in $PRS; do
+            gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --body \
+              "CI does not start on PRs opened by \`GITHUB_TOKEN\`. Close and reopen this PR to run the checks before merging."
+          done
+
+      # The action reports failures as a comment on the original PR but still
+      # ends green. Fail the run so a missed backport is visible.
+      - name: Fail if a backport was not created
+        if: steps.backport.outputs.was_successful == 'false'
+        run: |
+          echo "::error::Backport failed. See the comment on the original PR, then backport by hand (RELEASE.md)."
+          exit 1
