@@ -9,6 +9,11 @@ All notable changes to this project will be documented in this file.
   modules (`[{ typeDefs, resolvers }]`). `@apollo/subgraph` 2.15 removed the
   `{ typeDefs, resolvers }` object form, so a fresh install that resolved 2.15
   failed to compile.
+- `add-mcp`: the Docker commands in `MCP_README.md`, `mcp.Dockerfile` and the
+  `.apollo` config comments now expose the MCP server only on your own machine
+  (`-p 127.0.0.1:8000:8000`, or `APOLLO_MCP_TRANSPORT__ADDRESS=127.0.0.1` with
+  `--network=host`). The server has no authentication and can run mutations,
+  so `-p 8000:8000` made it reachable from other machines on the network.
 - `add-mcp`: MCP config files now load on apollo-mcp-server 1.7 and later.
   `name`/`description` are replaced by `server_info.title`, which every
   supported server version accepts.

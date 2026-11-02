@@ -14,10 +14,10 @@
 #
 # USAGE:
 # 1. Build: docker build -f mcp.Dockerfile -t {{PROJECT_NAME}} .
-# 2. Run:   docker run -p 8000:8000 --env-file .env {{PROJECT_NAME}}
+# 2. Run:   docker run -p 127.0.0.1:8000:8000 --env-file .env {{PROJECT_NAME}}
 #    On Linux, host.docker.internal does not reach a GraphQL API that
 #    listens only on 127.0.0.1 (the rover dev default). Use host networking:
-#    docker run --network=host -e APOLLO_MCP_ENDPOINT=http://localhost:4000 --env-file .env {{PROJECT_NAME}}
+#    docker run --network=host -e APOLLO_MCP_TRANSPORT__ADDRESS=127.0.0.1 -e APOLLO_MCP_ENDPOINT=http://localhost:4000 --env-file .env {{PROJECT_NAME}}
 # 3. Test:  npx @modelcontextprotocol/inspector (Transport: HTTP, URL: http://localhost:8000/mcp)
 #
 # =============================================================================
