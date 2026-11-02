@@ -23,8 +23,10 @@ transport:
 endpoint: "${STAGING_GRAPHQL_ENDPOINT}"  # Your staging GraphQL API endpoint
 
 # Authentication headers for staging
+# ${env.APOLLO_KEY} is read from the environment when the server starts,
+# so the key is never written into this file.
 headers:
-  Authorization: "Bearer ${APOLLO_KEY}"
+  Authorization: "Bearer ${env.APOLLO_KEY}"
   X-Environment: "staging"
   Content-Type: "application/json"
 
@@ -32,8 +34,8 @@ headers:
 # Configuration Details
 # =============================================================================
 
-name: "${PROJECT_NAME} GraphQL API (Staging)"
-description: "Staging environment for ${PROJECT_NAME} GraphQL API"
+server_info:
+  title: "${PROJECT_NAME} GraphQL API (Staging)"
 
 # Enhanced security settings for staging:
 # - mutations require confirmation
@@ -58,4 +60,4 @@ description: "Staging environment for ${PROJECT_NAME} GraphQL API"
 # STAGING_GRAPHQL_ENDPOINT - staging GraphQL endpoint
 # APOLLO_KEY - API key for staging authentication
 # PROJECT_NAME - project identifier
-# MCP_PORT - MCP server port
+# APOLLO_MCP_TRANSPORT__PORT - override MCP server port

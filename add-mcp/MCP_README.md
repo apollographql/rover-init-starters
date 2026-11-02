@@ -97,8 +97,11 @@ If you prefer to run just the MCP server separately (without rover dev):
 docker build -f mcp.Dockerfile -t your-project-mcp .
 docker run -d --name your-project-mcp -p 8000:8000 --env-file .env your-project-mcp
 
+# On Linux, use host networking so the container can reach the API on localhost:4000
+docker run -d --name your-project-mcp --network=host -e APOLLO_MCP_ENDPOINT=http://localhost:4000 --env-file .env your-project-mcp
+
 # Verify it's running
-curl http://localhost:8000/health
+docker logs your-project-mcp
 
 # Test with MCP inspector
 npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:8000/mcp
