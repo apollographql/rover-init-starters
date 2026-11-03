@@ -96,7 +96,7 @@ jobs:
         if: steps.check-update.outputs.needs_update == 'true'
         uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '26'
 
       - name: Validate MCP template YAML against new schema
         id: validate
