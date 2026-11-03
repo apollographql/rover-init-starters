@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- `start-with-typescript`: `graphql` is pinned to `^16.12.0` instead of
+  `latest`. `latest` now resolves to graphql 17, which the template's
+  dependencies do not support, so installing without the lock file failed.
 - `start-with-typescript`: the lockfile now installs patched versions of
   vulnerable dependencies, including all critical ones. `@apollo/server` is
   5.5.1 and `@apollo/subgraph` is 2.14.4. `graphql` stays on 16.
