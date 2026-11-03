@@ -1,20 +1,79 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)"
+  ],
+  "baseBranchPatterns": [
+    "main",
+    "release/v3"
   ],
   "packageRules": [
     {
       "description": "Batch all non-major updates into one weekly PR so a single review covers them",
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "matchCurrentVersion": "!/^0/",
       "groupName": "non-major dependencies",
-      "schedule": ["before 6am on monday"],
+      "schedule": [
+        "before 6am on monday"
+      ],
       "minimumReleaseAge": "3 days",
       "minimumReleaseAgeBehaviour": "timestamp-optional",
       "automerge": true
+    },
+    {
+      "description": "Templates support Node 22 and later. Keep the Node type definitions on 22 so template code cannot use APIs that Node 22 does not have",
+      "matchPackageNames": [
+        "@types/node"
+      ],
+      "allowedVersions": "<23"
+    },
+    {
+      "description": "Template tests run on Node 22, the oldest supported version",
+      "matchFileNames": [
+        ".github/workflows/templates-test.yml"
+      ],
+      "matchDepNames": [
+        "node"
+      ],
+      "allowedVersions": "<23"
+    },
+    {
+      "description": "release/v3 is live: rover init downloads it at run time. Major updates go to main only",
+      "matchBaseBranches": [
+        "release/v3"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "release/v3 is live: every update needs a human review, nothing merges itself",
+      "matchBaseBranches": [
+        "release/v3"
+      ],
+      "automerge": false,
+      "addLabels": [
+        "release/v3"
+      ],
+      "prBodyNotes": [
+        "> [!IMPORTANT]\n> This PR targets `release/v3`. `rover init` downloads this branch at run time, so merging ships the update to all users immediately."
+      ]
+    },
+    {
+      "description": "release/v3 lock file refreshes also need a human review",
+      "matchBaseBranches": [
+        "release/v3"
+      ],
+      "matchUpdateTypes": [
+        "lockFileMaintenance"
+      ],
+      "automerge": false
     }
   ],
   "lockFileMaintenance": {
