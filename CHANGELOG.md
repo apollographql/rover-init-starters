@@ -35,6 +35,9 @@ All notable changes to this project will be documented in this file.
   instructions.
 
 ### Changed
+- `start-with-typescript`: the template now requires Node 22 or later
+  (`engines.node` is `>=22`), and `@types/node` is on 22 to match. Node 18 and
+  20 are no longer supported.
 - `add-mcp`: `mcp.Dockerfile` pins the base image to
   `ghcr.io/apollographql/apollo-mcp-server:v2.1.0` instead of `latest`.
 - `add-mcp`: the VS Code config schema is updated to apollo-mcp-server v1.16.0.
