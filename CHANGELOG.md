@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- `start-with-typescript`: the lockfile now installs patched versions of
+  vulnerable dependencies, including all critical ones. `@apollo/server` is
+  5.5.1 and `@apollo/subgraph` is 2.14.4. `graphql` stays on 16.
 - `start-with-typescript`: `buildSubgraphSchema` now receives an array of
   modules (`[{ typeDefs, resolvers }]`). `@apollo/subgraph` 2.15 removed the
   `{ typeDefs, resolvers }` object form, so a fresh install that resolved 2.15
