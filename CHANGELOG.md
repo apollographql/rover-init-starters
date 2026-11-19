@@ -51,7 +51,8 @@ All notable changes to this project will be documented in this file.
   12.1.0.
 - `add-mcp`: `mcp.Dockerfile` pins the base image to
   `ghcr.io/apollographql/apollo-mcp-server:v2.2.1` instead of `latest`.
-- `add-mcp`: the VS Code config schema is updated to apollo-mcp-server v1.16.0.
+- `add-mcp`: the VS Code config schema is updated to apollo-mcp-server v2.2.1,
+  the version `mcp.Dockerfile` uses.
 - CI: template tests now also run on `release/**` branches, and MCP config
   templates are checked daily against the latest apollo-mcp-server release.
 
