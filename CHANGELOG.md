@@ -38,8 +38,19 @@ All notable changes to this project will be documented in this file.
   instructions.
 
 ### Changed
+- `start-with-typescript`: the template now requires Node 22 or later
+  (`engines.node` is `>=22`). Node 18 and 20 are no longer supported.
+  `@apollo/subgraph` 2.16 and later already require Node 22.
+- `start-with-typescript`: the lockfile updates `@apollo/server` to 5.5.2,
+  `@apollo/subgraph` to 2.16.0 and `graphql` to 16.15.0. `npm audit` reports
+  a high-severity advisory for `@graphql-tools/utils` 10.11.0
+  ([GHSA-7mx3-vvmw-hjmv](https://github.com/advisories/GHSA-7mx3-vvmw-hjmv),
+  [GHSA-c4qx-w738-7hr3](https://github.com/advisories/GHSA-c4qx-w738-7hr3)).
+  `@apollo/server` 5.5.2 lists that version as a dependency but does not load
+  it; the packages that use `@graphql-tools/utils` at run time get the patched
+  12.1.0.
 - `add-mcp`: `mcp.Dockerfile` pins the base image to
-  `ghcr.io/apollographql/apollo-mcp-server:v2.1.0` instead of `latest`.
+  `ghcr.io/apollographql/apollo-mcp-server:v2.2.1` instead of `latest`.
 - `add-mcp`: the VS Code config schema is updated to apollo-mcp-server v1.16.0.
 - CI: template tests now also run on `release/**` branches, and MCP config
   templates are checked daily against the latest apollo-mcp-server release.
