@@ -24,7 +24,7 @@
 
 # Pinned to an exact release so a new major version cannot break this file.
 # To upgrade, change the tag and check that the config in .apollo/ still loads.
-FROM ghcr.io/apollographql/apollo-mcp-server:v2.1.0
+FROM ghcr.io/apollographql/apollo-mcp-server:v2.2.1
 
 # =============================================================================
 # METADATA AND LABELS
