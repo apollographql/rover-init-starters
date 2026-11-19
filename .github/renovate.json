@@ -26,6 +26,16 @@
       "automerge": true
     },
     {
+      "description": "Major updates can break the templates. List them on the Dependency Dashboard and open a PR only after a maintainer ticks its checkbox",
+      "matchBaseBranches": [
+        "main"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
       "description": "Templates support Node 22 and later. Keep the Node type definitions on 22 so template code cannot use APIs that Node 22 does not have",
       "matchPackageNames": [
         "@types/node"
