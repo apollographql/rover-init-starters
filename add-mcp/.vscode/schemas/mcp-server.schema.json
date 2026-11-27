@@ -8,7 +8,8 @@
       "description": "MCP Apps configuration",
       "$ref": "#/$defs/AppsConfig",
       "default": {
-        "path": "apps"
+        "path": "apps",
+        "expose_without_app_param": {}
       }
     },
     "caching": {
@@ -135,6 +136,17 @@
           "description": "Directory containing MCP Apps. Each subdirectory holding an\n`.application-manifest.json` file is loaded as an app.",
           "type": "string",
           "default": "apps"
+        },
+        "expose_without_app_param": {
+          "description": "App tools to expose on connections without the `app` parameter, as a map of\napp name to manifest tool names.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": {}
         }
       },
       "additionalProperties": false
@@ -1683,7 +1695,7 @@
       "additionalProperties": false
     },
     "EndpointPath": {
-      "description": "The URL path that the Streamable HTTP transport serves MCP requests on, such as `/mcp`.\n\nA valid path is absolute, is not the root (`/`), is not under `/.well-known`, and has\nnon-empty segments made only of letters, digits, `-`, `_`, `.`, and `~`.",
+      "description": "The URL path that the Streamable HTTP transport serves MCP requests on, such as `/mcp`.\n\nA valid path is either the root (`/`) or an absolute path that is not under `/.well-known`\nand has non-empty segments made only of letters, digits, `-`, `_`, `.`, and `~`. Trailing\nslashes are trimmed, as they are from requests, so `/mcp/` is the same as `/mcp`.",
       "type": "string"
     },
     "HostValidationConfig": {
